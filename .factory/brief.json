@@ -1,0 +1,8 @@
+{
+  "slug": "food-log-export-kit",
+  "title": "Food Log Export Kit",
+  "summary": "Turn food tracker exports into a local archive.",
+  "artifact_class": "desktop-app",
+  "monetization": "one-time",
+  "job": "Validate user-provided food tracker exports, normalize meals, recipes, nutrition and weights, flag lossy fields, and export CSV plus portable JSON on-device."
+}
