@@ -57,7 +57,7 @@ function steps(): string {
 function emptyPanel(): string {
   return `<section class="import-panel" aria-labelledby="import-title">
     <div class="import-copy"><p class="eyebrow">Stage 1 · Import</p><h2 id="import-title">Choose a tracker export</h2><p>Use a CSV or JSON file you exported from your food tracker. We check its headings before reading any entries.</p>
-      <div class="support-row"><span>${icons.check} CSV with comma, semicolon, or tabs</span><span>${icons.check} JSON lists and archives</span></div>
+      <div class="support-row"><span>${icons.check} CSV with comma, semicolon, or tabs</span><span>${icons.check} JSON lists and archives</span><span>${icons.check} Dot decimals; comma formats are explained in notes</span></div>
     </div>
     <div class="drop-zone" id="drop-zone">
       <span class="large-icon">${icons.file}</span><h3>Drop your export here</h3><p>or choose it from this device</p>
@@ -78,7 +78,7 @@ function reviewPanel(): string {
       <button class="secondary-button" id="add-file">${icons.file} Add another file</button><input class="visually-hidden" id="file-input" aria-label="Choose another tracker export" type="file" accept=".csv,.json,text/csv,application/json" ${state.licensed ? 'multiple' : ''} />
     </div>
     <div class="summary-strip" aria-label="Import summary"><div><strong>${summary.meals}</strong><span>meals</span></div><div><strong>${summary.recipes}</strong><span>recipes</span></div><div><strong>${summary.weights}</strong><span>weights</span></div><div><strong>${summary.dates}</strong><span>days</span></div></div>
-    ${state.issues.length ? `<details class="issues"><summary>${icons.warn} Review ${state.issues.length} conversion ${state.issues.length === 1 ? 'note' : 'notes'}</summary><ol>${state.issues.map((issue) => `<li><b>Row ${issue.row}: ${escapeHtml(issue.field)}</b><span>${escapeHtml(issue.message)}</span></li>`).join('')}</ol></details>` : `<p class="success-line">${icons.check} Every imported row was explained.</p>`}
+    ${state.issues.length ? `<details class="issues"><summary>${icons.warn} Review ${state.issues.length} conversion ${state.issues.length === 1 ? 'note' : 'notes'}</summary><ol>${state.issues.map((issue) => `<li><b>${issue.row > 0 ? `Row ${issue.row}: ${escapeHtml(issue.field)}` : `File: ${escapeHtml(issue.field)}`}</b><span>${escapeHtml(issue.message)}</span></li>`).join('')}</ol></details>` : `<p class="success-line">${icons.check} Every imported row was explained.</p>`}
     <div class="table-tools"><div class="filter-group" role="group" aria-label="Filter entries">${(['all', 'meal', 'recipe', 'weight'] as const).map((filter) => `<button class="filter ${state.filter === filter ? 'selected' : ''}" data-filter="${filter}">${filter === 'all' ? 'All entries' : `${filter[0].toUpperCase()}${filter.slice(1)}s`}</button>`).join('')}</div><span>${shown.length} shown</span></div>
     <div class="record-table-wrap"><table class="record-table"><caption class="sr-only">Normalized food log entries</caption><thead><tr><th>Date</th><th>Meal</th><th>Item</th><th>Amount</th><th>Calories</th><th>Protein</th><th>Carbs</th><th>Fat</th></tr></thead><tbody>${shown.map((record) => `<tr><td data-label="Date">${escapeHtml(record.date || 'Date missing')}</td><td data-label="Meal">${escapeHtml(record.kind === 'weight' ? 'Weight' : record.meal || '—')}</td><td data-label="Item"><b>${escapeHtml(record.item)}</b>${record.notes ? `<small>${escapeHtml(record.notes)}</small>` : ''}</td><td data-label="Amount">${escapeHtml([record.amount, record.unit].filter(Boolean).join(' ') || '—')}</td><td data-label="Calories">${number(record.calories)}</td><td data-label="Protein">${number(record.protein_g, ' g')}</td><td data-label="Carbs">${number(record.carbs_g, ' g')}</td><td data-label="Fat">${number(record.fat_g, ' g')}</td></tr>`).join('')}</tbody></table></div>
     <div class="export-bar"><div><p class="eyebrow">Stage 3 · Export</p><h3>Save your archive</h3><p>CSV opens in spreadsheets. JSON keeps every normalized field and conversion note.</p></div><div class="export-actions"><button class="primary-button" id="export-csv">${icons.download} Export CSV</button><button class="secondary-button" id="export-json">${icons.archive} Export JSON</button></div></div>
@@ -118,15 +118,23 @@ async function readFiles(files: FileList | File[]): Promise<void> {
   if (!state.licensed && list.length > 1) state.notice = 'The free app imports one file at a time. Only the first file was opened.';
   const selected = state.licensed ? list : list.slice(0, 1);
   state.error = '';
+  const failures: string[] = [];
+  let imported = 0;
   for (const file of selected) {
     try {
       const result = importText(await file.text(), file.name);
       state.records.push(...result.records);
       state.issues.push(...result.issues);
       state.sources.push(file.name);
-      state.status = `${result.records.length} entries imported from ${file.name}.`;
-    } catch (error) { state.error = error instanceof Error ? error.message : 'The file could not be read. Choose another export.'; }
+      imported += result.records.length;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'The file could not be read. Choose another export.';
+      failures.push(`${file.name}: ${message}`);
+      state.issues.push({ row: 0, field: file.name, value: file.name, message: `This file was not imported. ${message}` });
+    }
   }
+  if (!state.records.length && failures.length) state.error = failures.join(' ');
+  state.status = `${imported} ${imported === 1 ? 'entry' : 'entries'} imported.${failures.length ? ` ${failures.length} ${failures.length === 1 ? 'file needs' : 'files need'} a look.` : ''}`;
   rerender();
 }
 

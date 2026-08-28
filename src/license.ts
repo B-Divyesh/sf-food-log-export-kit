@@ -4,6 +4,7 @@ const verdictKey = `${key}:verdict`;
 const base = 'https://api.sociobot.in/api/v1';
 
 export interface LicenseState { licensed: boolean; checking: boolean; notice: string; }
+interface CachedVerdict { token: string; valid: boolean; checked: number; }
 
 export function checkoutUrl(): string {
   return `${base}/products/${slug}/checkout`;
@@ -17,35 +18,48 @@ export function acceptLicenseFromUrl(): void {
   const url = new URL(location.href);
   const token = url.searchParams.get('license');
   if (!token) return;
-  localStorage.setItem(key, token);
+  const cleanToken = token.trim();
+  if (storedLicense() !== cleanToken) localStorage.removeItem(verdictKey);
+  localStorage.setItem(key, cleanToken);
   url.searchParams.delete('license');
   history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
 }
 
-export function optimisticLicense(): boolean {
+function cachedVerdict(token = storedLicense()): CachedVerdict | null {
   const cached = localStorage.getItem(verdictKey);
-  if (!cached) return false;
-  try { return JSON.parse(cached).valid === true; } catch { return false; }
+  if (!cached || !token) return null;
+  try {
+    const verdict = JSON.parse(cached) as Partial<CachedVerdict>;
+    return verdict.token === token.trim() && typeof verdict.valid === 'boolean' && typeof verdict.checked === 'number'
+      ? verdict as CachedVerdict
+      : null;
+  } catch { return null; }
+}
+
+export function optimisticLicense(token = storedLicense()): boolean {
+  return cachedVerdict(token)?.valid === true;
 }
 
 export async function verifyLicense(token = storedLicense()): Promise<LicenseState> {
-  if (!token) return { licensed: false, checking: false, notice: '' };
-  localStorage.setItem(key, token.trim());
-  const cachedRaw = localStorage.getItem(verdictKey);
-  if (cachedRaw) {
-    try {
-      const cached = JSON.parse(cachedRaw) as { valid: boolean; checked: number };
-      if (Date.now() - cached.checked < 86_400_000) return { licensed: cached.valid, checking: false, notice: cached.valid ? '' : 'This license is no longer active.' };
-    } catch { /* verify below */ }
-  }
+  const cleanToken = token.trim();
+  if (!cleanToken) return { licensed: false, checking: false, notice: '' };
+  if (storedLicense() !== cleanToken) localStorage.removeItem(verdictKey);
+  localStorage.setItem(key, cleanToken);
+  const cached = cachedVerdict(cleanToken);
+  if (cached && Date.now() - cached.checked < 86_400_000) return { licensed: cached.valid, checking: false, notice: cached.valid ? '' : 'This license is no longer active.' };
   try {
-    const response = await fetch(`${base}/products/${slug}/verify?license=${encodeURIComponent(token.trim())}`);
+    const response = await fetch(`${base}/products/${slug}/verify?license=${encodeURIComponent(cleanToken)}`);
     if (!response.ok) throw new Error('verify unavailable');
     const result = await response.json() as { valid: boolean };
-    localStorage.setItem(verdictKey, JSON.stringify({ valid: result.valid, checked: Date.now() }));
+    localStorage.setItem(verdictKey, JSON.stringify({ token: cleanToken, valid: result.valid, checked: Date.now() } satisfies CachedVerdict));
     return { licensed: result.valid, checking: false, notice: result.valid ? '' : 'This license is no longer active.' };
   } catch {
-    return { licensed: optimisticLicense(), checking: false, notice: 'License check is offline. The last saved status is in use.' };
+    const saved = cachedVerdict(cleanToken);
+    return {
+      licensed: saved?.valid === true,
+      checking: false,
+      notice: saved ? 'License check is offline. The last saved status is in use.' : 'The license could not be checked. Connect to the internet and try again.'
+    };
   }
 }
 

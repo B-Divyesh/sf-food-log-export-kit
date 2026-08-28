@@ -1,5 +1,5 @@
-const CACHE = 'food-log-export-kit-v2';
-const SHELL = ['/', '/demo', '/privacy', '/terms', '/favicon.svg', '/art/archive-kitchen-720.webp', '/art/archive-kitchen-1280.webp'];
+const CACHE = 'food-log-export-kit-v3';
+const SHELL = ['/', '/app', '/demo', '/privacy', '/terms', '/404.html', '/404.css', '/favicon.svg', '/art/archive-kitchen-720.webp', '/art/archive-kitchen-1280.webp'];
 self.addEventListener('install', (event) => event.waitUntil((async () => {
   const cache = await caches.open(CACHE);
   await cache.addAll(SHELL);

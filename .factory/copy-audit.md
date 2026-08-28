@@ -20,8 +20,8 @@ Audited 2026-08-28. Counts treat hyphenated terms and numbers as one word. No se
 | It also works when your internet is off. | 8 |
 | Unsigned builds for macOS, Windows, and Linux. | 7 |
 | See every row before you export. | 6 |
-| Missing dates and unreadable numbers appear as notes. | 8 |
-| The archive explains which rows it could not use. | 9 |
+| Missing or invalid dates and unreadable or comma-formatted numbers appear as notes. | 12 |
+| Skipped files and rows are named. | 6 |
 | Three checks between export and archive. | 6 |
 | Choose your export. | 3 |
 | Open a CSV or JSON file from your tracker. | 9 |
@@ -38,14 +38,14 @@ Audited 2026-08-28. Counts treat hyphenated terms and numbers as one word. No se
 | No nutrition advice. | 3 |
 | Numbers are copied and labeled, not judged. | 7 |
 | No silent drops. | 3 |
-| Skipped rows appear in conversion notes. | 6 |
+| Skipped files and rows appear in conversion notes. | 8 |
 | One job. | 2 |
 | One price. | 2 |
 | Combine several exports for $19. | 5 |
 | A free archive handles one file at a time. | 9 |
 | The license adds multi-file selection for migrations split across years or apps. | 12 |
 | One-time purchase. | 2 |
-| License works on your devices. | 5 |
+| Paste the license token on another device. | 7 |
 | CSV and JSON export stay free. | 6 |
 | Sociobot/Dodo handles payment and refunds. | 5 |
 | Read the terms. | 3 |

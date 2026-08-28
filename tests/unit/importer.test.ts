@@ -24,6 +24,21 @@ describe('normalization', () => {
     expect(result.issues.some((issue) => issue.field === 'date')).toBe(true);
   });
 
+  it('rejects impossible ISO calendar dates without losing the original value', () => {
+    const result = importText('Date,Food\n2025-99-99,Impossible date', 'history.csv');
+    expect(result.records[0]).toMatchObject({ date: '', notes: 'Original date: 2025-99-99' });
+    expect(result.issues).toContainEqual(expect.objectContaining({ field: 'date', value: '2025-99-99' }));
+  });
+
+  it('interprets grouped comma numbers explicitly and flags negative nutrition', () => {
+    const result = importText('Date,Food,Calories,Protein\n2025-01-01,Soup,"1,234",-5', 'history.csv');
+    expect(result.records[0]).toMatchObject({ calories: 1234, protein_g: -5 });
+    expect(result.issues.map((issue) => issue.message)).toEqual(expect.arrayContaining([
+      expect.stringContaining('comma as a thousands separator'),
+      expect.stringContaining('negative value was kept')
+    ]));
+  });
+
   it('explains unusable rows', () => {
     const result = importText('Date,Food,Calories\n2025-01-01,Soup,180\n2025-01-02,,220', 'history.csv');
     expect(result.records).toHaveLength(1);

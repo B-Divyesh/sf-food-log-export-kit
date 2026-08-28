@@ -2,7 +2,7 @@
 
 Turn food tracker exports into a local archive.
 
-Food Log Export Kit is for people leaving a calorie tracker. It reads user-provided CSV and JSON files, normalizes meal, recipe, nutrition, and weight fields, then exports a readable CSV and a versioned JSON archive. Rows it cannot use appear in conversion notes.
+Food Log Export Kit is for people leaving a calorie tracker. It reads user-provided CSV and JSON files, normalizes meal, recipe, nutrition, and weight fields, then exports a readable CSV and a versioned JSON archive. Files and rows it cannot use appear in conversion notes.
 
 All food-data conversion happens in the browser or desktop webview. The project has no tracker, account system, food-data server, or medical advice. The sample demo makes no cross-origin requests.
 
@@ -15,8 +15,10 @@ Demo: <https://food-log-export-kit.sociobot.in/demo>
 - CSV files separated by commas, semicolons, or tabs
 - JSON arrays and objects with `entries`, `records`, `meals`, `foods`, `items`, or `data` lists
 - Common column names used for dates, meals, foods, recipes, amounts, energy, macros, and weights
+- ISO dates in `YYYY-MM-DD` order; impossible and ambiguous numeric dates are noted
+- Dot decimals, grouped commas such as `1,234`, and decimal commas such as `1,5`; comma interpretations are noted
 
-The free app imports one file at a time. A $19 one-time personal license adds multi-file selection. CSV and JSON export stay free. Purchases and license checks use the Sociobot billing API.
+The free app imports one file at a time. A $19 one-time personal license adds multi-file selection. Paste its token to restore it on another device. CSV and JSON export stay free. Purchases and license checks use the Sociobot billing API.
 
 ## Run locally
 
@@ -57,4 +59,3 @@ Publish `dist/site/` as a static site. The included Static Web Apps config sets 
 ## Privacy and license
 
 The MIT license covers the source code. Product terms for the paid batch license are available at `/terms`; data handling details are at `/privacy`.
-

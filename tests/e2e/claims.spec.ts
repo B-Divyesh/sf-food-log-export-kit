@@ -1,5 +1,8 @@
 import { expect, test } from '@playwright/test';
 
+const licenseKey = 'sb_license:food-log-export-kit';
+const verdictKey = `${licenseKey}:verdict`;
+
 test('@claim:csv-export exports one CSV row per sample entry', async ({ page }) => {
   await page.goto('/demo');
   await expect(page.getByRole('heading', { name: '12 entries are ready' })).toBeVisible();
@@ -42,11 +45,17 @@ test('@claim:local-only demo conversion sends no cross-origin request', async ({
   expect(crossOrigin).toEqual([]);
 });
 
-test('@claim:format-import reads CSV, semicolon CSV, and JSON', async ({ page }) => {
+test('@claim:format-import reads comma, semicolon, tab CSV, and JSON', async ({ page }) => {
   await page.goto('/app');
   const input = page.locator('#file-input');
+  await input.setInputFiles({ name: 'comma.csv', mimeType: 'text/csv', buffer: Buffer.from('Date,Food,Calories\n2025-01-31,Tomato soup,210') });
+  await expect(page.getByText('Tomato soup')).toBeVisible();
+  await page.getByRole('button', { name: 'Clear this import' }).click();
   await input.setInputFiles({ name: 'semicolon.csv', mimeType: 'text/csv', buffer: Buffer.from('Date;Food;Calories\n2025-02-01;Bean stew;330') });
   await expect(page.getByText('Bean stew')).toBeVisible();
+  await page.getByRole('button', { name: 'Clear this import' }).click();
+  await page.locator('#file-input').setInputFiles({ name: 'tab.csv', mimeType: 'text/tab-separated-values', buffer: Buffer.from('Date\tFood\tCalories\n2025-02-02\tMushroom toast\t275') });
+  await expect(page.getByText('Mushroom toast')).toBeVisible();
   await page.getByRole('button', { name: 'Clear this import' }).click();
   await page.locator('#file-input').setInputFiles({ name: 'archive.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ entries: [{ date: '2025-02-02', name: 'Rice bowl', kcal: 410 }] })) });
   await expect(page.getByText('Rice bowl')).toBeVisible();
@@ -55,7 +64,7 @@ test('@claim:format-import reads CSV, semicolon CSV, and JSON', async ({ page })
 test('@claim:batch-import combines multiple files with a valid cached license', async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem('sb_license:food-log-export-kit', 'test-license');
-    localStorage.setItem('sb_license:food-log-export-kit:verdict', JSON.stringify({ valid: true, checked: Date.now() }));
+    localStorage.setItem('sb_license:food-log-export-kit:verdict', JSON.stringify({ token: 'test-license', valid: true, checked: Date.now() }));
   });
   await page.goto('/app');
   await page.locator('#file-input').setInputFiles([
@@ -66,13 +75,87 @@ test('@claim:batch-import combines multiple files with a valid cached license', 
   await expect(page.getByText('2 source files')).toBeVisible();
 });
 
-test('@claim:explained-drops lists every unusable row', async ({ page }) => {
+test('@claim:explained-drops lists every unusable row and file', async ({ page }) => {
+  await page.addInitScript(({ licenseKey, verdictKey }) => {
+    localStorage.setItem(licenseKey, 'test-license');
+    localStorage.setItem(verdictKey, JSON.stringify({ token: 'test-license', valid: true, checked: Date.now() }));
+  }, { licenseKey, verdictKey });
   await page.goto('/app');
-  await page.locator('#file-input').setInputFiles({ name: 'mixed.csv', mimeType: 'text/csv', buffer: Buffer.from('Date,Food,Calories\n2025-01-01,Soup,180\n2025-01-02,,200') });
+  await page.locator('#file-input').setInputFiles([
+    { name: 'broken.csv', mimeType: 'text/csv', buffer: Buffer.from('Unknown,Columns\n1,2') },
+    { name: 'mixed.csv', mimeType: 'text/csv', buffer: Buffer.from('Date,Food,Calories\n2025-01-01,Soup,180\n2025-01-02,,200') }
+  ]);
   await expect(page.getByText('1 entries are ready')).toBeVisible();
-  await expect(page.getByText('Review 1 conversion note')).toBeVisible();
-  await page.getByText('Review 1 conversion note').click();
+  await expect(page.getByText('Review 2 conversion notes')).toBeVisible();
+  await page.getByText('Review 2 conversion notes').click();
+  await expect(page.getByText('broken.csv', { exact: false })).toBeVisible();
+  await expect(page.getByText('No food or weight column was found.', { exact: false })).toBeVisible();
   await expect(page.getByText('No food, recipe, or weight was found. This row was not exported.')).toBeVisible();
+  const downloadEvent = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export JSON' }).click();
+  const stream = await (await downloadEvent).createReadStream();
+  let body = '';
+  for await (const chunk of stream) body += chunk.toString();
+  const archive = JSON.parse(body);
+  expect(archive.records).toHaveLength(1);
+  expect(archive.issues).toEqual(expect.arrayContaining([expect.objectContaining({ row: 0, field: 'broken.csv' })]));
+});
+
+test('@claim:validation-notes flags impossible dates and explains comma numbers', async ({ page }) => {
+  await page.goto('/app');
+  await page.locator('#file-input').setInputFiles({
+    name: 'boundary.csv',
+    mimeType: 'text/csv',
+    buffer: Buffer.from('Date,Food,Calories,Protein\n2025-99-99,Impossible date,"1,234",-5')
+  });
+  await expect(page.getByText('Date missing')).toBeVisible();
+  await expect(page.getByRole('cell', { name: '1,234', exact: true })).toBeVisible();
+  await expect(page.getByText('Review 3 conversion notes')).toBeVisible();
+  await page.getByText('Review 3 conversion notes').click();
+  await expect(page.getByText('not a real calendar date', { exact: false })).toBeVisible();
+  await expect(page.getByText('comma as a thousands separator', { exact: false })).toBeVisible();
+  await expect(page.getByText('negative value was kept', { exact: false })).toBeVisible();
+});
+
+test('@claim:license-restore restores a license token on a fresh device', async ({ page }) => {
+  await page.route('https://api.sociobot.in/api/v1/products/food-log-export-kit/verify?license=restored-token', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ valid: true, reason: 'ok', expires_at: null }) })
+  );
+  await page.goto('/app');
+  await page.getByRole('button', { name: 'Have a license?' }).click();
+  await page.getByLabel('License token').fill('restored-token');
+  await page.getByRole('button', { name: 'Verify license' }).click();
+  await expect(page.getByText('Licensed', { exact: false })).toBeVisible();
+  await expect.poll(() => page.evaluate((key) => localStorage.getItem(key), licenseKey)).toBe('restored-token');
+});
+
+test('@claim:paid-purchase live checkout redirects to Dodo hosted checkout', async ({ page, request }) => {
+  await page.goto('/');
+  const buy = page.getByRole('link', { name: 'Buy the batch license' });
+  await expect(buy).toHaveAttribute('href', 'https://api.sociobot.in/api/v1/products/food-log-export-kit/checkout');
+  const response = await request.get(await buy.getAttribute('href') as string, { maxRedirects: 0 });
+  expect(response.status()).toBe(303);
+  const redirect = new URL(response.headers().location);
+  expect(redirect.origin).toBe('https://checkout.dodopayments.com');
+  expect(redirect.pathname).toMatch(/^\/session\/cks_/);
+});
+
+test('a replacement license token never reuses another token verdict', async ({ page }) => {
+  await page.addInitScript(({ licenseKey, verdictKey }) => {
+    localStorage.setItem(licenseKey, 'known-valid');
+    localStorage.setItem(verdictKey, JSON.stringify({ token: 'known-valid', valid: true, checked: Date.now() }));
+  }, { licenseKey, verdictKey });
+  let verificationRequests = 0;
+  await page.route('https://api.sociobot.in/api/v1/products/food-log-export-kit/verify?license=obviously-invalid-replacement', async (route) => {
+    verificationRequests += 1;
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ valid: false, reason: 'invalid', expires_at: null }) });
+  });
+  await page.goto('/app?license=obviously-invalid-replacement');
+  await expect(page.getByText('This license is no longer active.')).toBeVisible();
+  expect(verificationRequests).toBe(1);
+  await expect(page.getByText('✓ Licensed')).toHaveCount(0);
+  await expect.poll(() => page.evaluate((key) => localStorage.getItem(key), licenseKey)).toBe('obviously-invalid-replacement');
+  expect(new URL(page.url()).searchParams.has('license')).toBe(false);
 });
 
 test('@claim:offline-reload reopens the demo without a network', async ({ page, context }) => {

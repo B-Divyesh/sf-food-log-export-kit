@@ -28,12 +28,34 @@ function findValue(row: Record<string, unknown>, field: keyof typeof aliases): s
 
 function asNumber(value: string, row: number, field: string, issues: ImportIssue[]): number | null {
   if (!value) return null;
-  const cleaned = value.replace(',', '.').replace(/[^\d.+-]/g, '');
+  const match = value.trim().match(/^([+-]?\d[\d.,]*)(?:\s*[a-zA-Z%]+)?$/);
+  if (!match) {
+    issues.push({ row, field, value, message: `“${value}” is not a number. The field was left empty.` });
+    return null;
+  }
+  const token = match[1];
+  let cleaned = token;
+  let interpretation = '';
+  if (/^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$/.test(token)) {
+    cleaned = token.replaceAll(',', '');
+    interpretation = `“${value}” used a comma as a thousands separator. It was read as ${cleaned}.`;
+  } else if (/^[+-]?\d{1,3}(\.\d{3})+,\d+$/.test(token)) {
+    cleaned = token.replaceAll('.', '').replace(',', '.');
+    interpretation = `“${value}” used dots for thousands and a comma for decimals. It was read as ${cleaned}.`;
+  } else if (/^[+-]?\d+,\d{1,2}$/.test(token)) {
+    cleaned = token.replace(',', '.');
+    interpretation = `“${value}” used a comma as the decimal mark. It was read as ${cleaned}.`;
+  } else if (token.includes(',')) {
+    issues.push({ row, field, value, message: `“${value}” uses an ambiguous number format. The field was left empty.` });
+    return null;
+  }
   const result = Number(cleaned);
   if (!Number.isFinite(result)) {
     issues.push({ row, field, value, message: `“${value}” is not a number. The field was left empty.` });
     return null;
   }
+  if (interpretation) issues.push({ row, field, value, message: interpretation });
+  if (result < 0) issues.push({ row, field, value, message: `A negative value was kept for ${field}. Check it against the source file.` });
   return result;
 }
 
@@ -42,8 +64,17 @@ function asDate(value: string, row: number, issues: ImportIssue[]): string {
     issues.push({ row, field: 'date', message: 'No date was found. Add one before relying on timeline order.' });
     return '';
   }
-  const iso = value.match(/^\d{4}-\d{2}-\d{2}/)?.[0];
-  if (iso) return iso;
+  const iso = value.match(/^(\d{4}-\d{2}-\d{2})(?:$|[T\s])/)?.[1];
+  if (iso) {
+    const parsedIso = new Date(`${iso}T00:00:00Z`);
+    if (!Number.isNaN(parsedIso.getTime()) && parsedIso.toISOString().slice(0, 10) === iso) return iso;
+    issues.push({ row, field: 'date', value, message: `“${value}” is not a real calendar date. The original value was kept in notes.` });
+    return '';
+  }
+  if (/^\d{1,2}[./-]\d{1,2}[./-]\d{2,4}$/.test(value)) {
+    issues.push({ row, field: 'date', value, message: `“${value}” has an ambiguous day and month order. Use YYYY-MM-DD. The original value was kept in notes.` });
+    return '';
+  }
   const parsed = new Date(value);
   if (Number.isNaN(parsed.getTime())) {
     issues.push({ row, field: 'date', value, message: `“${value}” could not be read as a date. The original value was kept in notes.` });
