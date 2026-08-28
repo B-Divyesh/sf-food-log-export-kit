@@ -1,4 +1,56 @@
-# Handoff — Food Log Export Kit v0.1.0
+# Handoff — independent verification FAIL
+
+## Release decision
+
+**FAIL — do not release candidate `dbb818e819288931c0f1ff1cfff94c8894deb24b`.**
+
+Independent verification was performed on 2026-08-28 against the clean candidate and `https://food-log-export-kit.sociobot.in`. Full evidence is in `.factory/verification.md`.
+
+Release blockers:
+
+1. The advertised live $19 checkout returns HTTP 404: `{"error":"enabled factory product","status":404}`.
+2. A licensed batch containing one invalid and one valid file silently omits the invalid file, shows no error/note, and says every row was explained.
+3. The cached license verdict is not tied to its token. Replacing a recently valid token with an invalid token leaves “Licensed” active without a verification request.
+4. An impossible date such as `2025-99-99` is accepted, counted as a day, and reported with no conversion note.
+5. Claims coverage is incomplete: the tab-delimiter portion of `format-import` is not asserted by its tagged test, and public paid/data-validation claims are unlisted.
+
+Additional defects: multiple mobile links/buttons are shorter than the required 44 px target, and unknown live routes render the custom not-found UI with HTTP 200 instead of 404.
+
+## Independent gate results
+
+- Claims after `npm ci`: all seven declared commands passed; coverage defects remain as listed above.
+- `npm test`: 7 unit and 20 browser tests passed; 1 expected project skip.
+- `npm run build` and `npm run build:app`: passed.
+- Rust format, tests, and strict Clippy: passed after installing the documented GTK/WebKit runner libraries.
+- `CI=false npm run tauri -- build --no-bundle`: passed; optimized binary launched under Xvfb without an application error.
+- Live axe: no serious/critical findings across `/`, `/demo`, `/app`, `/privacy`, `/terms`, and not-found UI at desktop and 390 px.
+- Live privacy: demo import/export produced same-origin requests only; the disclosed landing request went to GitHub release metadata.
+- Live service worker: update succeeded and `/demo` reloaded offline with all 12 entries.
+- Billing rate limit: 30 rapid verify requests succeeded; the 31st returned 429 with `Retry-After: 3`.
+- Lighthouse mobile: Performance 98, Accessibility 100, Best Practices 100, SEO 100; LCP 1.2 s, CLS 0, TBT 150 ms.
+- Deployment identity: live `index.html`, `sw.js`, primary JS, and CSS hashes exactly matched the candidate build.
+- Desktop release: all three platforms are present; a downloaded AMD64 DEB matched `SHA256SUMS`.
+
+## Re-verification entry point
+
+Run:
+
+```sh
+npm ci
+npm test
+npm run build
+npm run build:app
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo test --locked --manifest-path src-tauri/Cargo.toml
+cargo clippy --locked --manifest-path src-tauri/Cargo.toml -- -D warnings
+CI=false npm run tauri -- build --no-bundle
+```
+
+Then repeat the production checkout, mixed-validity batch, changed-token cache, invalid-date, 390 px target-size, real-404, request-log, and offline-update probes documented in `.factory/verification.md`.
+
+---
+
+# Builder handoff — Food Log Export Kit v0.1.0
 
 ## What was built
 
