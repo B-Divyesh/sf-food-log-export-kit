@@ -43,12 +43,9 @@
     ],
     "1": [
       "src_tauri_gen_schemas_linux_schema_capability_properties",
-      "src_tauri_gen_schemas_linux_schema_definitions_identifier",
       "src_tauri_gen_schemas_linux_schema_description_default",
       "src_tauri_gen_schemas_linux_schema_description_description",
       "src_tauri_gen_schemas_linux_schema_description_type",
-      "src_tauri_gen_schemas_linux_schema_identifier_description",
-      "src_tauri_gen_schemas_linux_schema_identifier_oneof",
       "src_tauri_gen_schemas_linux_schema_identifier_type",
       "src_tauri_gen_schemas_linux_schema_items_ref",
       "src_tauri_gen_schemas_linux_schema_items_type",
@@ -83,37 +80,74 @@
       "src_tauri_gen_schemas_linux_schema_windows_type"
     ],
     "2": [
-      "src_app",
-      "src_app_announce",
-      "src_app_appheader",
-      "src_app_appstate",
-      "src_app_bindapp",
-      "src_app_demobanner",
-      "src_app_emptypanel",
-      "src_app_emptystate",
-      "src_app_escapehtml",
-      "src_app_licensepanel",
-      "src_app_loadsample",
-      "src_app_number",
-      "src_app_readfiles",
-      "src_app_renderapp",
-      "src_app_rerender",
-      "src_app_reviewpanel",
       "src_app_startapp",
-      "src_app_state",
-      "src_app_steps",
-      "src_app_totals",
-      "src_exporter_savetext",
-      "src_icons",
-      "src_icons_icons",
-      "src_importer_importtext",
-      "src_license_optimisticlicense",
+      "src_license",
+      "src_license_acceptlicensefromurl",
+      "src_license_cachedverdict",
+      "src_license_checkouturl",
+      "src_license_licensestate",
+      "src_license_removelicense",
       "src_license_storedlicense",
       "src_license_verifylicense",
-      "src_sample",
-      "src_sample_samplecsv"
+      "src_main",
+      "src_main_bindlinks",
+      "src_main_istauri",
+      "src_main_live",
+      "src_main_render",
+      "src_main_root",
+      "src_pages",
+      "src_pages_landingpage",
+      "src_pages_notfoundpage",
+      "src_pages_privacypage",
+      "src_pages_resolveplatformdownload",
+      "src_pages_termspage",
+      "src_release",
+      "src_release_desktopplatform",
+      "src_release_detectdesktopplatform",
+      "src_release_detectmacarchitecture",
+      "src_release_macarchitecture",
+      "src_release_releaseasset",
+      "src_release_releasedetails",
+      "src_release_selectplatformasset",
+      "src_shell",
+      "src_shell_footer",
+      "src_shell_header",
+      "tests_unit_release_test",
+      "tests_unit_release_test_assets"
     ],
     "3": [
+      "src_tauri_gen_schemas_linux_schema",
+      "src_tauri_gen_schemas_linux_schema_anyof",
+      "src_tauri_gen_schemas_linux_schema_capabilityremote_description",
+      "src_tauri_gen_schemas_linux_schema_capabilityremote_properties",
+      "src_tauri_gen_schemas_linux_schema_capabilityremote_required",
+      "src_tauri_gen_schemas_linux_schema_capabilityremote_type",
+      "src_tauri_gen_schemas_linux_schema_definitions",
+      "src_tauri_gen_schemas_linux_schema_definitions_capabilityremote",
+      "src_tauri_gen_schemas_linux_schema_definitions_identifier",
+      "src_tauri_gen_schemas_linux_schema_definitions_number",
+      "src_tauri_gen_schemas_linux_schema_definitions_permissionentry",
+      "src_tauri_gen_schemas_linux_schema_definitions_target",
+      "src_tauri_gen_schemas_linux_schema_definitions_value",
+      "src_tauri_gen_schemas_linux_schema_description",
+      "src_tauri_gen_schemas_linux_schema_identifier_description",
+      "src_tauri_gen_schemas_linux_schema_identifier_oneof",
+      "src_tauri_gen_schemas_linux_schema_json_ref_urls",
+      "src_tauri_gen_schemas_linux_schema_number_anyof",
+      "src_tauri_gen_schemas_linux_schema_number_description",
+      "src_tauri_gen_schemas_linux_schema_permissionentry_anyof",
+      "src_tauri_gen_schemas_linux_schema_permissionentry_description",
+      "src_tauri_gen_schemas_linux_schema_properties_urls",
+      "src_tauri_gen_schemas_linux_schema_schema",
+      "src_tauri_gen_schemas_linux_schema_target_description",
+      "src_tauri_gen_schemas_linux_schema_target_oneof",
+      "src_tauri_gen_schemas_linux_schema_title",
+      "src_tauri_gen_schemas_linux_schema_urls_description",
+      "src_tauri_gen_schemas_linux_schema_urls_type",
+      "src_tauri_gen_schemas_linux_schema_value_anyof",
+      "src_tauri_gen_schemas_linux_schema_value_description"
+    ],
+    "4": [
       "ref_icons_128x128_2x_png",
       "ref_icons_128x128_png",
       "ref_icons_32x32_png",
@@ -142,7 +176,7 @@
       "src_tauri_tauri_conf_security_csp",
       "src_tauri_tauri_conf_version"
     ],
-    "4": [
+    "5": [
       "src_tauri_gen_schemas_desktop_schema",
       "src_tauri_gen_schemas_desktop_schema_anyof",
       "src_tauri_gen_schemas_desktop_schema_capabilityremote_description",
@@ -171,36 +205,35 @@
       "src_tauri_gen_schemas_desktop_schema_value_anyof",
       "src_tauri_gen_schemas_desktop_schema_value_description"
     ],
-    "5": [
-      "src_tauri_gen_schemas_linux_schema",
-      "src_tauri_gen_schemas_linux_schema_anyof",
-      "src_tauri_gen_schemas_linux_schema_capabilityremote_description",
-      "src_tauri_gen_schemas_linux_schema_capabilityremote_properties",
-      "src_tauri_gen_schemas_linux_schema_capabilityremote_required",
-      "src_tauri_gen_schemas_linux_schema_capabilityremote_type",
-      "src_tauri_gen_schemas_linux_schema_definitions",
-      "src_tauri_gen_schemas_linux_schema_definitions_capabilityremote",
-      "src_tauri_gen_schemas_linux_schema_definitions_number",
-      "src_tauri_gen_schemas_linux_schema_definitions_permissionentry",
-      "src_tauri_gen_schemas_linux_schema_definitions_target",
-      "src_tauri_gen_schemas_linux_schema_definitions_value",
-      "src_tauri_gen_schemas_linux_schema_description",
-      "src_tauri_gen_schemas_linux_schema_json_ref_urls",
-      "src_tauri_gen_schemas_linux_schema_number_anyof",
-      "src_tauri_gen_schemas_linux_schema_number_description",
-      "src_tauri_gen_schemas_linux_schema_permissionentry_anyof",
-      "src_tauri_gen_schemas_linux_schema_permissionentry_description",
-      "src_tauri_gen_schemas_linux_schema_properties_urls",
-      "src_tauri_gen_schemas_linux_schema_schema",
-      "src_tauri_gen_schemas_linux_schema_target_description",
-      "src_tauri_gen_schemas_linux_schema_target_oneof",
-      "src_tauri_gen_schemas_linux_schema_title",
-      "src_tauri_gen_schemas_linux_schema_urls_description",
-      "src_tauri_gen_schemas_linux_schema_urls_type",
-      "src_tauri_gen_schemas_linux_schema_value_anyof",
-      "src_tauri_gen_schemas_linux_schema_value_description"
-    ],
     "6": [
+      "src_csv",
+      "src_csv_countoutsidequotes",
+      "src_csv_detectdelimiter",
+      "src_csv_encodecsv",
+      "src_csv_parsecsv",
+      "src_exporter",
+      "src_exporter_csvheaders",
+      "src_exporter_exportarchive",
+      "src_exporter_exportcsv",
+      "src_exporter_savetext",
+      "src_importer",
+      "src_importer_aliases",
+      "src_importer_asdate",
+      "src_importer_asnumber",
+      "src_importer_astext",
+      "src_importer_findvalue",
+      "src_importer_importtext",
+      "src_importer_maprecord",
+      "src_importer_normalized",
+      "src_importer_objectsfromjson",
+      "src_types",
+      "src_types_foodrecord",
+      "src_types_importissue",
+      "src_types_importresult",
+      "src_types_recordkind",
+      "tests_unit_importer_test"
+    ],
+    "7": [
       "ref_dom",
       "ref_dom_iterable",
       "ref_es2022",
@@ -227,33 +260,33 @@
       "tsconfig_compileroptions_usedefineforclassfields",
       "tsconfig_include"
     ],
-    "7": [
-      "src_csv",
-      "src_csv_countoutsidequotes",
-      "src_csv_detectdelimiter",
-      "src_csv_encodecsv",
-      "src_csv_parsecsv",
-      "src_exporter",
-      "src_exporter_csvheaders",
-      "src_exporter_exportarchive",
-      "src_exporter_exportcsv",
-      "src_importer",
-      "src_importer_aliases",
-      "src_importer_asdate",
-      "src_importer_asnumber",
-      "src_importer_astext",
-      "src_importer_findvalue",
-      "src_importer_maprecord",
-      "src_importer_normalized",
-      "src_importer_objectsfromjson",
-      "src_types",
-      "src_types_foodrecord",
-      "src_types_importissue",
-      "src_types_importresult",
-      "src_types_recordkind",
-      "tests_unit_importer_test"
-    ],
     "8": [
+      "src_app",
+      "src_app_announce",
+      "src_app_appheader",
+      "src_app_appstate",
+      "src_app_bindapp",
+      "src_app_demobanner",
+      "src_app_emptypanel",
+      "src_app_emptystate",
+      "src_app_escapehtml",
+      "src_app_licensepanel",
+      "src_app_loadsample",
+      "src_app_number",
+      "src_app_readfiles",
+      "src_app_renderapp",
+      "src_app_rerender",
+      "src_app_reviewpanel",
+      "src_app_state",
+      "src_app_steps",
+      "src_app_totals",
+      "src_icons",
+      "src_icons_icons",
+      "src_license_optimisticlicense",
+      "src_sample",
+      "src_sample_samplecsv"
+    ],
+    "9": [
       "package",
       "package_dependencies",
       "package_dependencies_tauri_apps_api",
@@ -275,29 +308,6 @@
       "tauri_apps_api",
       "tauri_apps_plugin_dialog",
       "tauri_apps_plugin_fs"
-    ],
-    "9": [
-      "src_license",
-      "src_license_acceptlicensefromurl",
-      "src_license_cachedverdict",
-      "src_license_checkouturl",
-      "src_license_licensestate",
-      "src_license_removelicense",
-      "src_main",
-      "src_main_bindlinks",
-      "src_main_istauri",
-      "src_main_live",
-      "src_main_render",
-      "src_main_root",
-      "src_pages",
-      "src_pages_landingpage",
-      "src_pages_notfoundpage",
-      "src_pages_privacypage",
-      "src_pages_resolveplatformdownload",
-      "src_pages_termspage",
-      "src_shell",
-      "src_shell_footer",
-      "src_shell_header"
     ],
     "10": [
       "axe_core_playwright",
@@ -341,66 +351,73 @@
       "src_tauri_gen_schemas_linux_schema_json_ref_permissions"
     ],
     "13": [
+      "public_install_choose_bin_dir",
+      "public_install_fail",
       "public_install_sh__entry",
       "public_install_sh_public_install"
     ],
     "14": [
+      "tests_unit_installer_test",
+      "tests_unit_installer_test_installer",
+      "tests_unit_installer_test_sha256"
+    ],
+    "15": [
       "public_sw",
       "public_sw_shell"
     ],
-    "15": [
+    "16": [
       "src_tauri_build",
       "src_tauri_build_main"
     ],
-    "16": [
+    "17": [
       "src_tauri_src_lib",
       "src_tauri_src_lib_run"
     ],
-    "17": [
+    "18": [
       "src_tauri_src_main",
       "src_tauri_src_main_main"
     ],
-    "18": [
+    "19": [
       "pkg_food_log_export_kit"
     ],
-    "19": [
+    "20": [
       "playwright_config"
     ],
-    "20": [
+    "21": [
       "public_install_ps1_public_install"
     ],
-    "21": [
+    "22": [
       "tests_e2e_accessibility_spec"
     ],
-    "22": [
+    "23": [
       "tests_e2e_claims_spec"
     ],
-    "23": [
+    "24": [
       "tests_unit_hosting_test"
     ],
-    "24": [
+    "25": [
       "vite_config"
     ],
-    "25": [
+    "26": [
       "vitest_config"
     ]
   },
   "cohesion": {
     "0": 0.05398110661268556,
-    "1": 0.05398110661268556,
-    "2": 0.15517241379310345,
-    "3": 0.07407407407407407,
+    "1": 0.05873015873015873,
+    "2": 0.1319073083778966,
+    "3": 0.06666666666666667,
     "4": 0.07407407407407407,
     "5": 0.07407407407407407,
-    "6": 0.08,
-    "7": 0.16304347826086957,
-    "8": 0.09523809523809523,
-    "9": 0.22380952380952382,
+    "6": 0.16,
+    "7": 0.08,
+    "8": 0.17391304347826086,
+    "9": 0.09523809523809523,
     "10": 0.13333333333333333,
     "11": 0.2,
     "12": 0.2222222222222222,
-    "13": 1.0,
-    "14": 1.0,
+    "13": 0.6666666666666666,
+    "14": 0.6666666666666666,
     "15": 1.0,
     "16": 1.0,
     "17": 1.0,
@@ -411,7 +428,8 @@
     "22": 1.0,
     "23": 1.0,
     "24": 1.0,
-    "25": 1.0
+    "25": 1.0,
+    "26": 1.0
   },
   "gods": [
     {
@@ -450,11 +468,6 @@
       "degree": 8
     },
     {
-      "id": "src_tauri_tauri_conf_bundle",
-      "label": "bundle",
-      "degree": 8
-    },
-    {
       "id": "src_tauri_gen_schemas_desktop_schema_definitions",
       "label": "definitions",
       "degree": 8
@@ -462,6 +475,11 @@
     {
       "id": "src_tauri_gen_schemas_linux_schema_definitions",
       "label": "definitions",
+      "degree": 8
+    },
+    {
+      "id": "src_tauri_tauri_conf_bundle",
+      "label": "bundle",
       "degree": 8
     }
   ],
@@ -489,8 +507,19 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "licensePanel()",
-      "target": "checkoutUrl()",
+      "source": "bindApp()",
+      "target": "saveText()",
+      "source_files": [
+        "src/app.ts",
+        "src/exporter.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "bindApp()",
+      "target": "verifyLicense()",
       "source_files": [
         "src/app.ts",
         "src/license.ts"
@@ -500,22 +529,11 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "render()",
-      "target": "startApp()",
+      "source": "licensePanel()",
+      "target": "checkoutUrl()",
       "source_files": [
-        "src/main.ts",
-        "src/app.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "importText()",
-      "target": "parseCsv()",
-      "source_files": [
-        "src/importer.ts",
-        "src/csv.ts"
+        "src/app.ts",
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
