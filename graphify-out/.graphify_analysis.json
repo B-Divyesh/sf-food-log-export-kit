@@ -435,14 +435,24 @@
       "degree": 10
     },
     {
+      "id": "src_importer_importtext",
+      "label": "importText()",
+      "degree": 9
+    },
+    {
       "id": "package_scripts",
       "label": "scripts",
       "degree": 9
     },
     {
-      "id": "src_importer_importtext",
-      "label": "importText()",
-      "degree": 9
+      "id": "src_app_startapp",
+      "label": "startApp()",
+      "degree": 8
+    },
+    {
+      "id": "src_tauri_tauri_conf_bundle",
+      "label": "bundle",
+      "degree": 8
     },
     {
       "id": "src_tauri_gen_schemas_desktop_schema_definitions",
@@ -453,30 +463,9 @@
       "id": "src_tauri_gen_schemas_linux_schema_definitions",
       "label": "definitions",
       "degree": 8
-    },
-    {
-      "id": "src_tauri_tauri_conf_bundle",
-      "label": "bundle",
-      "degree": 8
-    },
-    {
-      "id": "src_app_startapp",
-      "label": "startApp()",
-      "degree": 8
     }
   ],
   "surprises": [
-    {
-      "source": "importText()",
-      "target": "parseCsv()",
-      "source_files": [
-        "src/importer.ts",
-        "src/csv.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
     {
       "source": "bindApp()",
       "target": "exportArchive()",
@@ -500,6 +489,17 @@
       "why": "bridges separate communities"
     },
     {
+      "source": "licensePanel()",
+      "target": "checkoutUrl()",
+      "source_files": [
+        "src/app.ts",
+        "src/license.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
       "source": "render()",
       "target": "startApp()",
       "source_files": [
@@ -511,11 +511,11 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "licensePanel()",
-      "target": "checkoutUrl()",
+      "source": "importText()",
+      "target": "parseCsv()",
       "source_files": [
-        "src/app.ts",
-        "src/license.ts"
+        "src/importer.ts",
+        "src/csv.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
