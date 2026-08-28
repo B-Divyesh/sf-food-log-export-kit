@@ -32,6 +32,8 @@ Results on 2026-08-28:
 - Axe: no serious or critical violations on `/`, `/demo`, `/privacy`, `/terms`, or the SPA 404.
 - Offline: demo reloaded with the network disabled and showed all 12 entries.
 - Native shell: release binary built at `src-tauri/target/release/food-log-export-kit`.
+- GitHub release: `v0.1.0` completed on all four matrix jobs. It contains two DMGs, MSI/EXE, AppImage/DEB/RPM, app tarballs, `SHA256SUMS`, and `latest.json`.
+- Release integrity: the published AMD64 DEB matched its entry in `SHA256SUMS`; `latest.json` parsed with URLs for all three platforms.
 - `npm audit`: 0 vulnerabilities.
 - Static build: `dist/site/index.html` exists. Initial JS is about 12.1 KB gzip; CSS is 5.9 KB gzip; the mobile hero is 15 KB.
 - Lighthouse mobile: Performance 99, Accessibility 100, Best Practices 96, SEO 100. LCP 2.1 s, CLS 0, total blocking time 0 ms, speed index 0.9 s.
@@ -41,12 +43,10 @@ Claim definitions and exact commands are in `.factory/claims.json`. The copy aud
 ## Known gaps
 
 - Source apps change their export headings. This v1 uses documented aliases rather than app-specific account scraping. Unknown headings get a clear error; unusable rows get a note.
-- The GitHub release assets do not exist until the `v0.1.0` tag runs the release workflow. The site shows a calm publishing state until then.
 - macOS and Windows packages are unsigned. Users may need the platform’s right-click/open flow until certificates are configured.
 
 ## Needs operator action
 
 1. Register `food-log-export-kit` and its $19 one-time price with the Sociobot billing API. No numeric product ID is stored in this repo.
-2. Push `main`, then push tag `v0.1.0`. Confirm `.dmg`, `.msi`/`.exe`, `.AppImage`, `.deb`, `SHA256SUMS`, and `latest.json` on the GitHub release.
-3. Add signing secrets when certificates are available: `APPLE_CERTIFICATE`, `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD`, `APPLE_TEAM_ID`, `WINDOWS_CERT_PFX`, and `WINDOWS_CERT_PASSWORD`. The current workflow intentionally builds unsigned packages and does not consume them.
-4. Deploy `dist/site/`. No DNS, infrastructure, billing registration, or payment-provider configuration was changed here.
+2. Add signing support when certificates are available. The current workflow expects no signing secrets. A future signed workflow would need `APPLE_CERTIFICATE`, `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD`, `APPLE_TEAM_ID`, `WINDOWS_CERT_PFX`, and `WINDOWS_CERT_PASSWORD`.
+3. Deploy `dist/site/`. No DNS, infrastructure, billing registration, or payment-provider configuration was changed here.
