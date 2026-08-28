@@ -106,46 +106,13 @@
       "src_icons_icons",
       "src_importer_importtext",
       "src_importer_objectsfromjson",
-      "src_license",
-      "src_license_checkouturl",
-      "src_license_licensestate",
       "src_license_optimisticlicense",
-      "src_license_removelicense",
       "src_license_storedlicense",
       "src_license_verifylicense",
       "src_sample",
       "src_sample_samplecsv"
     ],
     "3": [
-      "plugin_dialog",
-      "plugin_fs",
-      "src_app_appstate",
-      "src_csv",
-      "src_csv_countoutsidequotes",
-      "src_csv_detectdelimiter",
-      "src_csv_encodecsv",
-      "src_csv_parsecsv",
-      "src_exporter",
-      "src_exporter_csvheaders",
-      "src_exporter_exportarchive",
-      "src_exporter_exportcsv",
-      "src_exporter_savetext",
-      "src_importer",
-      "src_importer_aliases",
-      "src_importer_asdate",
-      "src_importer_asnumber",
-      "src_importer_astext",
-      "src_importer_findvalue",
-      "src_importer_maprecord",
-      "src_importer_normalized",
-      "src_types",
-      "src_types_foodrecord",
-      "src_types_importissue",
-      "src_types_importresult",
-      "src_types_recordkind",
-      "tests_unit_importer_test"
-    ],
-    "4": [
       "ref_icons_128x128_2x_png",
       "ref_icons_128x128_png",
       "ref_icons_32x32_png",
@@ -174,7 +141,7 @@
       "src_tauri_tauri_conf_security_csp",
       "src_tauri_tauri_conf_version"
     ],
-    "5": [
+    "4": [
       "src_tauri_gen_schemas_desktop_schema",
       "src_tauri_gen_schemas_desktop_schema_anyof",
       "src_tauri_gen_schemas_desktop_schema_capabilityremote_description",
@@ -203,7 +170,7 @@
       "src_tauri_gen_schemas_desktop_schema_value_anyof",
       "src_tauri_gen_schemas_desktop_schema_value_description"
     ],
-    "6": [
+    "5": [
       "src_tauri_gen_schemas_linux_schema",
       "src_tauri_gen_schemas_linux_schema_anyof",
       "src_tauri_gen_schemas_linux_schema_capabilityremote_description",
@@ -232,7 +199,7 @@
       "src_tauri_gen_schemas_linux_schema_value_anyof",
       "src_tauri_gen_schemas_linux_schema_value_description"
     ],
-    "7": [
+    "6": [
       "ref_dom",
       "ref_dom_iterable",
       "ref_es2022",
@@ -259,6 +226,33 @@
       "tsconfig_compileroptions_usedefineforclassfields",
       "tsconfig_include"
     ],
+    "7": [
+      "src_app_appstate",
+      "src_csv",
+      "src_csv_countoutsidequotes",
+      "src_csv_detectdelimiter",
+      "src_csv_encodecsv",
+      "src_csv_parsecsv",
+      "src_exporter",
+      "src_exporter_csvheaders",
+      "src_exporter_exportarchive",
+      "src_exporter_exportcsv",
+      "src_exporter_savetext",
+      "src_importer",
+      "src_importer_aliases",
+      "src_importer_asdate",
+      "src_importer_asnumber",
+      "src_importer_astext",
+      "src_importer_findvalue",
+      "src_importer_maprecord",
+      "src_importer_normalized",
+      "src_types",
+      "src_types_foodrecord",
+      "src_types_importissue",
+      "src_types_importresult",
+      "src_types_recordkind",
+      "tests_unit_importer_test"
+    ],
     "8": [
       "package",
       "package_dependencies",
@@ -283,7 +277,11 @@
       "tauri_apps_plugin_fs"
     ],
     "9": [
+      "src_license",
       "src_license_acceptlicensefromurl",
+      "src_license_checkouturl",
+      "src_license_licensestate",
+      "src_license_removelicense",
       "src_main",
       "src_main_bindlinks",
       "src_main_istauri",
@@ -386,14 +384,14 @@
   "cohesion": {
     "0": 0.05398110661268556,
     "1": 0.05398110661268556,
-    "2": 0.14112903225806453,
-    "3": 0.1396011396011396,
+    "2": 0.16137566137566137,
+    "3": 0.07407407407407407,
     "4": 0.07407407407407407,
     "5": 0.07407407407407407,
-    "6": 0.07407407407407407,
-    "7": 0.08,
+    "6": 0.08,
+    "7": 0.15666666666666668,
     "8": 0.09523809523809523,
-    "9": 0.31666666666666665,
+    "9": 0.24210526315789474,
     "10": 0.13333333333333333,
     "11": 0.2,
     "12": 0.2222222222222222,
@@ -432,14 +430,24 @@
       "degree": 10
     },
     {
+      "id": "src_importer_importtext",
+      "label": "importText()",
+      "degree": 9
+    },
+    {
       "id": "package_scripts",
       "label": "scripts",
       "degree": 9
     },
     {
-      "id": "src_importer_importtext",
-      "label": "importText()",
-      "degree": 9
+      "id": "src_app_startapp",
+      "label": "startApp()",
+      "degree": 8
+    },
+    {
+      "id": "src_tauri_tauri_conf_bundle",
+      "label": "bundle",
+      "degree": 8
     },
     {
       "id": "src_tauri_gen_schemas_desktop_schema_definitions",
@@ -449,16 +457,6 @@
     {
       "id": "src_tauri_gen_schemas_linux_schema_definitions",
       "label": "definitions",
-      "degree": 8
-    },
-    {
-      "id": "src_tauri_tauri_conf_bundle",
-      "label": "bundle",
-      "degree": 8
-    },
-    {
-      "id": "src_app_startapp",
-      "label": "startApp()",
       "degree": 8
     }
   ],
@@ -497,22 +495,22 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "render()",
-      "target": "startApp()",
+      "source": "licensePanel()",
+      "target": "checkoutUrl()",
       "source_files": [
-        "src/main.ts",
-        "src/app.ts"
+        "src/app.ts",
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "bridges separate communities"
     },
     {
-      "source": "importText()",
-      "target": "parseCsv()",
+      "source": "render()",
+      "target": "startApp()",
       "source_files": [
-        "src/importer.ts",
-        "src/csv.ts"
+        "src/main.ts",
+        "src/app.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
