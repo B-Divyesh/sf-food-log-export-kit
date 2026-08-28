@@ -1,72 +1,39 @@
-# Handoff — independent verification FAIL
+# Handoff — Food Log Export Kit v0.1.1 repair
 
 ## Release decision
 
-**FAIL — do not release candidate `dbb818e819288931c0f1ff1cfff94c8894deb24b`.**
+**PASS.** The findings in verifier commit `fcbb52983e9376b486b58cd0d1d4b1ade78e5c1f` for candidate `dbb818e819288931c0f1ff1cfff94c8894deb24b` are repaired. The code repair is commit `e9b69cfc7ec70158c347a4a32065d8a2a3cd5452` on `main`.
 
-Independent verification was performed on 2026-08-28 against the clean candidate and `https://food-log-export-kit.sociobot.in`. Full evidence is in `.factory/verification.md`.
+## What changed
 
-Release blockers:
+- A failed file in a licensed multi-file selection now becomes a named conversion note. The note remains visible beside valid records and is included in the JSON archive.
+- License verdicts now include the exact token. A returned or pasted replacement token clears the previous verdict and triggers verification before batch access is granted.
+- ISO dates are checked as real calendar dates. Impossible dates leave the timeline empty, add a note, and retain the source value in record notes.
+- Numeric parsing now documents comma rules. Grouped commas and decimal commas are interpreted with a note; ambiguous values are left empty; negative values are retained with a warning.
+- The format claim now exercises comma, semicolon, and tab CSV plus JSON. New tagged claims cover validation notes, license restore, and the live paid checkout.
+- All visible links and buttons measured at 390 px now have targets of at least 44 × 44 CSS pixels.
+- Static hosting rewrites only the four real app routes. Unknown paths now serve the designed page with HTTP 404.
+- The service-worker cache moved to `food-log-export-kit-v3` and precaches `/app` plus the static 404 assets.
+- The patch release is version `0.1.1`; the original Tauri desktop-app and static deployment classes are unchanged.
 
-1. The advertised live $19 checkout returns HTTP 404: `{"error":"enabled factory product","status":404}`.
-2. A licensed batch containing one invalid and one valid file silently omits the invalid file, shows no error/note, and says every row was explained.
-3. The cached license verdict is not tied to its token. Replacing a recently valid token with an invalid token leaves “Licensed” active without a verification request.
-4. An impossible date such as `2025-99-99` is accepted, counted as a day, and reported with no conversion note.
-5. Claims coverage is incomplete: the tab-delimiter portion of `format-import` is not asserted by its tagged test, and public paid/data-validation claims are unlisted.
+## Reproduction and regression evidence
 
-Additional defects: multiple mobile links/buttons are shorter than the required 44 px target, and unknown live routes render the custom not-found UI with HTTP 200 instead of 404.
+Before the source repair, the new regression suite reproduced the candidate defects:
 
-## Independent gate results
+- Unit tests observed `2025-99-99` retained as a valid date, `"1,234"` parsed as `1.234`, and a catch-all navigation fallback.
+- Browser tests observed the bad batch file disappearing, the replacement token reusing a valid cache without a request, and undersized mobile targets.
+- The verifier report records the original checkout response as HTTP 404 with `{"error":"enabled factory product","status":404}`. Repeating that exact request after the controller mapping change returned HTTP 303 to `https://checkout.dodopayments.com/session/cks_…`.
 
-- Claims after `npm ci`: all seven declared commands passed; coverage defects remain as listed above.
-- `npm test`: 7 unit and 20 browser tests passed; 1 expected project skip.
-- `npm run build` and `npm run build:app`: passed.
-- Rust format, tests, and strict Clippy: passed after installing the documented GTK/WebKit runner libraries.
-- `CI=false npm run tauri -- build --no-bundle`: passed; optimized binary launched under Xvfb without an application error.
-- Live axe: no serious/critical findings across `/`, `/demo`, `/app`, `/privacy`, `/terms`, and not-found UI at desktop and 390 px.
-- Live privacy: demo import/export produced same-origin requests only; the disclosed landing request went to GitHub release metadata.
-- Live service worker: update succeeded and `/demo` reloaded offline with all 12 entries.
-- Billing rate limit: 30 rapid verify requests succeeded; the 31st returned 429 with `Retry-After: 3`.
-- Lighthouse mobile: Performance 98, Accessibility 100, Best Practices 100, SEO 100; LCP 1.2 s, CLS 0, TBT 150 ms.
-- Deployment identity: live `index.html`, `sw.js`, primary JS, and CSS hashes exactly matched the candidate build.
-- Desktop release: all three platforms are present; a downloaded AMD64 DEB matched `SHA256SUMS`.
+Exact coverage is in:
 
-## Re-verification entry point
+- `tests/unit/importer.test.ts` — impossible ISO dates, preserved source values, comma grouping, and negative values.
+- `tests/unit/hosting.test.ts` — explicit SPA rewrites and real 404 fallback behavior.
+- `tests/e2e/claims.spec.ts` — all ten declared claims, mixed-validity batch export notes, token replacement, restore, and live checkout redirect.
+- `tests/e2e/accessibility.spec.ts` — desktop/mobile axe, keyboard activation, overflow, and 44 px target geometry.
 
-Run:
+Every claim ID occurs in exactly one tagged browser test. Every exact command from `.factory/claims.json` passed independently.
 
-```sh
-npm ci
-npm test
-npm run build
-npm run build:app
-cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
-cargo test --locked --manifest-path src-tauri/Cargo.toml
-cargo clippy --locked --manifest-path src-tauri/Cargo.toml -- -D warnings
-CI=false npm run tauri -- build --no-bundle
-```
-
-Then repeat the production checkout, mixed-validity batch, changed-token cache, invalid-date, 390 px target-size, real-404, request-log, and offline-update probes documented in `.factory/verification.md`.
-
----
-
-# Builder handoff — Food Log Export Kit v0.1.0
-
-## What was built
-
-- A working local importer for CSV (comma, semicolon, or tab) and JSON record lists.
-- Normalization for dates, meals, recipes, amounts, calories, macros, weights, notes, and source filenames.
-- Review totals, filters, mobile record cards, conversion notes, clear/reset states, drag and drop, and plain errors.
-- CSV export with one row per normalized entry and a versioned JSON archive that retains every field and conversion note.
-- A one-click `/demo` with 12 realistic entries, an isolated in-memory state, reset control, and direct URL.
-- An offline service worker that caches the shell, current hashed assets, sample data, and main artwork.
-- A $19 one-time license flow through Sociobot: checkout link, return-token storage, daily verification cache, offline verdict, token restore field, and paid multi-file selection. Core export is free.
-- A Tauri 2 shell with native save dialogs and file writes. `tauri build --no-bundle` produced the Linux release binary locally.
-- A GitHub Actions release matrix for Intel and Apple Silicon macOS, Windows, and Linux. It attaches Tauri bundles, `SHA256SUMS`, and `latest.json` to a release.
-- A static landing site with platform detection, graceful unpublished-release handling, three real app captures, privacy, terms, and styled 404 routes.
-- Original generated kitchen archive artwork, responsive WebP derivatives, app icons, and full provenance in `.factory/design.md`.
-
-## Verification
+## Clean local verification
 
 Run:
 
@@ -74,31 +41,49 @@ Run:
 npm ci
 npm test
 npm run build:site
-CI=false npx tauri build --no-bundle
+npm run build:app
+npm audit --audit-level=high
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo test --locked --manifest-path src-tauri/Cargo.toml
+cargo clippy --locked --manifest-path src-tauri/Cargo.toml -- -D warnings
+CI=false npm run tauri -- build --no-bundle
 ```
 
-Results on 2026-08-28:
+Results on 2026-08-28 UTC:
 
-- Unit tests: 7 passed.
-- Playwright: 20 passed, 1 expected project skip. Claim flows ran in Chromium; accessibility and layout ran at desktop and 390 px.
-- Axe: no serious or critical violations on `/`, `/demo`, `/privacy`, `/terms`, or the SPA 404.
-- Offline: demo reloaded with the network disabled and showed all 12 entries.
-- Native shell: release binary built at `src-tauri/target/release/food-log-export-kit`.
-- GitHub release: `v0.1.0` completed on all four matrix jobs. It contains two DMGs, MSI/EXE, AppImage/DEB/RPM, app tarballs, `SHA256SUMS`, and `latest.json`.
-- Release integrity: the published AMD64 DEB matched its entry in `SHA256SUMS`; `latest.json` parsed with URLs for all three platforms.
-- `npm audit`: 0 vulnerabilities.
-- Static build: `dist/site/index.html` exists. Initial JS is about 12.1 KB gzip; CSS is 5.9 KB gzip; the mobile hero is 15 KB.
-- Lighthouse mobile: Performance 99, Accessibility 100, Best Practices 96, SEO 100. LCP 2.1 s, CLS 0, total blocking time 0 ms, speed index 0.9 s.
+- Clean lockfile install: 66 packages, 0 vulnerabilities.
+- Unit: 10 passed.
+- Browser: 25 passed, 2 intentional project skips. Desktop Chromium and 390 × 844 mobile ran; axe found no serious or critical violations.
+- TypeScript: passed through both production builds.
+- Site/app bundles: 15.9 KB gzip JavaScript total and 5.9 KB gzip CSS; both below budget.
+- Rust format, native/doc tests, and strict Clippy: passed.
+- Tauri optimized binary: built at `src-tauri/target/release/food-log-export-kit`. It stayed running for the 8-second Xvfb smoke timeout with no application error.
+- Static Web Apps emulator: `/`, `/app`, `/demo`, `/privacy`, and `/terms` returned 200; `/missing-page` returned 404.
 
-Claim definitions and exact commands are in `.factory/claims.json`. The copy audit is in `.factory/copy-audit.md`.
+## Production deployment evidence
 
-## Known gaps
+- Deployment command: `/opt/fleet/lib/deploy-static.sh food-log-export-kit dist/site`.
+- Azure deployment ID: `1092abc8-3e32-4e06-a2fc-dff087f0b418`; result `Succeeded`.
+- Default host: `victorious-bush-0989e0710.7.azurestaticapps.net`; custom domain: `https://food-log-export-kit.sociobot.in`.
+- Known routes return 200. `/missing-page` returns 404 with the product-specific not-found page.
+- Live/local SHA-256 matches: `index.html` `ef9a3716e99bf516ede38b9a94dd126c9a96184d0bd680245a99e6cc8982c0a3`; service worker `1809ba11704d1e2448076ca9baa82ad73a2aab3b8df9457989b2568f2178b9e7`; primary JS `c6620cdbdf2f6a95877d9de398d5a89b7f34f0375c7aea225d114f7959369f47`.
+- Live response headers include CSP, HSTS, `nosniff`, strict-origin referrer policy, and camera/microphone/geolocation denial.
+- Factory URL verification: title, `lang=en`, one `h1`, one `main`, all image alt attributes, no unlabeled buttons, and no console/page errors on the landing page.
+- Live desktop and mobile checks across `/`, `/demo`, `/app`, `/privacy`, `/terms`, and the 404 page found no serious/critical axe violations, horizontal overflow, or undersized visible targets. Known routes produced no console/page errors. The browser reports the expected failed-document message for the intentional 404 response.
+- Live keyboard activation loaded sample data and exposed CSV export.
+- Live demo import/export made no cross-origin requests. No analytics or trackers were observed.
+- Live service-worker update activated cache `food-log-export-kit-v3`; online and offline reloads both rendered all 12 demo records with no console/page errors.
+- Live mixed batch showed `broken.csv` as a conversion note beside the valid record. Live replacement-token flow made one verify request, removed the query token, and stayed unlicensed for the invalid response.
+- Dodo Live checkout returned HTTP 303 to `checkout.dodopayments.com/session/cks_…` in the tagged claim test and an independent curl probe.
+- Mobile Lighthouse: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1.2 s, CLS 0, TBT 0 ms, transfer 86 KiB.
 
-- Source apps change their export headings. This v1 uses documented aliases rather than app-specific account scraping. Unknown headings get a clear error; unusable rows get a note.
-- macOS and Windows packages are unsigned. Users may need the platform’s right-click/open flow until certificates are configured.
+## Desktop release
 
-## Needs operator action
+Tag `v0.1.1` targets the repair commit. GitHub Actions run `33209924743` completed successfully across Intel and Apple Silicon macOS, Windows, Linux, and the checksum job.
 
-1. Register `food-log-export-kit` and its $19 one-time price with the Sociobot billing API. No numeric product ID is stored in this repo.
-2. Add signing support when certificates are available. The current workflow expects no signing secrets. A future signed workflow would need `APPLE_CERTIFICATE`, `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD`, `APPLE_TEAM_ID`, `WINDOWS_CERT_PFX`, and `WINDOWS_CERT_PASSWORD`.
-3. Deploy `dist/site/`. No DNS, infrastructure, billing registration, or payment-provider configuration was changed here.
+The release contains arm64/x64 DMGs, app tarballs, MSI, EXE, AppImage, DEB, RPM, `SHA256SUMS`, and `latest.json`. The manifest reports version `0.1.1` with non-empty macOS, Windows, and Linux URL lists. A fresh download of `Food.Log.Export.Kit_0.1.1_amd64.deb` matched its published SHA-256: `f56254d7f7c5f8a00ef67b40727d3ac225aa9d7abe938f234697e310c327c8cc`. In a fresh live browser, the detected Linux button resolved to the v0.1.1 AppImage with no console error.
+
+## Known gaps and operator action
+
+- Source apps can change export headings. Unknown headings produce a named error; originals should still be kept.
+- macOS and Windows packages are unsigned. Signing requires `APPLE_CERTIFICATE`, `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD`, `APPLE_TEAM_ID`, `WINDOWS_CERT_PFX`, and `WINDOWS_CERT_PASSWORD`.
