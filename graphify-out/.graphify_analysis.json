@@ -86,6 +86,7 @@
       "src_app",
       "src_app_announce",
       "src_app_appheader",
+      "src_app_appstate",
       "src_app_bindapp",
       "src_app_demobanner",
       "src_app_emptypanel",
@@ -102,10 +103,10 @@
       "src_app_state",
       "src_app_steps",
       "src_app_totals",
+      "src_exporter_savetext",
       "src_icons",
       "src_icons_icons",
       "src_importer_importtext",
-      "src_importer_objectsfromjson",
       "src_license_optimisticlicense",
       "src_license_storedlicense",
       "src_license_verifylicense",
@@ -227,7 +228,6 @@
       "tsconfig_include"
     ],
     "7": [
-      "src_app_appstate",
       "src_csv",
       "src_csv_countoutsidequotes",
       "src_csv_detectdelimiter",
@@ -237,7 +237,6 @@
       "src_exporter_csvheaders",
       "src_exporter_exportarchive",
       "src_exporter_exportcsv",
-      "src_exporter_savetext",
       "src_importer",
       "src_importer_aliases",
       "src_importer_asdate",
@@ -246,6 +245,7 @@
       "src_importer_findvalue",
       "src_importer_maprecord",
       "src_importer_normalized",
+      "src_importer_objectsfromjson",
       "src_types",
       "src_types_foodrecord",
       "src_types_importissue",
@@ -279,6 +279,7 @@
     "9": [
       "src_license",
       "src_license_acceptlicensefromurl",
+      "src_license_cachedverdict",
       "src_license_checkouturl",
       "src_license_licensestate",
       "src_license_removelicense",
@@ -375,23 +376,26 @@
       "tests_e2e_claims_spec"
     ],
     "23": [
-      "vite_config"
+      "tests_unit_hosting_test"
     ],
     "24": [
+      "vite_config"
+    ],
+    "25": [
       "vitest_config"
     ]
   },
   "cohesion": {
     "0": 0.05398110661268556,
     "1": 0.05398110661268556,
-    "2": 0.16137566137566137,
+    "2": 0.15517241379310345,
     "3": 0.07407407407407407,
     "4": 0.07407407407407407,
     "5": 0.07407407407407407,
     "6": 0.08,
-    "7": 0.15666666666666668,
+    "7": 0.16304347826086957,
     "8": 0.09523809523809523,
-    "9": 0.24210526315789474,
+    "9": 0.22380952380952382,
     "10": 0.13333333333333333,
     "11": 0.2,
     "12": 0.2222222222222222,
@@ -406,7 +410,8 @@
     "21": 1.0,
     "22": 1.0,
     "23": 1.0,
-    "24": 1.0
+    "24": 1.0,
+    "25": 1.0
   },
   "gods": [
     {
@@ -430,24 +435,14 @@
       "degree": 10
     },
     {
-      "id": "src_importer_importtext",
-      "label": "importText()",
-      "degree": 9
-    },
-    {
       "id": "package_scripts",
       "label": "scripts",
       "degree": 9
     },
     {
-      "id": "src_app_startapp",
-      "label": "startApp()",
-      "degree": 8
-    },
-    {
-      "id": "src_tauri_tauri_conf_bundle",
-      "label": "bundle",
-      "degree": 8
+      "id": "src_importer_importtext",
+      "label": "importText()",
+      "degree": 9
     },
     {
       "id": "src_tauri_gen_schemas_desktop_schema_definitions",
@@ -458,9 +453,30 @@
       "id": "src_tauri_gen_schemas_linux_schema_definitions",
       "label": "definitions",
       "degree": 8
+    },
+    {
+      "id": "src_tauri_tauri_conf_bundle",
+      "label": "bundle",
+      "degree": 8
+    },
+    {
+      "id": "src_app_startapp",
+      "label": "startApp()",
+      "degree": 8
     }
   ],
   "surprises": [
+    {
+      "source": "importText()",
+      "target": "parseCsv()",
+      "source_files": [
+        "src/importer.ts",
+        "src/csv.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
     {
       "source": "bindApp()",
       "target": "exportArchive()",
@@ -484,11 +500,11 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "bindApp()",
-      "target": "saveText()",
+      "source": "render()",
+      "target": "startApp()",
       "source_files": [
-        "src/app.ts",
-        "src/exporter.ts"
+        "src/main.ts",
+        "src/app.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
@@ -500,17 +516,6 @@
       "source_files": [
         "src/app.ts",
         "src/license.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "render()",
-      "target": "startApp()",
-      "source_files": [
-        "src/main.ts",
-        "src/app.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
