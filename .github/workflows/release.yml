@@ -44,8 +44,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.1' }}
-          releaseName: Food Log Export Kit ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.1' }}
+          tagName: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.2' }}
+          releaseName: Food Log Export Kit ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.2' }}
           releaseBody: Unsigned desktop builds for macOS, Windows, and Linux. Verify downloads with SHA256SUMS.
           releaseDraft: false
           prerelease: false
@@ -59,11 +59,11 @@ jobs:
       - name: Download release assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.1' }}
+          TAG: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.2' }}
         run: gh release download "$TAG" --dir release-assets
       - name: Create checksums and manifest
         env:
-          TAG: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.1' }}
+          TAG: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.2' }}
         run: |
           cd release-assets
           sha256sum * > SHA256SUMS
@@ -82,7 +82,7 @@ jobs:
           PY
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.1' }}
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.2' }}
           files: |
             release-assets/SHA256SUMS
             release-assets/latest.json

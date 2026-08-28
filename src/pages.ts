@@ -1,4 +1,5 @@
 import { checkoutUrl } from './license';
+import { detectDesktopPlatform, detectMacArchitecture, selectPlatformAsset, type ReleaseDetails } from './release';
 import { footer, header } from './shell';
 
 const art = `<picture class="hero-art"><source media="(max-width: 720px)" srcset="/art/archive-kitchen-720.webp"><img src="/art/archive-kitchen-1280.webp" width="1280" height="853" alt="A recipe card archive box in a quiet kitchen at dusk." fetchpriority="high" decoding="async"></picture>`;
@@ -14,7 +15,7 @@ export function landingPage(): string {
       </div>
       <div class="hero-caption"><span>01 / THE SAFE EXIT</span><p>Your old log becomes an archive you can open anywhere.</p></div>
     </section>
-    <section class="download-band" aria-labelledby="download-title"><div><p class="eyebrow">Desktop app · version 0.1.1</p><h2 id="download-title">Keep the converter on your computer</h2><p>The app reads CSV and JSON exports. It also works when your internet is off.</p></div><div class="download-action"><a class="primary-button download-button" id="platform-download" href="https://github.com/B-Divyesh/sf-food-log-export-kit/releases">Downloads are being published</a><small id="download-note">Unsigned builds for macOS, Windows, and Linux.</small></div></section>
+    <section class="download-band" aria-labelledby="download-title"><div><p class="eyebrow">Desktop app · version 0.1.2</p><h2 id="download-title">Keep the converter on your computer</h2><p>The app reads CSV and JSON exports. It also works when your internet is off.</p></div><div class="download-action"><a class="primary-button download-button" id="platform-download" href="https://github.com/B-Divyesh/sf-food-log-export-kit/releases">Downloads are being published</a><small id="download-note">Unsigned builds for macOS, Windows, and Linux.</small></div></section>
     <section class="product-preview" aria-labelledby="preview-title"><div class="section-intro"><p class="eyebrow">The product</p><h2 id="preview-title">See every row before you export</h2><p>Missing or invalid dates and unreadable or comma-formatted numbers appear as notes. Skipped files and rows are named.</p></div>
       <div class="preview-window"><div class="preview-top"><span></span><b>Food Log Export Kit</b><small>● On this device</small></div><div class="preview-body"><ol><li class="done"><i>1</i><span><b>Import</b><small>sample-food-history.csv</small></span></li><li class="active"><i>2</i><span><b>Review</b><small>12 entries ready</small></span></li><li><i>3</i><span><b>Export</b><small>CSV + JSON</small></span></li></ol><div class="preview-ledger"><div class="ledger-head"><span>APR 14</span><b>3 meals</b><em>No notes</em></div><div><span>Breakfast</span><b>Oatmeal with blueberries</b><span>342 kcal</span></div><div><span>Lunch</span><b>Lentil soup</b><span>418 kcal</span></div><div><span>Dinner</span><b>Tofu ginger stir-fry</b><span>561 kcal</span></div></div></div></div>
     </section>
@@ -47,11 +48,10 @@ export async function resolvePlatformDownload(): Promise<void> {
   const button = document.querySelector<HTMLAnchorElement>('#platform-download');
   const note = document.querySelector('#download-note');
   if (!button || !note) return;
-  const platform = /Mac/i.test(navigator.userAgent) ? 'macOS' : /Windows/i.test(navigator.userAgent) ? 'Windows' : 'Linux';
-  const matches: Record<string, RegExp> = { macOS: /\.(dmg|app\.tar\.gz)$/i, Windows: /\.(msi|exe)$/i, Linux: /\.(AppImage|deb)$/i };
+  const platform = detectDesktopPlatform(navigator.userAgent);
   try {
     const cached = localStorage.getItem('release:food-log-export-kit');
-    let release: { html_url: string; assets: Array<{ name: string; browser_download_url: string }> };
+    let release: ReleaseDetails;
     if (cached && Date.now() - JSON.parse(cached).saved < 3_600_000) release = JSON.parse(cached).release;
     else {
       const response = await fetch('https://api.github.com/repos/B-Divyesh/sf-food-log-export-kit/releases/latest');
@@ -59,10 +59,11 @@ export async function resolvePlatformDownload(): Promise<void> {
       release = await response.json();
       localStorage.setItem('release:food-log-export-kit', JSON.stringify({ saved: Date.now(), release }));
     }
-    const asset = release.assets.find((item) => matches[platform].test(item.name));
+    const macArchitecture = platform === 'macOS' ? await detectMacArchitecture() : 'unknown';
+    const asset = selectPlatformAsset(release.assets, platform, macArchitecture);
     button.href = asset?.browser_download_url ?? release.html_url;
-    button.textContent = asset ? `Download for ${platform}` : 'View desktop releases';
-    note.textContent = asset ? `${asset.name} · unsigned build` : 'Downloads are being published for all three platforms.';
+    button.textContent = asset ? `Download for ${platform}` : platform === 'macOS' ? 'Choose your Mac download' : 'View desktop releases';
+    note.textContent = asset ? `${asset.name} · unsigned build` : platform === 'macOS' ? 'Choose Apple Silicon or Intel on the release page.' : 'Downloads are being published for all three platforms.';
   } catch {
     button.textContent = 'Downloads are being published';
     note.textContent = 'Use the release page to check current desktop builds.';

@@ -20,6 +20,22 @@ Demo: <https://food-log-export-kit.sociobot.in/demo>
 
 The free app imports one file at a time. A $19 one-time personal license adds multi-file selection. Paste its token to restore it on another device. CSV and JSON export stay free. Purchases and license checks use the Sociobot billing API.
 
+## Install the desktop app
+
+The landing page selects the published build for your system. On Linux or macOS, the installer verifies the release checksum. It adds a `food-log-export-kit` launcher to PATH:
+
+```sh
+curl -fsSL https://food-log-export-kit.sociobot.in/install.sh | sh
+```
+
+On Windows, this command verifies and starts the MSI installer:
+
+```powershell
+irm https://food-log-export-kit.sociobot.in/install.ps1 | iex
+```
+
+The macOS and Windows builds are unsigned. Review the release notes for the platform-specific open step.
+
 ## Run locally
 
 Requires Node.js 22. Rust is needed only for the desktop shell.

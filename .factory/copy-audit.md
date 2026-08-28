@@ -19,6 +19,14 @@ Audited 2026-08-28. Counts treat hyphenated terms and numbers as one word. No se
 | The app reads CSV and JSON exports. | 7 |
 | It also works when your internet is off. | 8 |
 | Unsigned builds for macOS, Windows, and Linux. | 7 |
+| Download for Linux. | 3 |
+| Download for Windows. | 3 |
+| Download for macOS. | 3 |
+| Choose your Mac download. | 4 |
+| Choose Apple Silicon or Intel on the release page. | 9 |
+| View desktop releases. | 3 |
+| Downloads are being published for all three platforms. | 8 |
+| Use the release page to check current desktop builds. | 9 |
 | See every row before you export. | 6 |
 | Missing or invalid dates and unreadable or comma-formatted numbers appear as notes. | 12 |
 | Skipped files and rows are named. | 6 |
