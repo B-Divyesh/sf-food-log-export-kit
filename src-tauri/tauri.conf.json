@@ -1,0 +1,35 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Food Log Export Kit",
+  "version": "0.1.0",
+  "identifier": "in.sociobot.food-log-export-kit",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:4173",
+    "beforeBuildCommand": "npm run build:app",
+    "frontendDist": "../dist/app"
+  },
+  "app": {
+    "windows": [{
+      "title": "Food Log Export Kit",
+      "width": 1180,
+      "height": 800,
+      "minWidth": 390,
+      "minHeight": 640,
+      "resizable": true,
+      "fullscreen": false
+    }],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' asset: data:; font-src 'self'; connect-src 'self' https://api.sociobot.in; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Utility",
+    "shortDescription": "Save food tracker exports as CSV and JSON",
+    "longDescription": "Validate and normalize user-provided food tracker exports into a readable CSV and portable JSON archive.",
+    "copyright": "Copyright 2026 Param Factory",
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"]
+  }
+}
