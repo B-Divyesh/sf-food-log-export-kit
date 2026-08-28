@@ -1,0 +1,9 @@
+{
+  "name": "Food Log Export Kit",
+  "short_name": "Export Kit",
+  "start_url": "/app",
+  "display": "standalone",
+  "background_color": "#f4efdf",
+  "theme_color": "#183b32",
+  "icons": [{ "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }]
+}
