@@ -82,6 +82,8 @@ test('@claim:offline-reload reopens the demo without a network', async ({ page, 
   await expect(page.getByText('Oatmeal with blueberries')).toBeVisible();
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
+  await page.reload();
+  await expect(page.getByText('Oatmeal with blueberries')).toBeVisible();
   await context.setOffline(true);
   await page.reload();
   expect(errors).toEqual([]);
