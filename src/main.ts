@@ -20,6 +20,9 @@ function render(path = location.pathname): void {
   else if (path === '/terms') root.innerHTML = termsPage();
   else if (path === '/') { root.innerHTML = landingPage(); void resolvePlatformDownload(); }
   else root.innerHTML = notFoundPage();
+  const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  if (canonical) canonical.href = `https://food-log-export-kit.sociobot.in${path === '/app' ? '/' : path}`;
+  document.querySelector<HTMLMetaElement>('meta[property="og:title"]')?.setAttribute('content', document.title);
   bindLinks();
   const heading = root.querySelector<HTMLElement>('h1');
   live.textContent = heading?.textContent ?? '';

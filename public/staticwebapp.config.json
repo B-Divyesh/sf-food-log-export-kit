@@ -3,6 +3,11 @@
     "rewrite": "/index.html",
     "exclude": ["/assets/*", "/art/*", "/*.svg", "/*.png", "/*.xml", "/*.txt", "/*.js", "/*.sh", "/*.ps1"]
   },
+  "routes": [
+    { "route": "/assets/*", "headers": { "Cache-Control": "public, max-age=31536000, immutable" } },
+    { "route": "/art/*", "headers": { "Cache-Control": "public, max-age=31536000, immutable" } },
+    { "route": "/screens/*", "headers": { "Cache-Control": "public, max-age=31536000, immutable" } }
+  ],
   "responseOverrides": {
     "404": { "rewrite": "/404.html" }
   },
