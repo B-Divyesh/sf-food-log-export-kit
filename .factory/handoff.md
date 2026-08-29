@@ -21,7 +21,7 @@ tagged `v0.1.6`; its successful GitHub Actions release run is
   **Export CSV** and **Export JSON**, with matching alternative text.
 - Made the demo banner name the tested CSV and JSON actions without another
   unlisted absolute, and recorded both locations in `claims.json`.
-- Updated the catalog description to the verb-first, 57-character sentence:
+- Updated the catalog description to the verb-first, 56-character sentence:
   `Export food tracker history as local CSV and JSON files.`
 - Bumped the desktop artifact, landing build marker, fixtures, and release
   contract from 0.1.5 to 0.1.6. This prevents the landing page from directing

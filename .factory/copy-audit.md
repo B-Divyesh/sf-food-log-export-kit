@@ -119,4 +119,4 @@ Developer commands and project-map fragments use technical names only where they
 | Isolated sample environment | demo |
 | Source product category | food tracker |
 
-Catalog description: “Export food tracker history as local CSV and JSON files.” (10 words, 57 characters)
+Catalog description: “Export food tracker history as local CSV and JSON files.” (10 words, 56 characters)
