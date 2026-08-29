@@ -79,6 +79,7 @@ p { line-height: 1.55; }
 .download-band p { margin: 0; color: var(--muted); }
 .download-action { min-width: 290px; display: grid; gap: 10px; text-align: center; }
 .download-action small { color: var(--muted); }
+.release-notes-link { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
 .section-intro { max-width: 700px; margin-bottom: 42px; }
 .section-intro > p:last-child { font-size: 1.1rem; color: var(--muted); max-width: 630px; }
 .product-preview, .walkthrough, .pricing { padding: clamp(72px, 10vw, 140px) clamp(24px, 7vw, 104px); }

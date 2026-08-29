@@ -17,7 +17,7 @@ describe('static hosting routes', () => {
 
   it('gives the static 404 page the shared metadata, navigation, and footer', () => {
     const page = readFileSync(new URL('../../public/404.html', import.meta.url), 'utf8');
-    for (const marker of ['rel="canonical"', 'property="og:title"', 'property="og:url"', 'name="twitter:card"', 'apple-touch-icon', 'Main navigation', 'href="/terms"', 'Built by Param Factory', 'Version 0.1.4 · repair 4']) {
+    for (const marker of ['rel="canonical"', 'property="og:title"', 'property="og:url"', 'name="twitter:card"', 'apple-touch-icon', 'Main navigation', 'href="/terms"', 'Built by Param Factory', 'Version 0.1.4 · polish 3']) {
       expect(page).toContain(marker);
     }
   });
@@ -25,8 +25,22 @@ describe('static hosting routes', () => {
   it('keeps the static and rendered footer build identifiers in sync', () => {
     const page = readFileSync(new URL('../../public/404.html', import.meta.url), 'utf8');
     const shell = readFileSync(new URL('../../src/shell.ts', import.meta.url), 'utf8');
-    const build = 'Version 0.1.4 · repair 4 · Generated artwork';
+    const build = 'Version 0.1.4 · polish 3 · Generated artwork';
     expect(page).toContain(build);
     expect(shell).toContain(build);
+  });
+
+  it('keeps review 3 copy plain and links readers to release notes', () => {
+    const pages = readFileSync(new URL('../../src/pages.ts', import.meta.url), 'utf8');
+    const readme = readFileSync(new URL('../../README.md', import.meta.url), 'utf8');
+    for (const oldCopy of ['Read the notes', 'Save both formats', 'normalized local record', 'normalized archive']) {
+      expect(pages).not.toContain(oldCopy);
+    }
+    for (const replacement of ['Review conversion notes', 'Save CSV and JSON', 'JSON keeps consistent fields and conversion notes', 'id="release-notes"']) {
+      expect(pages).toContain(replacement);
+    }
+    expect(readme).toContain('checks that the downloaded file was not changed');
+    expect(readme).toContain('command so you can run it from a terminal');
+    expect(readme).toContain('[release notes](https://github.com/B-Divyesh/sf-food-log-export-kit/releases/latest)');
   });
 });

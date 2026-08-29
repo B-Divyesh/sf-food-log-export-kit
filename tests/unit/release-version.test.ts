@@ -19,7 +19,7 @@ describe('desktop release regression', () => {
     expect(tauri).toBe(packageVersion);
     expect(cargo).toMatch(new RegExp(`name = "food-log-export-kit"\\nversion = "${packageVersion}"`));
     expect(landing).toContain(`Desktop app · version ${packageVersion}`);
-    for (const surface of [footer, notFound]) expect(surface).toContain(`Version ${packageVersion} · repair 4`);
+    for (const surface of [footer, notFound]) expect(surface).toContain(`Version ${packageVersion} · polish 3`);
   });
 
   it('requires a matching tag and verifies the published installer assets and checksums', () => {

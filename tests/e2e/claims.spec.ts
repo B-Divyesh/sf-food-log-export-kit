@@ -22,7 +22,7 @@ test('@claim:csv-export exports one CSV row per sample entry', async ({ page }) 
   expect(csv).toContain('Oatmeal with blueberries');
 });
 
-test('@claim:json-archive exports every normalized field and note', async ({ page }) => {
+test('@claim:json-archive exports every consistent field and note', async ({ page }) => {
   await page.goto('/demo');
   const downloadEvent = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export JSON' }).click();
@@ -326,9 +326,12 @@ test('@claim:detected-platform-downloads selects each published operating-system
     await page.route('https://api.github.com/repos/B-Divyesh/sf-food-log-export-kit/releases/latest', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(release) }));
     await page.goto('/');
     const button = page.getByRole('link', { name: item.label });
+    const releaseNotes = page.getByRole('link', { name: 'Read release notes on GitHub' });
     const escapedFile = item.file.replaceAll('.', '\\.');
+    const assetName = release.assets.find((asset) => asset.browser_download_url.endsWith(item.file))?.name;
     await expect(button).toHaveAttribute('href', new RegExp(escapedFile + '$'));
-    await expect(page.locator('#download-note')).toContainText('Check the release notes before installing.');
+    await expect(page.locator('#download-note')).toHaveText(assetName as string);
+    await expect(releaseNotes).toHaveAttribute('href', release.html_url);
     await context.close();
   }
 });

@@ -1,6 +1,8 @@
-# Landing copy audit
+# Copy audit
 
-Audited 2026-08-29 after polish round 2. Counts treat hyphenated terms, product names, and numbers as one word. No sentence exceeds 22 words. No sentence contains a banned marketing word.
+Audited 2026-08-29 after polish round 3. Counts treat hyphenated terms, product names, file names, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
+
+## Landing page
 
 | Copy | Words |
 |---|---:|
@@ -22,23 +24,31 @@ Audited 2026-08-29 after polish round 2. Counts treat hyphenated terms, product 
 | Open a file and start. | 5 |
 | Free for one file. | 4 |
 | Batch import costs $19 once. | 5 |
-| Keep a CSV for spreadsheets and JSON for a normalized local record. | 12 |
+| Keep a CSV for spreadsheets. | 5 |
+| JSON keeps consistent fields and conversion notes. | 7 |
 | A recipe card archive box in a quiet kitchen at dusk. | 11 |
-| Desktop app · version 0.1.2 | 4 |
+| Desktop app · version 0.1.4 | 4 |
 | Download the desktop app | 4 |
 | The app reads CSV and JSON exports. | 7 |
 | It also works when your internet is off. | 8 |
+| Download for Linux | 3 |
+| Food.Log.Export.Kit_0.1.4_amd64.AppImage | 1 |
+| Read release notes | 3 |
 | Review before export | 3 |
 | See every row before you export | 6 |
 | Invalid values, skipped rows, and populated unrecognized fields appear in conversion notes. | 12 |
+| How it works | 3 |
 | How to turn an export into an archive | 8 |
 | Choose your export | 3 |
 | Open a CSV or JSON file from your tracker. | 9 |
-| Read the notes | 3 |
+| The app screen for choosing a tracker export. | 8 |
+| Review conversion notes | 3 |
 | Check missing fields and rows before saving anything. | 8 |
-| Save both formats | 3 |
+| A conversion note explaining an unusable row. | 7 |
+| Save CSV and JSON | 4 |
 | Use CSV now. | 3 |
-| Keep JSON as the normalized archive. | 6 |
+| Keep JSON with consistent fields and conversion notes. | 8 |
+| The filled review table with CSV and JSON export buttons. | 10 |
 | Privacy and limits | 3 |
 | How the app handles your files | 6 |
 | Your files stay local. | 4 |
@@ -61,19 +71,52 @@ Audited 2026-08-29 after polish round 2. Counts treat hyphenated terms, product 
 | Read the terms. | 3 |
 | Turn food tracker exports into a local archive. | 8 |
 | Built by Param Factory | 4 |
-| Version 0.1.2 · polish 2 · Generated artwork | 6 |
+| Version 0.1.4 · polish 3 · Generated artwork | 6 |
+
+## README
+
+| Copy | Words |
+|---|---:|
+| Turn food tracker exports into a local archive. | 8 |
+| Food Log Export Kit is for people leaving a food tracker. | 11 |
+| It reads CSV and JSON food tracker exports. | 8 |
+| It keeps meal, recipe, nutrition, and weight fields. | 8 |
+| It exports a CSV and JSON archive. | 7 |
+| Files, rows, and populated fields it cannot map appear in conversion notes. | 12 |
+| JSON preserves those unmapped field values. | 6 |
+| The website and desktop app convert food data on your device. | 11 |
+| The project has no tracker, account system, food-data server, or medical advice. | 12 |
+| The sample demo contacts only this website. | 7 |
+| The landing page selects the published build for your system. | 10 |
+| On Linux or macOS, the installer checks that the downloaded file was not changed. | 14 |
+| It installs the `food-log-export-kit` command so you can run it from a terminal. | 12 |
+| On Windows, this command verifies and starts the MSI installer. | 10 |
+| Review the release notes for the platform-specific open step. | 9 |
+| Requires Node.js 22. | 3 |
+| Rust is needed only for the desktop shell. | 8 |
+| Open `http://127.0.0.1:4173/demo` for the isolated sample workspace. | 7 |
+| The release workflow builds macOS, Windows, and Linux installers after a `v*` tag is pushed. | 15 |
+| Tested product claims are listed in `.factory/claims.json`. | 7 |
+| Demo behavior is documented in `.factory/demo.md`. | 6 |
+| Publish `dist/site/` as a static site. | 6 |
+| The included hosting config keeps app routes working after reload and sets security headers, caching, and the 404 response. | 19 |
+| The factory handles DNS and deployment. | 6 |
+| The MIT license covers the source code. | 7 |
+| Product terms for the batch-import license are available at `/terms`; data handling details are at `/privacy`. | 16 |
+
+Developer commands and project-map fragments use technical names only where they identify code or build output.
 
 ## Terminology
 
 | Concept | One term used |
 |---|---|
 | Input file from another tracker | export |
-| Saved normalized collection | archive |
+| Saved collection | archive |
 | Spreadsheet output | CSV |
-| Portable output with conversion details | JSON |
+| Structured output with conversion details | JSON |
 | Import warning or preservation detail | conversion note |
 | Paid multi-file capability | batch-import license |
 | Isolated sample environment | demo |
 | Source product category | food tracker |
 
-Catalog description: “Convert food tracker exports to CSV and JSON archives on your device.” (12 words, 69 characters)
+Catalog description: “Convert food tracker exports into local CSV and JSON archives.” (10 words, 62 characters)
