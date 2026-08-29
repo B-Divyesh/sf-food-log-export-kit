@@ -78,7 +78,7 @@ test('app and demo use the shared navigation and footer', async ({ page }) => {
     await expect(navigation.getByRole('link', { name: 'Terms' })).toBeVisible();
     const footer = page.locator('footer');
     await expect(footer).toContainText('Built by Param Factory');
-    await expect(footer).toContainText('Version 0.1.4 · polish 3');
+    await expect(footer).toContainText('Version 0.1.5 · release repair');
   }
 });
 
@@ -112,15 +112,16 @@ test('reduced motion removes visible movement', async ({ page }) => {
 });
 
 test('landing link crawl includes the selected release notes page', async ({ page, request }) => {
-  const releaseUrl = 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.4';
+  const releaseUrl = 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.5';
   await page.route('https://api.github.com/repos/B-Divyesh/sf-food-log-export-kit/releases/latest', (route) => route.fulfill({
     status: 200,
     contentType: 'application/json',
     body: JSON.stringify({
+      tag_name: 'v0.1.5',
       html_url: releaseUrl,
       assets: [{
-        name: 'Food.Log.Export.Kit_0.1.4_amd64.AppImage',
-        browser_download_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.4/Food.Log.Export.Kit_0.1.4_amd64.AppImage'
+        name: 'Food.Log.Export.Kit_0.1.5_amd64.AppImage',
+        browser_download_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.5/Food.Log.Export.Kit_0.1.5_amd64.AppImage'
       }]
     })
   }));
@@ -135,4 +136,25 @@ test('landing link crawl includes the selected release notes page', async ({ pag
     const response = await request.get(path);
     expect(response.status(), `${path} should resolve`).toBe(200);
   }
+});
+
+test('@regression:stale-desktop-release keeps the download action calm when GitHub latest predates this site build', async ({ page }) => {
+  await page.route('https://api.github.com/repos/B-Divyesh/sf-food-log-export-kit/releases/latest', (route) => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({
+      tag_name: 'v0.1.4',
+      target_commitish: '5b770194cb02e41d70efb114f7e11a1a35f6766c',
+      html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.4',
+      assets: [{
+        name: 'Food.Log.Export.Kit_0.1.4_amd64.AppImage',
+        browser_download_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.4/Food.Log.Export.Kit_0.1.4_amd64.AppImage'
+      }]
+    })
+  }));
+
+  await page.goto('/');
+  await expect(page.locator('#download-note')).toHaveText('Use the release page to check current desktop builds.');
+  await expect(page.getByRole('link', { name: 'Downloads are being published' })).toHaveAttribute('href', 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases');
+  await expect(page.getByRole('link', { name: 'Read release notes on GitHub' })).toHaveAttribute('href', 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases');
 });

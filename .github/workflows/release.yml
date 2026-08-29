@@ -38,6 +38,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_type == 'tag' && github.ref || inputs.release_tag }}
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -49,6 +50,14 @@ jobs:
         if: matrix.platform == 'ubuntu-22.04'
         run: sudo apt-get update && sudo apt-get install -y file libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
       - run: npm ci
+      - name: Resolve the tagged source commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          source_commit="$(git rev-parse "${RELEASE_TAG}^{commit}")"
+          test "$source_commit" = "$(git rev-parse HEAD)"
+          echo "FOOD_LOG_SOURCE_COMMIT=$source_commit" >> "$GITHUB_ENV"
+          echo "VITE_FOOD_LOG_SOURCE_COMMIT=$source_commit" >> "$GITHUB_ENV"
       - name: Verify release tag matches the desktop and site version
         shell: bash
         run: |
@@ -56,6 +65,7 @@ jobs:
           test "$RELEASE_TAG" = "v$(node -p 'require("./package.json").version')"
           test "$(node -p 'require("./package.json").version')" = "$(node -p 'require("./src-tauri/tauri.conf.json").version')"
           test "$(node -p 'require("fs").readFileSync("src-tauri/Cargo.toml", "utf8").match(/^version = "([^"]+)"$/m)[1]')" = "$(node -p 'require("./package.json").version')"
+          test "$FOOD_LOG_SOURCE_COMMIT" = "$(git rev-parse HEAD)"
       - name: Verify the Windows installer contract
         if: matrix.platform == 'windows-latest'
         run: npm run test:unit -- --testNamePattern '@claim:windows-installer'
@@ -79,6 +89,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_type == 'tag' && github.ref || inputs.release_tag }}
+          fetch-depth: 0
+      - name: Resolve the tagged source commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          source_commit="$(git rev-parse "${RELEASE_TAG}^{commit}")"
+          test "$source_commit" = "$(git rev-parse HEAD)"
+          echo "FOOD_LOG_SOURCE_COMMIT=$source_commit" >> "$GITHUB_ENV"
       - name: Download release assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -92,15 +110,16 @@ jobs:
           python3 - <<'PY'
           import json, os
           tag = os.environ['TAG']
+          source_commit = os.environ['FOOD_LOG_SOURCE_COMMIT']
           base = f"https://github.com/${{ github.repository }}/releases/download/{tag}"
           files = [f for f in os.listdir('.') if f not in {'SHA256SUMS', 'latest.json'}]
           platforms = {
             'macos': [f for f in files if f.endswith('.dmg')],
             'windows': [f for f in files if f.endswith(('.msi', '.exe'))],
-            'linux': [f for f in files if f.endswith(('.AppImage', '.deb'))]
+            'linux': [f for f in files if f.endswith(('.AppImage', '.deb', '.rpm'))]
           }
           with open('latest.json', 'w') as out:
-              json.dump({'version': tag.lstrip('v'), 'platforms': {k: [f'{base}/{name}' for name in v] for k, v in platforms.items()}}, out, indent=2)
+              json.dump({'version': tag.lstrip('v'), 'release_tag': tag, 'source_commit': source_commit, 'platforms': {k: [f'{base}/{name}' for name in v] for k, v in platforms.items()}}, out, indent=2)
           PY
       - uses: softprops/action-gh-release@v2
         with:
@@ -117,21 +136,34 @@ jobs:
           cd verify-release
           sha256sum -c SHA256SUMS
           test "$(find . -maxdepth 1 -name '*.dmg' | wc -l)" -ge 2
-          test "$(find . -maxdepth 1 -name '*.msi' -o -name '*-setup.exe' | wc -l)" -ge 1
-          test "$(find . -maxdepth 1 -name '*.AppImage' -o -name '*.deb' | wc -l)" -ge 1
+          test "$(find . -maxdepth 1 -name '*.msi' | wc -l)" -ge 1
+          test "$(find . -maxdepth 1 -name '*-setup.exe' | wc -l)" -ge 1
+          test "$(find . -maxdepth 1 -name '*.AppImage' | wc -l)" -ge 1
+          test "$(find . -maxdepth 1 -name '*.deb' | wc -l)" -ge 1
+          test "$(find . -maxdepth 1 -name '*.rpm' | wc -l)" -ge 1
           python3 - <<'PY'
           import json, os
           with open('latest.json') as source:
               latest = json.load(source)
           tag = os.environ['RELEASE_TAG']
+          source_commit = os.environ['FOOD_LOG_SOURCE_COMMIT']
           assert latest['version'] == tag.removeprefix('v')
+          assert latest['release_tag'] == tag
+          assert latest['source_commit'] == source_commit
           for platform in ('macos', 'windows', 'linux'):
               assert latest['platforms'][platform]
               assert all(f'/releases/download/{tag}/' in url for url in latest['platforms'][platform])
+          assert sum(url.endswith('.dmg') for url in latest['platforms']['macos']) >= 2
+          assert any(url.endswith('.msi') for url in latest['platforms']['windows'])
+          assert any(url.endswith('-setup.exe') for url in latest['platforms']['windows'])
+          assert any(url.endswith('.AppImage') for url in latest['platforms']['linux'])
+          assert any(url.endswith('.deb') for url in latest['platforms']['linux'])
+          assert any(url.endswith('.rpm') for url in latest['platforms']['linux'])
           PY
           remote_tag_type="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" --jq '.object.type')"
           remote_tag_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" --jq '.object.sha')"
           if [ "$remote_tag_type" = tag ]; then
             remote_tag_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/tags/${remote_tag_sha}" --jq '.object.sha')"
           fi
-          test "$remote_tag_sha" = "$(git rev-parse HEAD)"
+          test "$remote_tag_sha" = "$FOOD_LOG_SOURCE_COMMIT"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" --jq '.target_commitish')" = "$FOOD_LOG_SOURCE_COMMIT"

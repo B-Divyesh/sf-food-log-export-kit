@@ -4,6 +4,8 @@ export interface ReleaseAsset {
 }
 
 export interface ReleaseDetails {
+  tag_name?: string;
+  target_commitish?: string;
   html_url: string;
   assets: ReleaseAsset[];
 }
@@ -32,6 +34,21 @@ export async function detectMacArchitecture(): Promise<MacArchitecture> {
   if (/(?:arm64|aarch64)/i.test(navigator.userAgent)) return 'arm64';
   if (/(?:x86_64|x64)/i.test(navigator.userAgent)) return 'x64';
   return 'unknown';
+}
+
+/**
+ * GitHub's `releases/latest` is chronological, not tied to the deployed site.
+ * Require the release tag (and, for production builds, source commit) to match
+ * before exposing an installer URL.
+ */
+export function selectCurrentRelease(
+  release: ReleaseDetails,
+  appVersion: string,
+  sourceCommit = ''
+): ReleaseDetails | undefined {
+  if (release.tag_name !== `v${appVersion}`) return undefined;
+  if (sourceCommit && release.target_commitish !== sourceCommit) return undefined;
+  return release;
 }
 
 export function selectPlatformAsset(assets: ReleaseAsset[], platform: DesktopPlatform, macArchitecture: MacArchitecture = 'unknown'): ReleaseAsset | undefined {

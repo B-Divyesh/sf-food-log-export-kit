@@ -13,13 +13,15 @@ describe('desktop release regression', () => {
     const footer = read('src/shell.ts');
     const notFound = read('public/404.html');
 
-    expect(packageVersion).toBe('0.1.4');
+    expect(packageVersion).toBe('0.1.5');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);
     expect(cargo).toMatch(new RegExp(`name = "food-log-export-kit"\\nversion = "${packageVersion}"`));
-    expect(landing).toContain(`Desktop app · version ${packageVersion}`);
-    for (const surface of [footer, notFound]) expect(surface).toContain(`Version ${packageVersion} · polish 3`);
+    expect(landing).toContain('Desktop app · version ${appVersion}');
+    expect(read('src/build.ts')).toContain(`appVersion = '${packageVersion}'`);
+    expect(footer).toContain('Version ${appVersion} · release repair');
+    expect(notFound).toContain(`Version ${packageVersion} · release repair`);
   });
 
   it('requires a matching tag and verifies the published installer assets and checksums', () => {
@@ -32,9 +34,14 @@ describe('desktop release regression', () => {
     expect(workflow).toContain('test "$RELEASE_TAG" = "v$(node -p');
     expect(workflow).toContain('Verify published installer release');
     expect(workflow).toContain('sha256sum -c SHA256SUMS');
+    for (const asset of ["'*.dmg'", "'*.msi'", "'*-setup.exe'", "'*.AppImage'", "'*.deb'", "'*.rpm'"]) expect(workflow).toContain(asset);
     expect(workflow).toContain('git/ref/tags/${RELEASE_TAG}');
     expect(workflow).toContain('git/tags/${remote_tag_sha}');
     expect(workflow).toContain('if [ "$remote_tag_type" = tag ]; then');
+    expect(workflow).toContain('FOOD_LOG_SOURCE_COMMIT');
+    expect(workflow).toContain('VITE_FOOD_LOG_SOURCE_COMMIT');
+    expect(workflow).toContain("'source_commit': source_commit");
+    expect(workflow).toContain("latest['source_commit'] == source_commit");
     expect(workflow).not.toContain("|| 'v0.1.2'");
   });
 });
