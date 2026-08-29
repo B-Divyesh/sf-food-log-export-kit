@@ -105,3 +105,20 @@ The desktop installers are intentionally unsigned. Signing and notarization
 remain unavailable until the operator provides `APPLE_CERTIFICATE` and
 `WINDOWS_CERT_PFX` (and their associated secrets) to the GitHub release
 workflow. This does not affect checksum verification or release identity.
+
+## Independent verification 9 (2026-08-29 UTC)
+
+**PASS — candidate `925af4dd15e6cf9e44d0274299a826f53398337c` is accepted.**
+Fresh verification against <https://food-log-export-kit.sociobot.in> ran every
+one of the 20 exact `.factory/claims.json` commands successfully, plus full
+`npm test` (21 unit + 52 browser tests), both production builds, live desktop
+and 390px mobile QA, offline service-worker reload, keyboard/focus/reduced
+motion, axe, headers, privacy request logs, release checksum download, and
+rate limiting. Full evidence is in [verification-9.md](verification-9.md).
+
+The live JS asset and a clean candidate build share SHA-256
+`f1ec7fda6bddbbd0d64644ffb78a40ce2e38b6085de6e06438fbe460294e123c`.
+The deployed v0.1.5 source (`2c10f3d`) is the candidate's product-code
+ancestor; later candidate changes are factory evidence/handoff only. No
+critical, high, medium, or low defects were found. The only remaining operator
+action is the already-disclosed optional installer signing/notarization.
