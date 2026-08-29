@@ -45,6 +45,9 @@ tagged `v0.1.6`; its successful GitHub Actions release run is
   in `.factory/evidence/polish-4/live-*`.
 - Live axe checks found no serious or critical issues on `/`, `/demo`, `/app`,
   `/privacy`, `/terms`, or `/not-a-real-route`.
+- Fresh mobile Lighthouse on the live landing: Performance 100, Accessibility
+  100, LCP 1.8 s, CLS 0. The full report is
+  `.factory/evidence/polish-4/lighthouse-live.json`.
 - A cold live check confirmed the direct demo, first-viewport sample, Reset
   demo, Start for real, same-origin demo requests, offline reload, route focus,
   route titles/canonicals, designed HTTP 404, and the corrected export

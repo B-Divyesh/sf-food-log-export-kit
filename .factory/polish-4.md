@@ -58,6 +58,9 @@ checks use <https://food-log-export-kit.sociobot.in> in a new browser context.
 - Fresh live axe checks found zero serious or critical violations on `/`,
   `/demo`, `/app`, `/privacy`, `/terms`, and the HTTP 404. The cold live demo
   reset, exit, request-boundary, offline reload, and route-focus checks passed.
+- Mobile Lighthouse on the live landing scored 100 Performance and 100
+  Accessibility, with 1.8 s LCP and 0 CLS; report:
+  `evidence/polish-4/lighthouse-live.json`.
 - Static deployment used `/opt/fleet/lib/deploy-static.sh food-log-export-kit
   dist/site`; its final Azure deployment id was
   `f6864bf4-3deb-45b2-b8de-4e7df6736c38`.
