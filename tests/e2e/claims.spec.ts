@@ -166,6 +166,29 @@ test('@claim:normalized-types normalizes meal, recipe, nutrition, and weight fie
   ]));
 });
 
+test('@claim:lossy-fields names and preserves every populated unrecognized field', async ({ page }) => {
+  await page.goto('/app');
+  await page.locator('#file-input').setInputFiles({
+    name: 'tracker-with-fiber.csv',
+    mimeType: 'text/csv',
+    buffer: Buffer.from('Date,Food,Calories,Fiber,Empty custom field\n2026-08-29,Bean bowl,430,12,')
+  });
+  await expect(page.getByText('Review 1 conversion note')).toBeVisible();
+  await page.getByText('Review 1 conversion note').click();
+  await expect(page.getByText('Row 2: Fiber')).toBeVisible();
+  await expect(page.getByText('“Fiber” from tracker-with-fiber.csv is not a standard archive field. Its value was preserved in JSON under unmapped_fields.')).toBeVisible();
+  await expect(page.getByText('Empty custom field')).toHaveCount(0);
+
+  const downloadEvent = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export JSON' }).click();
+  const stream = await (await downloadEvent).createReadStream();
+  let body = '';
+  for await (const chunk of stream) body += chunk.toString();
+  const archive = JSON.parse(body);
+  expect(archive.records[0].unmapped_fields).toEqual({ Fiber: '12' });
+  expect(archive.issues).toContainEqual(expect.objectContaining({ row: 2, field: 'Fiber', value: '12' }));
+});
+
 test('@claim:explained-drops lists every unusable row and file', async ({ page }) => {
   await page.addInitScript(({ licenseKey, verdictKey }) => {
     localStorage.setItem(licenseKey, 'test-license');
@@ -251,7 +274,7 @@ test('@claim:license-request-data-boundary sends only the license token during v
 
 test('@claim:paid-purchase live checkout redirects to Dodo hosted checkout', async ({ page, request }) => {
   await page.goto('/');
-  const buy = page.getByRole('link', { name: 'Buy the batch license' });
+  const buy = page.getByRole('link', { name: 'Buy the batch-import license' });
   await expect(buy).toHaveAttribute('href', 'https://api.sociobot.in/api/v1/products/food-log-export-kit/checkout');
   const response = await request.get(await buy.getAttribute('href') as string, { maxRedirects: 0 });
   expect(response.status()).toBe(303);

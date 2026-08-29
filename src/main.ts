@@ -22,7 +22,7 @@ function render(path = location.pathname): void {
   else if (path === '/terms') root.innerHTML = termsPage();
   else if (path === '/') { root.innerHTML = landingPage(); void resolvePlatformDownload(); }
   else root.innerHTML = notFoundPage();
-  const canonicalPath = demo ? '/demo' : path === '/app' ? '/' : path;
+  const canonicalPath = demo ? '/demo' : path;
   const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
   if (canonical) canonical.href = `https://food-log-export-kit.sociobot.in${canonicalPath}`;
   const description = demo
@@ -33,7 +33,7 @@ function render(path = location.pathname): void {
         ? 'Terms for using Food Log Export Kit and its optional batch-import license.'
         : path === '/app'
           ? 'Import a food tracker export and review it before creating CSV and JSON files.'
-          : path === '/404.html' || path === '/404'
+          : !['/', '/demo', '/app', '/privacy', '/terms'].includes(path)
             ? 'The requested Food Log Export Kit page was not found.'
             : 'Turn food tracker exports into CSV and JSON files on your device.';
   document.querySelector<HTMLMetaElement>('meta[name="description"]')?.setAttribute('content', description);
@@ -41,6 +41,7 @@ function render(path = location.pathname): void {
   document.querySelector<HTMLMetaElement>('meta[name="twitter:title"]')?.setAttribute('content', document.title);
   document.querySelector<HTMLMetaElement>('meta[property="og:description"]')?.setAttribute('content', description);
   document.querySelector<HTMLMetaElement>('meta[name="twitter:description"]')?.setAttribute('content', description);
+  document.querySelector<HTMLMetaElement>('meta[property="og:url"]')?.setAttribute('content', `https://food-log-export-kit.sociobot.in${canonicalPath}`);
   bindLinks();
   const heading = root.querySelector<HTMLElement>('h1');
   live.textContent = heading?.textContent ?? '';

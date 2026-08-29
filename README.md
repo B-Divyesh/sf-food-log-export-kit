@@ -2,9 +2,9 @@
 
 Turn food tracker exports into a local archive.
 
-Food Log Export Kit is for people leaving a calorie tracker. It reads CSV and JSON food-tracker exports. It keeps meal, recipe, nutrition, and weight fields. It exports a CSV and JSON archive. Files and rows it cannot use appear in conversion notes.
+Food Log Export Kit is for people leaving a food tracker. It reads CSV and JSON food tracker exports. It keeps meal, recipe, nutrition, and weight fields. It exports a CSV and JSON archive. Files, rows, and populated fields it cannot map appear in conversion notes. JSON preserves those unmapped field values.
 
-All food-data conversion happens in the browser or desktop webview. The project has no tracker, account system, food-data server, or medical advice. The sample demo makes no cross-origin requests.
+The website and desktop app convert food data on your device. The project has no tracker, account system, food-data server, or medical advice. The sample demo contacts only this website.
 
 Live site: <https://food-log-export-kit.sociobot.in>
 
@@ -15,10 +15,10 @@ Demo: <https://food-log-export-kit.sociobot.in/demo>
 - CSV files separated by commas, semicolons, or tabs
 - JSON arrays and objects with `entries`, `records`, `meals`, `foods`, `items`, or `data` lists
 - CSV headings for dates, meals, foods, recipes, amounts, energy, macros, and weights
-- ISO dates in `YYYY-MM-DD` order; impossible and ambiguous numeric dates are noted
+- Dates in `YYYY-MM-DD` order; impossible or ambiguous numeric dates appear in conversion notes
 - Dot decimals, grouped commas such as `1,234`, and decimal commas such as `1,5`; comma interpretations are noted
 
-The free app imports one file at a time. A $19 one-time personal license adds multi-file selection. Paste its token to restore it on another device. CSV and JSON export stay free. License checks send only the token to the Sociobot billing API.
+The free app imports one file at a time. A $19 one-time batch-import license adds multi-file selection. Paste its token to restore it on another device. CSV and JSON export stay free. License checks send only the token to the Sociobot billing API.
 
 ## Install the desktop app
 
@@ -70,8 +70,8 @@ Tested product claims are listed in [`.factory/claims.json`](.factory/claims.jso
 
 ## Deploy
 
-Publish `dist/site/` as a static site. The included Static Web Apps config sets SPA routing, security headers, caching behavior, and the 404 response. The factory handles DNS and deployment.
+Publish `dist/site/` as a static site. The included hosting config keeps app routes working after reload and sets security headers, caching, and the 404 response. The factory handles DNS and deployment.
 
 ## Privacy and license
 
-The MIT license covers the source code. Product terms for the paid batch license are available at `/terms`; data handling details are at `/privacy`.
+The MIT license covers the source code. Product terms for the batch-import license are available at `/terms`; data handling details are at `/privacy`.

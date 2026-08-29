@@ -17,8 +17,16 @@ describe('static hosting routes', () => {
 
   it('gives the static 404 page the shared metadata, navigation, and footer', () => {
     const page = readFileSync(new URL('../../public/404.html', import.meta.url), 'utf8');
-    for (const marker of ['rel="canonical"', 'property="og:title"', 'name="twitter:card"', 'apple-touch-icon', 'Main navigation', 'Built by Param Factory', 'Version 0.1.2']) {
+    for (const marker of ['rel="canonical"', 'property="og:title"', 'property="og:url"', 'name="twitter:card"', 'apple-touch-icon', 'Main navigation', 'href="/terms"', 'Built by Param Factory', 'Version 0.1.2 · polish 2']) {
       expect(page).toContain(marker);
     }
+  });
+
+  it('keeps the static and rendered footer build identifiers in sync', () => {
+    const page = readFileSync(new URL('../../public/404.html', import.meta.url), 'utf8');
+    const shell = readFileSync(new URL('../../src/shell.ts', import.meta.url), 'utf8');
+    const build = 'Version 0.1.2 · polish 2 · Generated artwork';
+    expect(page).toContain(build);
+    expect(shell).toContain(build);
   });
 });

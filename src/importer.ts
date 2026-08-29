@@ -1,7 +1,9 @@
 import { parseCsv } from './csv';
 import type { FoodRecord, ImportIssue, ImportResult, RecordKind } from './types';
 
-const aliases: Record<keyof Omit<FoodRecord, 'id' | 'source'>, string[]> = {
+type NormalizedField = Exclude<keyof FoodRecord, 'id' | 'source' | 'unmapped_fields'>;
+
+const aliases: Record<NormalizedField, string[]> = {
   kind: ['type', 'entry type', 'category'],
   date: ['date', 'day', 'timestamp', 'datetime', 'time'],
   meal: ['meal', 'meal name', 'meal_name', 'occasion', 'group'],
@@ -18,6 +20,40 @@ const aliases: Record<keyof Omit<FoodRecord, 'id' | 'source'>, string[]> = {
 
 const normalized = (value: string) => value.trim().toLowerCase().replaceAll(/\s+/g, ' ');
 const asText = (value: unknown) => value == null ? '' : String(value).trim();
+const mappedInputKeys = new Set(Object.entries(aliases).flatMap(([field, names]) => [field, ...names]).map(normalized));
+
+function hasValue(value: unknown): boolean {
+  if (value == null) return false;
+  if (typeof value === 'string') return value.trim().length > 0;
+  if (Array.isArray(value)) return value.length > 0;
+  if (typeof value === 'object') return Object.keys(value).length > 0;
+  return true;
+}
+
+function valueForNote(value: unknown): string {
+  if (typeof value === 'string') return value;
+  try { return JSON.stringify(value); }
+  catch { return String(value); }
+}
+
+function collectUnmappedFields(row: Record<string, unknown>, index: number, source: string, issues: ImportIssue[]): Record<string, unknown> {
+  const preserved: Record<string, unknown> = {};
+  for (const [field, value] of Object.entries(row)) {
+    if (!hasValue(value) || mappedInputKeys.has(normalized(field))) continue;
+    if (normalized(field) === 'unmapped_fields' && value && typeof value === 'object' && !Array.isArray(value)) {
+      Object.assign(preserved, value as Record<string, unknown>);
+      continue;
+    }
+    preserved[field] = value;
+    issues.push({
+      row: index,
+      field,
+      value: valueForNote(value),
+      message: `“${field}” from ${source} is not a standard archive field. Its value was preserved in JSON under unmapped_fields.`
+    });
+  }
+  return preserved;
+}
 
 function findValue(row: Record<string, unknown>, field: keyof typeof aliases): string {
   const entries = Object.entries(row);
@@ -84,6 +120,7 @@ function asDate(value: string, row: number, issues: ImportIssue[]): string {
 }
 
 function mapRecord(row: Record<string, unknown>, index: number, source: string, issues: ImportIssue[]): FoodRecord | null {
+  const unmappedFields = collectUnmappedFields(row, index, source, issues);
   const item = findValue(row, 'item');
   const weight = findValue(row, 'weight_kg');
   if (!item && !weight) {
@@ -110,7 +147,8 @@ function mapRecord(row: Record<string, unknown>, index: number, source: string, 
     fat_g: asNumber(findValue(row, 'fat_g'), index, 'fat', issues),
     weight_kg: asNumber(weight || (kind === 'weight' ? findValue(row, 'amount') : ''), index, 'weight', issues),
     source,
-    notes: !date && dateRaw ? [note, `Original date: ${dateRaw}`].filter(Boolean).join('; ') : note
+    notes: !date && dateRaw ? [note, `Original date: ${dateRaw}`].filter(Boolean).join('; ') : note,
+    unmapped_fields: unmappedFields
   };
 }
 

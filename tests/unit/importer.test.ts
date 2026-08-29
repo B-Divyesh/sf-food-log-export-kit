@@ -46,6 +46,18 @@ describe('normalization', () => {
     expect(result.totalRows).toBe(2);
   });
 
+  it('preserves populated unmapped fields and names their source row', () => {
+    const result = importText('Date,Food,Calories,Fiber,Unused\n2026-08-29,Bean bowl,430,12,', 'tracker.csv');
+    expect(result.records[0].unmapped_fields).toEqual({ Fiber: '12' });
+    expect(result.issues).toContainEqual(expect.objectContaining({
+      row: 2,
+      field: 'Fiber',
+      value: '12',
+      message: expect.stringContaining('tracker.csv')
+    }));
+    expect(result.issues.some((issue) => issue.field === 'Unused')).toBe(false);
+  });
+
   it('rejects empty and unknown files in plain words', () => {
     expect(() => importText('', 'empty.csv')).toThrow('file is empty');
     expect(() => importText('x,y\n1,2', 'unknown.csv')).toThrow('No food or weight column');

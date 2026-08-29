@@ -70,6 +70,37 @@ test('back navigation restores focus to the landing heading', async ({ page }) =
   await expect(page.getByRole('heading', { name: 'Save your food history' })).toBeFocused();
 });
 
+test('app and demo use the shared navigation and footer', async ({ page }) => {
+  for (const path of ['/app', '/demo']) {
+    await page.goto(path);
+    const navigation = page.getByLabel('Main navigation');
+    await expect(navigation.getByRole('link', { name: 'Privacy' })).toBeVisible();
+    await expect(navigation.getByRole('link', { name: 'Terms' })).toBeVisible();
+    const footer = page.locator('footer');
+    await expect(footer).toContainText('Built by Param Factory');
+    await expect(footer).toContainText('Version 0.1.2 · polish 2');
+  }
+});
+
+test('each client route sets its title, canonical URL, and heading focus', async ({ page }) => {
+  const routes = [
+    ['/app', 'Archive — Food Log Export Kit', '/app', 'Save your food history'],
+    ['/demo', 'Demo — Food Log Export Kit', '/demo', 'Save your food history'],
+    ['/privacy', 'Privacy — Food Log Export Kit', '/privacy', 'Your food data stays with you'],
+    ['/terms', 'Terms — Food Log Export Kit', '/terms', 'Terms for using the export kit']
+  ] as const;
+  await page.goto('/');
+  for (const [path, title, canonicalPath, heading] of routes) {
+    await page.evaluate((nextPath) => {
+      history.pushState({}, '', nextPath);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    }, path);
+    await expect(page).toHaveTitle(title);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://food-log-export-kit.sociobot.in${canonicalPath}`);
+    await expect(page.getByRole('heading', { name: heading, level: 1 })).toBeFocused();
+  }
+});
+
 test('reduced motion removes visible movement', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/demo');

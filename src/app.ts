@@ -3,6 +3,7 @@ import { icons } from './icons';
 import { importText } from './importer';
 import { checkoutUrl, optimisticLicense, storedLicense, verifyLicense } from './license';
 import { sampleCsv } from './sample';
+import { footer } from './shell';
 import type { FoodRecord, ImportIssue } from './types';
 
 interface AppState {
@@ -35,7 +36,7 @@ function totals(records: FoodRecord[]) {
 function appHeader(): string {
   return `<header class="app-header">
     <a class="wordmark" href="/" data-link aria-label="Food Log Export Kit home"><span class="wordmark-mark" aria-hidden="true">F</span><span>Food Log <b>Export Kit</b></span></a>
-    <div class="app-header-actions"><span class="local-badge">${icons.shield} On this device</span><a href="/privacy" data-link>Privacy</a></div>
+    <div class="app-header-actions"><span class="local-badge">${icons.shield} On this device</span><nav aria-label="Main navigation"><a href="/" data-link>Home</a><a href="/demo" data-link ${state.demo ? 'aria-current="page"' : ''}>Demo</a><a href="/privacy" data-link>Privacy</a><a href="/terms" data-link>Terms</a></nav></div>
   </header>`;
 }
 
@@ -84,24 +85,24 @@ function reviewPanel(): string {
       <button class="secondary-button" id="add-file">${icons.file} Add another file</button><input class="visually-hidden" id="file-input" aria-label="Choose another tracker export" type="file" accept=".csv,.json,text/csv,application/json" ${state.licensed ? 'multiple' : ''} />
     </div>
     <div class="summary-strip" aria-label="Import summary"><div><strong>${summary.meals}</strong><span>meals</span></div><div><strong>${summary.recipes}</strong><span>recipes</span></div><div><strong>${summary.weights}</strong><span>weights</span></div><div><strong>${summary.dates}</strong><span>days</span></div></div>
-    ${state.issues.length ? `<details class="issues"><summary>${icons.warn} Review ${state.issues.length} conversion ${state.issues.length === 1 ? 'note' : 'notes'}</summary><ol>${state.issues.map((issue) => `<li><b>${issue.row > 0 ? `Row ${issue.row}: ${escapeHtml(issue.field)}` : `File: ${escapeHtml(issue.field)}`}</b><span>${escapeHtml(issue.message)}</span></li>`).join('')}</ol></details>` : `<p class="success-line">${icons.check} Every imported row was explained.</p>`}
+    ${state.issues.length ? `<details class="issues"><summary>${icons.warn} Review ${state.issues.length} conversion ${state.issues.length === 1 ? 'note' : 'notes'}</summary><ol>${state.issues.map((issue) => `<li><b>${issue.row > 0 ? `Row ${issue.row}: ${escapeHtml(issue.field)}` : `File: ${escapeHtml(issue.field)}`}</b><span>${escapeHtml(issue.message)}</span></li>`).join('')}</ol></details>` : `<p class="success-line">${icons.check} No rows or populated fields need a conversion note.</p>`}
     <div class="table-tools"><div class="filter-group" role="group" aria-label="Filter entries">${(['all', 'meal', 'recipe', 'weight'] as const).map((filter) => `<button class="filter ${state.filter === filter ? 'selected' : ''}" data-filter="${filter}">${filter === 'all' ? 'All entries' : `${filter[0].toUpperCase()}${filter.slice(1)}s`}</button>`).join('')}</div><span>${shown.length} shown</span></div>
     <div class="record-table-wrap"><table class="record-table"><caption class="sr-only">Normalized food log entries</caption><thead><tr><th>Date</th><th>Meal</th><th>Item</th><th>Amount</th><th>Calories</th><th>Protein</th><th>Carbs</th><th>Fat</th></tr></thead><tbody>${shown.map((record) => `<tr><td data-label="Date">${escapeHtml(record.date || 'Date missing')}</td><td data-label="Meal">${escapeHtml(record.kind === 'weight' ? 'Weight' : record.meal || '—')}</td><td data-label="Item"><b>${escapeHtml(record.item)}</b>${record.notes ? `<small>${escapeHtml(record.notes)}</small>` : ''}</td><td data-label="Amount">${escapeHtml([record.amount, record.unit].filter(Boolean).join(' ') || '—')}</td><td data-label="Calories">${number(record.calories)}</td><td data-label="Protein">${number(record.protein_g, ' g')}</td><td data-label="Carbs">${number(record.carbs_g, ' g')}</td><td data-label="Fat">${number(record.fat_g, ' g')}</td></tr>`).join('')}</tbody></table></div>
-    <div class="export-bar"><div><p class="eyebrow">Stage 3 · Export</p><h3>Save your archive</h3><p>CSV opens in spreadsheets. JSON keeps every normalized field and conversion note.</p></div><div class="export-actions"><button class="primary-button" id="export-csv">${icons.download} Export CSV</button><button class="secondary-button" id="export-json">${icons.archive} Export JSON</button></div></div>
+    <div class="export-bar"><div><p class="eyebrow">Stage 3 · Export</p><h3>Save your archive</h3><p>CSV opens in spreadsheets. JSON keeps normalized fields, unmapped values, and conversion notes.</p></div><div class="export-actions"><button class="primary-button" id="export-csv">${icons.download} Export CSV</button><button class="secondary-button" id="export-json">${icons.archive} Export JSON</button></div></div>
     <button class="danger-link" id="clear-import">Clear this import</button>
   </section>`;
 }
 
 function licensePanel(): string {
   if (state.demo) return '';
-  return `<aside class="license-panel"><div><span class="archive-stamp">${state.licensed ? 'BATCH READY' : 'OPTIONAL'}</span><h2>${state.licensed ? 'Batch import is active' : 'Import several exports together'}</h2><p>${state.licensed ? 'Choose several CSV or JSON files in one step.' : 'The free app handles one file at a time. A $19 one-time license adds multi-file selection.'}</p></div>${state.licensed ? '<span class="licensed-mark">✓ Licensed</span>' : `<div class="license-actions"><a class="small-button" href="${checkoutUrl()}" rel="external">Buy for $19</a><button class="text-button" id="show-license">Have a license?</button></div>`}<form id="license-form" class="license-form hidden"><label for="license-token">License token</label><div><input id="license-token" name="license" autocomplete="off" required /><button class="small-button">Verify license</button></div></form></aside>`;
+  return `<aside class="license-panel"><div><span class="archive-stamp">${state.licensed ? 'LICENSE ACTIVE' : 'OPTIONAL'}</span><h2>${state.licensed ? 'Batch-import license is active' : 'Import several exports together'}</h2><p>${state.licensed ? 'Choose several CSV or JSON files in one step.' : 'The free app handles one file at a time. A $19 one-time batch-import license adds multi-file selection.'}</p></div>${state.licensed ? '<span class="licensed-mark">✓ Licensed</span>' : `<div class="license-actions"><a class="small-button" href="${checkoutUrl()}" rel="external">Buy the batch-import license</a><button class="text-button" id="show-license">Have a license?</button></div>`}<form id="license-form" class="license-form hidden"><label for="license-token">License token</label><div><input id="license-token" name="license" autocomplete="off" required /><button class="small-button">Verify license</button></div></form></aside>`;
 }
 
 export function renderApp(root: HTMLElement, demo: boolean): void {
   if (state.demo !== demo) state = emptyState(demo);
   if (demo && !state.records.length) loadSample(false);
   document.title = `${demo ? 'Demo' : 'Archive'} — Food Log Export Kit`;
-  root.innerHTML = `${appHeader()}${demoBanner()}<main id="main" class="app-main"><div class="app-title"><div><p class="eyebrow">Private archive workspace</p><h1 tabindex="-1">Save your food history</h1><p>Check a tracker export, fix surprises, then keep a CSV and JSON copy.</p></div><span class="connection-status" id="connection">${navigator.onLine ? '● Ready offline' : '○ You are offline'}</span></div>${demoFirstRecord()}${steps()}${state.notice ? `<p class="notice" role="status">${escapeHtml(state.notice)}</p>` : ''}${state.records.length ? reviewPanel() : emptyPanel()}${licensePanel()}</main><div id="app-status" class="sr-only" aria-live="polite">${escapeHtml(state.status)}</div>`;
+  root.innerHTML = `${appHeader()}${demoBanner()}<main id="main" class="app-main"><div class="app-title"><div><p class="eyebrow">Private archive workspace</p><h1 tabindex="-1">Save your food history</h1><p>Check a tracker export, fix surprises, then keep a CSV and JSON copy.</p></div><span class="connection-status" id="connection">${navigator.onLine ? '● Ready offline' : '○ You are offline'}</span></div>${demoFirstRecord()}${steps()}${state.notice ? `<p class="notice" role="status">${escapeHtml(state.notice)}</p>` : ''}${state.records.length ? reviewPanel() : emptyPanel()}${licensePanel()}</main>${footer()}<div id="app-status" class="sr-only" aria-live="polite">${escapeHtml(state.status)}</div>`;
   bindApp(root);
 }
 

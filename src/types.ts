@@ -15,6 +15,7 @@ export interface FoodRecord {
   weight_kg: number | null;
   source: string;
   notes: string;
+  unmapped_fields: Record<string, unknown>;
 }
 
 export interface ImportIssue {
