@@ -99,7 +99,7 @@ Audited 2026-08-29 after polish round 4. Counts treat hyphenated terms, product 
 | Tested product claims are listed in `.factory/claims.json`. | 7 |
 | Demo behavior is documented in `.factory/demo.md`. | 6 |
 | Publish `dist/site/` as a static site. | 6 |
-| The included hosting config keeps app routes working after reload and sets security headers, caching, and the 404 response. | 19 |
+| The included hosting config defines reload routes, security headers, cache rules, and the 404 response. | 15 |
 | The factory handles DNS and deployment. | 6 |
 | The MIT license covers the source code. | 7 |
 | Product terms for the batch-import license are available at `/terms`; data handling details are at `/privacy`. | 16 |

@@ -2,17 +2,25 @@ import { readFileSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 describe('static hosting routes', () => {
-  it('rewrites only known app routes and lets unknown paths return HTTP 404', () => {
+  it('@claim:static-hosting defines reload routes, security headers, cache rules, and a 404 response', () => {
     const config = JSON.parse(readFileSync(new URL('../../public/staticwebapp.config.json', import.meta.url), 'utf8')) as {
       navigationFallback?: unknown;
-      routes: Array<{ route: string; rewrite?: string }>;
+      routes: Array<{ route: string; rewrite?: string; headers?: Record<string, string> }>;
       responseOverrides: Record<string, { rewrite: string }>;
+      globalHeaders: Record<string, string>;
     };
     expect(config.navigationFallback).toBeUndefined();
     for (const route of ['/app', '/demo', '/privacy', '/terms']) {
       expect(config.routes).toContainEqual(expect.objectContaining({ route, rewrite: '/index.html' }));
     }
     expect(config.responseOverrides['404']).toEqual({ rewrite: '/404.html' });
+    for (const route of ['/assets/*', '/art/*', '/screens/*']) {
+      expect(config.routes).toContainEqual(expect.objectContaining({ route, headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } }));
+    }
+    expect(config.globalHeaders['Content-Security-Policy']).toContain("frame-ancestors 'none'");
+    expect(config.globalHeaders['X-Content-Type-Options']).toBe('nosniff');
+    expect(config.globalHeaders['Referrer-Policy']).toBe('strict-origin-when-cross-origin');
+    expect(config.globalHeaders['Permissions-Policy']).toBe('camera=(), microphone=(), geolocation=()');
   });
 
   it('gives the static 404 page the shared metadata, navigation, and footer', () => {

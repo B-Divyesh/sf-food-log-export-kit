@@ -70,7 +70,7 @@ Tested product claims are listed in [`.factory/claims.json`](.factory/claims.jso
 
 ## Deploy
 
-Publish `dist/site/` as a static site. The included hosting config keeps app routes working after reload and sets security headers, caching, and the 404 response. The factory handles DNS and deployment.
+Publish `dist/site/` as a static site. The included hosting config defines reload routes, security headers, cache rules, and the 404 response. The factory handles DNS and deployment.
 
 ## Privacy and license
 
