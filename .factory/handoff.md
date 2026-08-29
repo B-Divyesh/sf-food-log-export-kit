@@ -23,6 +23,7 @@ Repaired every finding in [review 1](review-1.md). The desktop-app artifact clas
 - `verify-url.sh http://127.0.0.1:4173/` and `verify-url.sh http://127.0.0.1:4173/?demo=1` — passed with no browser-console errors; reports and screenshots are under `.factory/evidence/`.
 - Fresh clone evidence: `git clone --no-local`, `npm ci`, all 19 declared claim tests (17 browser claims plus both installer claims) passed.
 - `cargo fmt --check`, `cargo test --locked`, `cargo clippy -- -D warnings`, and `CI=false npm run tauri -- build --no-bundle` passed after installing the Linux dependencies declared in the release workflow.
+- Deployed through `/opt/fleet/lib/deploy-static.sh food-log-export-kit dist/site`; Azure deployment `5dd01280-6d5d-4de9-8d73-8b48d5b16650` succeeded. Cold live checks for `/` and `/?demo=1` passed with no console errors; live reports are in `.factory/evidence/live-landing/verify.json` and `.factory/evidence/live-demo/verify.json`. The live unknown route returned HTTP 404 with the required static-404 metadata and shared footer.
 - The specific finding-to-evidence table is in [`.factory/polish-1.md`](polish-1.md).
 
 ## Run and verify
