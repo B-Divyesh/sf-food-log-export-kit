@@ -1,0 +1,14 @@
+{
+  "url": "https://food-log-export-kit.sociobot.in",
+  "loadMs": 912,
+  "errors": [],
+  "a11y": {
+    "title": "Food Log Export Kit — Save your food history",
+    "lang": "en",
+    "h1": 1,
+    "main": true,
+    "imgsMissingAlt": 0,
+    "buttonsUnlabeled": 0,
+    "textLength": 2238
+  }
+}
