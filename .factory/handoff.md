@@ -63,3 +63,6 @@ The static site was deployed through the work-order configuration with
 None. Desktop binaries are intentionally unsigned; the published release notes
 retain the platform-specific open/install guidance. No telemetry, analytics,
 food-data backend, or remote fonts were added.
+
+The pre-existing modified `graphify-out/` files were left untouched and are not
+part of this repair.
