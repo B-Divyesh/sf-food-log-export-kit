@@ -229,6 +229,26 @@ test('@claim:license-restore restores a license token on a fresh device', async 
   await expect.poll(() => page.evaluate((key) => localStorage.getItem(key), licenseKey)).toBe('restored-token');
 });
 
+test('@claim:license-request-data-boundary sends only the license token during verification', async ({ page }) => {
+  let requestUrl = '';
+  await page.route('https://api.sociobot.in/api/v1/products/food-log-export-kit/verify?license=private-token', (route) => {
+    requestUrl = route.request().url();
+    expect(route.request().method()).toBe('GET');
+    expect(route.request().postData()).toBeNull();
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ valid: true, reason: 'ok', expires_at: null }) });
+  });
+  await page.goto('/app');
+  await page.getByRole('button', { name: 'Load sample data' }).click();
+  await expect(page.getByText('Oatmeal with blueberries')).toBeVisible();
+  await page.getByRole('button', { name: 'Have a license?' }).click();
+  await page.getByLabel('License token').fill('private-token');
+  await page.getByRole('button', { name: 'Verify license' }).click();
+  await expect(page.getByText('Licensed', { exact: false })).toBeVisible();
+  expect(new URL(requestUrl).searchParams.get('license')).toBe('private-token');
+  expect(requestUrl).not.toContain('Oatmeal');
+  expect(requestUrl).not.toContain('calories');
+});
+
 test('@claim:paid-purchase live checkout redirects to Dodo hosted checkout', async ({ page, request }) => {
   await page.goto('/');
   const buy = page.getByRole('link', { name: 'Buy the batch license' });
@@ -285,7 +305,7 @@ test('@claim:detected-platform-downloads selects each published operating-system
     const button = page.getByRole('link', { name: item.label });
     const escapedFile = item.file.replaceAll('.', '\\.');
     await expect(button).toHaveAttribute('href', new RegExp(escapedFile + '$'));
-    await expect(page.locator('#download-note')).toContainText('unsigned build');
+    await expect(page.locator('#download-note')).toContainText('Check the release notes before installing.');
     await context.close();
   }
 });
@@ -294,14 +314,14 @@ test('@claim:offline-reload reopens the demo without a network', async ({ page, 
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/demo');
-  await expect(page.getByText('Oatmeal with blueberries')).toBeVisible();
+  await expect(page.getByLabel('Sample record')).toContainText('Oatmeal with blueberries');
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
   await page.reload();
-  await expect(page.getByText('Oatmeal with blueberries')).toBeVisible();
+  await expect(page.getByLabel('Sample record')).toContainText('Oatmeal with blueberries');
   await context.setOffline(true);
   await page.reload();
   expect(errors).toEqual([]);
-  await expect(page.getByText('Oatmeal with blueberries')).toBeVisible();
+  await expect(page.getByLabel('Sample record')).toContainText('Oatmeal with blueberries');
   await expect(page.getByText('You are offline')).toBeVisible();
 });

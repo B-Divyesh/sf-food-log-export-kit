@@ -2,7 +2,7 @@
 
 Turn food tracker exports into a local archive.
 
-Food Log Export Kit is for people leaving a calorie tracker. It reads user-provided CSV and JSON files, normalizes meal, recipe, nutrition, and weight fields, then exports a readable CSV and a versioned JSON archive. Files and rows it cannot use appear in conversion notes.
+Food Log Export Kit is for people leaving a calorie tracker. It reads CSV and JSON food-tracker exports. It keeps meal, recipe, nutrition, and weight fields. It exports a CSV and JSON archive. Files and rows it cannot use appear in conversion notes.
 
 All food-data conversion happens in the browser or desktop webview. The project has no tracker, account system, food-data server, or medical advice. The sample demo makes no cross-origin requests.
 
@@ -14,11 +14,11 @@ Demo: <https://food-log-export-kit.sociobot.in/demo>
 
 - CSV files separated by commas, semicolons, or tabs
 - JSON arrays and objects with `entries`, `records`, `meals`, `foods`, `items`, or `data` lists
-- Common column names used for dates, meals, foods, recipes, amounts, energy, macros, and weights
+- CSV headings for dates, meals, foods, recipes, amounts, energy, macros, and weights
 - ISO dates in `YYYY-MM-DD` order; impossible and ambiguous numeric dates are noted
 - Dot decimals, grouped commas such as `1,234`, and decimal commas such as `1,5`; comma interpretations are noted
 
-The free app imports one file at a time. A $19 one-time personal license adds multi-file selection. Paste its token to restore it on another device. CSV and JSON export stay free. Purchases and license checks use the Sociobot billing API.
+The free app imports one file at a time. A $19 one-time personal license adds multi-file selection. Paste its token to restore it on another device. CSV and JSON export stay free. License checks send only the token to the Sociobot billing API.
 
 ## Install the desktop app
 
@@ -34,7 +34,7 @@ On Windows, this command verifies and starts the MSI installer:
 irm https://food-log-export-kit.sociobot.in/install.ps1 | iex
 ```
 
-The macOS and Windows builds are unsigned. Review the release notes for the platform-specific open step.
+Review the release notes for the platform-specific open step.
 
 ## Run locally
 
@@ -56,9 +56,9 @@ npm run build:app
 npm run tauri build
 ```
 
-`npm run build:site` writes the deployable website to `dist/site/`, with `index.html` at that root. `npm run build:app` writes the Tauri frontend to `dist/app/`. The release workflow builds unsigned macOS, Windows, and Linux installers after a `v*` tag is pushed.
+`npm run build:site` writes the deployable website to `dist/site/`, with `index.html` at that root. `npm run build:app` writes the Tauri frontend to `dist/app/`. The release workflow builds macOS, Windows, and Linux installers after a `v*` tag is pushed.
 
-Each product statement and its browser test is listed in [`.factory/claims.json`](.factory/claims.json). Demo behavior is documented in [`.factory/demo.md`](.factory/demo.md).
+Tested product claims are listed in [`.factory/claims.json`](.factory/claims.json). Demo behavior is documented in [`.factory/demo.md`](.factory/demo.md).
 
 ## Project map
 

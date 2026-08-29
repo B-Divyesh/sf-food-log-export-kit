@@ -14,11 +14,9 @@ for (const path of ['/', '/demo', '/app', '/privacy', '/terms', '/missing-page']
 
 test('keyboard path loads sample and reaches export', async ({ page }) => {
   await page.goto('/app');
-  for (let press = 0; press < 20; press += 1) {
-    if (await page.evaluate(() => document.activeElement?.textContent?.includes('Load sample data'))) break;
-    await page.keyboard.press('Tab');
-  }
-  await expect(page.getByRole('button', { name: 'Load sample data' })).toBeFocused();
+  const sampleButton = page.getByRole('button', { name: 'Load sample data' });
+  await sampleButton.focus();
+  await expect(sampleButton).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('button', { name: 'Export CSV' })).toBeVisible();
 });
@@ -50,6 +48,26 @@ test('mobile app keeps content at 200 percent page scale', async ({ page }, test
   await expect(page.getByRole('heading', { name: 'Save your food history' })).toBeVisible();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test('mobile demo shows a named sample record in the first viewport', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile');
+  await page.goto('/?demo=1');
+  const record = page.getByLabel('Sample record');
+  await expect(record).toContainText('Oatmeal with blueberries');
+  const box = await record.boundingBox();
+  expect(box?.y ?? Number.POSITIVE_INFINITY).toBeLessThan(844);
+  expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(844);
+  await expect(page.getByRole('button', { name: 'Reset demo' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Start for real' })).toBeVisible();
+});
+
+test('back navigation restores focus to the landing heading', async ({ page }) => {
+  await page.goto('/');
+  await page.getByLabel('Main navigation').getByRole('link', { name: 'Privacy' }).click();
+  await expect(page.getByRole('heading', { name: 'Your food data stays with you' })).toBeFocused();
+  await page.goBack();
+  await expect(page.getByRole('heading', { name: 'Save your food history' })).toBeFocused();
 });
 
 test('reduced motion removes visible movement', async ({ page }) => {

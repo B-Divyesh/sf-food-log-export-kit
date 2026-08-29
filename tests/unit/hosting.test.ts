@@ -14,4 +14,11 @@ describe('static hosting routes', () => {
     }
     expect(config.responseOverrides['404']).toEqual({ rewrite: '/404.html' });
   });
+
+  it('gives the static 404 page the shared metadata, navigation, and footer', () => {
+    const page = readFileSync(new URL('../../public/404.html', import.meta.url), 'utf8');
+    for (const marker of ['rel="canonical"', 'property="og:title"', 'name="twitter:card"', 'apple-touch-icon', 'Main navigation', 'Built by Param Factory', 'Version 0.1.2']) {
+      expect(page).toContain(marker);
+    }
+  });
 });

@@ -1,38 +1,41 @@
-# Handoff — adversarial first-read review 1
+# Handoff — perfection-loop round 1
 
 ## Result
 
-**FAIL.** This review made no product-code changes. The full report is in [`.factory/review-1.md`](review-1.md).
+Repaired every finding in [review 1](review-1.md). The desktop-app artifact class, local-first conversion flow, Tauri shell, and dusk archive visual system remain intact.
 
-## What was done
+## Delivered
 
-- Reviewed the live site cold at 390 × 844 and 1440 × 900.
-- Exercised the direct one-click demo, reset, exports, storage isolation, and exit to the real workspace.
-- Read the brief, design thesis, claims manifest, README, prior handoff, and prior verification history.
-- Ran every one of the 18 declared claim commands independently from a fresh clone after `npm ci`; all passed.
-- Checked live routes, HTTP 404 behavior, headers, metadata, sitemap/robots, links, checkout redirect, routing focus, and earlier-finding repairs.
+- A direct isolated demo at `/?demo=1` and `/demo`, with an above-the-fold 390px sample record, persistent demo banner, reset, and exit to an empty real workspace.
+- First-screen, section, pricing, legal, metadata, README, and catalog copy rewritten to the review’s plain-language requirements.
+- Complete static 404 metadata and shared navigation/footer treatment.
+- Route-change focus on every client-side transition, including browser Back.
+- Expanded claims inventory with a recorded, observable license request data-boundary test; unsupported public promises were removed.
+- Mobile, accessibility, metadata, offline, installer, import/export, privacy, and claims coverage retained and expanded.
 
-## Findings left
+## Local evidence
 
-The release is blocked by:
+- `npm ci` — passed, 0 known vulnerabilities.
+- `npm run build` — passed; deployable static site is in `dist/site/`.
+- `npm run test:unit` — passed: 14 tests.
+- `npm run test:e2e -- --project=mobile` — passed: 13 tests.
+- `npm run test:e2e -- --project=chromium` — passed: 30 tests.
+- `verify-url.sh http://127.0.0.1:4173/` and `verify-url.sh http://127.0.0.1:4173/?demo=1` — passed with no browser-console errors; reports and screenshots are under `.factory/evidence/`.
+- Fresh clone evidence: `git clone --no-local`, `npm ci`, all 19 declared claim tests (17 browser claims plus both installer claims) passed.
+- `cargo fmt --check`, `cargo test --locked`, `cargo clippy -- -D warnings`, and `CI=false npm run tauri -- build --no-bundle` passed after installing the Linux dependencies declared in the release workflow.
+- The specific finding-to-evidence table is in [`.factory/polish-1.md`](polish-1.md).
 
-1. The 390px demo's first viewport has no visible sample record; the first table row is below the fold.
-2. Several visitor-facing claims are absent from `.factory/claims.json` and do not have their own tagged observable tests.
-
-The report also records Back-focus, static-404 parity, plain-language, and README copy findings.
-
-## Reproduce
+## Run and verify
 
 ```sh
-git clone <repository> review
-cd review
 npm ci
-npm test -- --grep @claim:csv-export
-# Repeat with each exact command in .factory/claims.json.
+npm test
+npm run build
+npm run build:app
 ```
 
-For the live demo, open `https://food-log-export-kit.sociobot.in/demo` in a fresh 390px browser context. The current first table row begins below an 844px viewport.
+Open `http://127.0.0.1:4173/?demo=1` after `npm run dev` or `npm exec vite preview` to inspect the isolated sample workspace.
 
-## Repository state
+## Remaining operator action
 
-Only `.factory/review-1.md` and this handoff were changed by this review. Existing unrelated `graphify-out/` working-tree changes were preserved.
+No code gaps are known. Push/deploy verification is completed after the repair commit so the live URL can be checked cold against this exact source revision.

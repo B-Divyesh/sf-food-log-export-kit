@@ -54,6 +54,12 @@ function steps(): string {
   </ol>`;
 }
 
+function demoFirstRecord(): string {
+  if (!state.demo || !state.records.length) return '';
+  const record = state.records[0];
+  return `<article class="demo-first-record" aria-label="Sample record"><span>14 Apr · Breakfast</span><b>${escapeHtml(record.item)}</b><strong>${number(record.calories)} kcal</strong><small>Sample record ready to review</small></article>`;
+}
+
 function emptyPanel(): string {
   return `<section class="import-panel" aria-labelledby="import-title">
     <div class="import-copy"><p class="eyebrow">Stage 1 · Import</p><h2 id="import-title">Choose a tracker export</h2><p>Use a CSV or JSON file you exported from your food tracker. We check its headings before reading any entries.</p>
@@ -95,7 +101,7 @@ export function renderApp(root: HTMLElement, demo: boolean): void {
   if (state.demo !== demo) state = emptyState(demo);
   if (demo && !state.records.length) loadSample(false);
   document.title = `${demo ? 'Demo' : 'Archive'} — Food Log Export Kit`;
-  root.innerHTML = `${appHeader()}${demoBanner()}<main id="main" class="app-main"><div class="app-title"><div><p class="eyebrow">Private archive workspace</p><h1 tabindex="-1">Save your food history</h1><p>Check a tracker export, fix surprises, then keep a CSV and JSON copy.</p></div><span class="connection-status" id="connection">${navigator.onLine ? '● Ready offline' : '○ You are offline'}</span></div>${steps()}${state.notice ? `<p class="notice" role="status">${escapeHtml(state.notice)}</p>` : ''}${state.records.length ? reviewPanel() : emptyPanel()}${licensePanel()}</main><div id="app-status" class="sr-only" aria-live="polite">${escapeHtml(state.status)}</div>`;
+  root.innerHTML = `${appHeader()}${demoBanner()}<main id="main" class="app-main"><div class="app-title"><div><p class="eyebrow">Private archive workspace</p><h1 tabindex="-1">Save your food history</h1><p>Check a tracker export, fix surprises, then keep a CSV and JSON copy.</p></div><span class="connection-status" id="connection">${navigator.onLine ? '● Ready offline' : '○ You are offline'}</span></div>${demoFirstRecord()}${steps()}${state.notice ? `<p class="notice" role="status">${escapeHtml(state.notice)}</p>` : ''}${state.records.length ? reviewPanel() : emptyPanel()}${licensePanel()}</main><div id="app-status" class="sr-only" aria-live="polite">${escapeHtml(state.status)}</div>`;
   bindApp(root);
 }
 
