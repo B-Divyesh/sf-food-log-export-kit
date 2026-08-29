@@ -1,0 +1,29 @@
+{
+  "origin": "https://food-log-export-kit.sociobot.in",
+  "deployment_id": "78331c2a-eb2f-477c-bf73-2858f49c3cdb",
+  "routes": [
+    {"path": "/", "status": 200, "title": "Food Log Export Kit — Save your food history", "serious_critical_axe": 0},
+    {"path": "/demo", "status": 200, "title": "Demo — Food Log Export Kit", "serious_critical_axe": 0},
+    {"path": "/app", "status": 200, "title": "Archive — Food Log Export Kit", "serious_critical_axe": 0},
+    {"path": "/privacy", "status": 200, "title": "Privacy — Food Log Export Kit", "serious_critical_axe": 0},
+    {"path": "/terms", "status": 200, "title": "Terms — Food Log Export Kit", "serious_critical_axe": 0},
+    {"path": "/missing-page", "status": 404, "title": "Page not found — Food Log Export Kit", "serious_critical_axe": 0}
+  ],
+  "history_focus": {"privacy_heading": true, "back_restored_landing_heading": true},
+  "mobile_demo": {
+    "viewport": "390x844",
+    "sample_record": "Oatmeal with blueberries",
+    "sample_record_bottom_px": 616,
+    "horizontal_overflow_px": 0,
+    "undersized_visible_targets": 0,
+    "requests_same_origin": true,
+    "reset_entry_count": 12,
+    "real_workspace_probe": "untouched",
+    "cookies": 0,
+    "start_for_real_path": "/app"
+  },
+  "offline_demo": {"fresh_context_primed_then_offline_reloaded": true, "sample_visible": true, "offline_notice": true},
+  "lossless_field_check": {"visible_note": "Row 2: Fiber", "exported_unmapped_fields": {"Fiber": "12"}},
+  "release_notes": {"url": "https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.4", "status": 200},
+  "lighthouse_mobile": {"performance": 100, "accessibility": 100, "best_practices": 100, "seo": 100, "lcp_seconds": 1.7, "cls": 0, "tbt_ms": 0}
+}
