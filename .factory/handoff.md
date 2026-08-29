@@ -30,12 +30,16 @@ tagged `v0.1.6`; its successful GitHub Actions release run is
 ## Verification
 
 - `npm ci`
-- `npm test` — 23 unit tests and 52 browser tests passed; four Chromium mobile
-  skips are intentional because those checks run in the mobile project.
+- `npm test` — 23 unit tests and 48 browser tests passed; four Chromium mobile
+  skips are intentional because those checks run in the mobile project (52
+  browser cases total).
 - `npm run build` and `npm run build:app` passed. Initial JS: 38.71 kB raw,
   13.67 kB gzip.
-- Every exact command from `.factory/claims.json` passed independently from a
-  clean clone: 20 claims, one tagged test per claim.
+- Every exact command from `.factory/claims.json` passed independently from
+  clean clone `/tmp/food-log-polish-4.HnUHEK` at
+  `5dc50b8f00489c1fb43a8b322f6b570059cbdfeb`: 20 claims, one tagged test per
+  claim. The clean clone also passed `npm test`, `npm run build`,
+  `npm run build:app`, and locked Cargo metadata validation.
 - `/opt/fleet/lib/verify-url.sh` passed on live `/`, `/demo`, `/app`,
   `/privacy`, and `/terms` with no console errors. Reports and screenshots are
   in `.factory/evidence/polish-4/live-*`.

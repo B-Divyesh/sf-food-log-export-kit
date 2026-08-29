@@ -45,9 +45,9 @@ checks use <https://food-log-export-kit.sociobot.in> in a new browser context.
 
 ## Final verification
 
-- `npm test` — 23 unit tests and 52 browser tests passed; four Chromium
-  project skips are intentional because the same mobile checks run in the
-  mobile project.
+- `npm test` — 23 unit tests and 48 browser tests passed; four Chromium
+  project skips are intentional because those same checks run in the mobile
+  project (52 browser cases total).
 - `npm run build` and `npm run build:app` passed. The largest initial script is
   38.71 kB raw / 13.67 kB gzip.
 - The clean-clone claims gate ran every exact command in `.factory/claims.json`.
