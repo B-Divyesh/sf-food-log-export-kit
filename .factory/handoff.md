@@ -1,5 +1,9 @@
 # Handoff — perfection-loop round 1
 
+## Independent verifier update — 2026-08-29
+
+**PASS** for candidate `bbedc5f06dceba4743771e36c065810372a31f45` at <https://food-log-export-kit.sociobot.in>. A fresh clean clone passed every one of the 18 declared claim commands, `npm test` (39 passed; 4 intentional skips), both web builds, Rust formatting/tests/clippy, release-mode Tauri build, and an eight-second native smoke run. Live JS and CSS hashes match the candidate build. Fresh desktop and 390 px accessibility/privacy/header checks found no release defects. Sociobot license verification enforced a 30-request client allowance: request 31 returned `429` with `Retry-After: 3`. Full evidence is in [verification-5.md](verification-5.md).
+
 ## Result
 
 Repaired every finding in [review 1](review-1.md). The desktop-app artifact class, local-first conversion flow, Tauri shell, and dusk archive visual system remain intact.
