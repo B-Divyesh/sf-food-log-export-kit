@@ -80,40 +80,41 @@
       "src_tauri_gen_schemas_linux_schema_windows_type"
     ],
     "2": [
+      "src_app",
+      "src_app_announce",
+      "src_app_appheader",
+      "src_app_appstate",
+      "src_app_bindapp",
+      "src_app_demobanner",
+      "src_app_demofirstrecord",
+      "src_app_emptypanel",
+      "src_app_emptystate",
+      "src_app_escapehtml",
+      "src_app_licensepanel",
+      "src_app_loadsample",
+      "src_app_number",
+      "src_app_readfiles",
+      "src_app_renderapp",
+      "src_app_rerender",
+      "src_app_reviewpanel",
       "src_app_startapp",
+      "src_app_state",
+      "src_app_steps",
+      "src_app_totals",
+      "src_exporter_savetext",
+      "src_icons",
+      "src_icons_icons",
       "src_license",
       "src_license_acceptlicensefromurl",
       "src_license_cachedverdict",
       "src_license_checkouturl",
       "src_license_licensestate",
+      "src_license_optimisticlicense",
       "src_license_removelicense",
       "src_license_storedlicense",
       "src_license_verifylicense",
-      "src_main",
-      "src_main_bindlinks",
-      "src_main_istauri",
-      "src_main_live",
-      "src_main_render",
-      "src_main_root",
-      "src_pages",
-      "src_pages_landingpage",
-      "src_pages_notfoundpage",
-      "src_pages_privacypage",
-      "src_pages_resolveplatformdownload",
-      "src_pages_termspage",
-      "src_release",
-      "src_release_desktopplatform",
-      "src_release_detectdesktopplatform",
-      "src_release_detectmacarchitecture",
-      "src_release_macarchitecture",
-      "src_release_releaseasset",
-      "src_release_releasedetails",
-      "src_release_selectplatformasset",
-      "src_shell",
-      "src_shell_footer",
-      "src_shell_header",
-      "tests_unit_release_test",
-      "tests_unit_release_test_assets"
+      "src_sample",
+      "src_sample_samplecsv"
     ],
     "3": [
       "src_tauri_gen_schemas_linux_schema",
@@ -206,34 +207,6 @@
       "src_tauri_gen_schemas_desktop_schema_value_description"
     ],
     "6": [
-      "src_app",
-      "src_app_announce",
-      "src_app_appheader",
-      "src_app_appstate",
-      "src_app_bindapp",
-      "src_app_demobanner",
-      "src_app_emptypanel",
-      "src_app_emptystate",
-      "src_app_escapehtml",
-      "src_app_licensepanel",
-      "src_app_loadsample",
-      "src_app_number",
-      "src_app_readfiles",
-      "src_app_renderapp",
-      "src_app_rerender",
-      "src_app_reviewpanel",
-      "src_app_state",
-      "src_app_steps",
-      "src_app_totals",
-      "src_exporter_exportarchive",
-      "src_exporter_savetext",
-      "src_icons",
-      "src_icons_icons",
-      "src_license_optimisticlicense",
-      "src_sample",
-      "src_sample_samplecsv"
-    ],
-    "7": [
       "ref_dom",
       "ref_dom_iterable",
       "ref_es2022",
@@ -260,7 +233,7 @@
       "tsconfig_compileroptions_usedefineforclassfields",
       "tsconfig_include"
     ],
-    "8": [
+    "7": [
       "src_csv",
       "src_csv_countoutsidequotes",
       "src_csv_detectdelimiter",
@@ -268,6 +241,7 @@
       "src_csv_parsecsv",
       "src_exporter",
       "src_exporter_csvheaders",
+      "src_exporter_exportarchive",
       "src_exporter_exportcsv",
       "src_importer",
       "src_importer_aliases",
@@ -285,6 +259,33 @@
       "src_types_importresult",
       "src_types_recordkind",
       "tests_unit_importer_test"
+    ],
+    "8": [
+      "src_main",
+      "src_main_bindlinks",
+      "src_main_istauri",
+      "src_main_live",
+      "src_main_render",
+      "src_main_root",
+      "src_pages",
+      "src_pages_landingpage",
+      "src_pages_notfoundpage",
+      "src_pages_privacypage",
+      "src_pages_resolveplatformdownload",
+      "src_pages_termspage",
+      "src_release",
+      "src_release_desktopplatform",
+      "src_release_detectdesktopplatform",
+      "src_release_detectmacarchitecture",
+      "src_release_macarchitecture",
+      "src_release_releaseasset",
+      "src_release_releasedetails",
+      "src_release_selectplatformasset",
+      "src_shell",
+      "src_shell_footer",
+      "src_shell_header",
+      "tests_unit_release_test",
+      "tests_unit_release_test_assets"
     ],
     "9": [
       "package",
@@ -413,13 +414,13 @@
   "cohesion": {
     "0": 0.05398110661268556,
     "1": 0.05873015873015873,
-    "2": 0.1319073083778966,
+    "2": 0.12773109243697478,
     "3": 0.06666666666666667,
     "4": 0.07407407407407407,
     "5": 0.07407407407407407,
-    "6": 0.16,
-    "7": 0.08,
-    "8": 0.17753623188405798,
+    "6": 0.08,
+    "7": 0.17,
+    "8": 0.18333333333333332,
     "9": 0.09523809523809523,
     "10": 0.13333333333333333,
     "11": 0.2,
@@ -449,7 +450,7 @@
     {
       "id": "src_app_renderapp",
       "label": "renderApp()",
-      "degree": 13
+      "degree": 14
     },
     {
       "id": "src_app_bindapp",
@@ -472,11 +473,6 @@
       "degree": 9
     },
     {
-      "id": "src_app_startapp",
-      "label": "startApp()",
-      "degree": 8
-    },
-    {
       "id": "src_tauri_gen_schemas_linux_schema_definitions",
       "label": "definitions",
       "degree": 8
@@ -490,14 +486,30 @@
       "id": "src_tauri_gen_schemas_desktop_schema_definitions",
       "label": "definitions",
       "degree": 8
+    },
+    {
+      "id": "src_app_startapp",
+      "label": "startApp()",
+      "degree": 8
     }
   ],
   "surprises": [
     {
-      "source": "licensePanel()",
+      "source": "render()",
+      "target": "acceptLicenseFromUrl()",
+      "source_files": [
+        "src/main.ts",
+        "src/license.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "landingPage()",
       "target": "checkoutUrl()",
       "source_files": [
-        "src/app.ts",
+        "src/pages.ts",
         "src/license.ts"
       ],
       "confidence": "EXTRACTED",
@@ -506,10 +518,10 @@
     },
     {
       "source": "bindApp()",
-      "target": "verifyLicense()",
+      "target": "exportArchive()",
       "source_files": [
         "src/app.ts",
-        "src/license.ts"
+        "src/exporter.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
@@ -528,17 +540,6 @@
     },
     {
       "source": "loadSample()",
-      "target": "importText()",
-      "source_files": [
-        "src/app.ts",
-        "src/importer.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "readFiles()",
       "target": "importText()",
       "source_files": [
         "src/app.ts",
