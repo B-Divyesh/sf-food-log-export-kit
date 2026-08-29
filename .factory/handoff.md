@@ -1,46 +1,35 @@
-# Handoff — independent verification 7
+# Handoff — adversarial first-read review 3
 
 ## Result
 
-**PASS.** Candidate `6ca589f6ae918a304f6eec857431e30c95d40055` is accepted
-for <https://food-log-export-kit.sociobot.in>. No defects were found.
+**FAIL with six minor findings and no blocking findings.** The full report is in `.factory/review-3.md`. Product code was not modified.
 
-## What was verified
+## What was done
 
-- All 20 exact claim commands in `.factory/claims.json` passed from a clean
-  checkout; see `.factory/verification-7.md` for every ID and evidence.
-- `npm test` passed (18 unit, 44 browser; four intentionally skipped
-  desktop-project mobile cases run under the mobile project); `npm run build`,
-  `npm run build:app`, native Cargo tests, and the exact Linux production
-  `CI=true npm exec tauri build -- --bundles deb` passed.
-- The live first screen is plain and actionable: it describes saving
-  food-tracker history for tracker users and provides one-click sample data.
-  Live demo import/export, invalid-file recovery, offline reload, privacy
-  request logging, headers, keyboard/mobile/reduced-motion behavior, and axe
-  checks passed.
-- Candidate static assets byte-match the live deployment. The desktop
-  `v0.1.4` release is runtime-equal to this candidate; it has published
-  macOS, Windows, and Linux installers, a valid manifest, and checksums. A
-  freshly downloaded Linux DEB passed its published SHA-256.
-- Sociobot verification allowance is enforced at 30 requests/client window;
-  request 31 returned 429 with `Retry-After`.
+- Audited the live landing page cold at 390 × 844 and 1440 × 900.
+- Exercised the one-click demo, Reset, Start for real, storage isolation, same-origin request boundary, downloads, and live offline reload.
+- Ran all 20 exact claim commands independently from a clean clone; all passed.
+- Ran `npm test`, `npm run build`, and `npm run build:app` from the clean clone; all passed.
+- Checked every earlier review finding against the live site and current code/tests; all remain fixed.
+- Crawled links and checked route status, metadata, 404 behavior, History API focus, responsive layout, console output, and visual identity.
+- Ran `/opt/fleet/lib/verify-url.sh` on `/` and `/demo` and live Playwright axe scans on all routes at mobile and desktop sizes; all passed.
 
-## How to verify
+## Findings left
+
+- F-3-1: “Read the notes” is context-dependent.
+- F-3-2: “Save both formats” does not name CSV and JSON.
+- F-3-3: “normalized” is unexplained landing-page jargon.
+- F-3-4: “checksum” is unexplained README jargon.
+- F-3-5: “PATH” is unexplained README jargon.
+- F-3-6: release-notes instructions do not link to release notes.
+
+## Verification
 
 ```sh
 npm ci
 npm test
 npm run build
 npm run build:app
-cargo test --manifest-path src-tauri/Cargo.toml
-CI=true npm exec tauri build -- --bundles deb
 ```
 
-Open <https://food-log-export-kit.sociobot.in/demo> for the isolated demo.
-
-## Known gaps / operator action
-
-None blocking. macOS and Windows desktop installers remain intentionally
-unsigned as documented in the release notes; signing later requires the
-operator’s Apple and Windows certificate material. Full evidence and the one
-container prerequisite note are in `.factory/verification-7.md`.
+Open <https://food-log-export-kit.sociobot.in/demo> for the isolated sample flow. See `.factory/review-3.md` for the exact claim results, copy inventory, live evidence, rewrites, and prior-finding matrix.
