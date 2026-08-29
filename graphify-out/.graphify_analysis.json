@@ -483,17 +483,17 @@
       "degree": 9
     },
     {
+      "id": "src_shell_footer",
+      "label": "footer()",
+      "degree": 8
+    },
+    {
       "id": "src_app_startapp",
       "label": "startApp()",
       "degree": 8
     },
     {
       "id": "src_tauri_gen_schemas_linux_schema_definitions",
-      "label": "definitions",
-      "degree": 8
-    },
-    {
-      "id": "src_tauri_gen_schemas_desktop_schema_definitions",
       "label": "definitions",
       "degree": 8
     },
