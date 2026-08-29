@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 2026-08-29 after polish round 3. Counts treat hyphenated terms, product names, file names, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
+Audited 2026-08-29 after polish round 4. Counts treat hyphenated terms, product names, file names, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
 
 ## Landing page
 
@@ -35,7 +35,7 @@ Audited 2026-08-29 after polish round 3. Counts treat hyphenated terms, product 
 | Food.Log.Export.Kit_0.1.5_amd64.AppImage | 1 |
 | Read release notes | 3 |
 | Review before export | 3 |
-| See every row before you export | 6 |
+| Review entries and conversion notes | 5 |
 | Invalid values, skipped rows, and populated unrecognized fields appear in conversion notes. | 12 |
 | How it works | 3 |
 | How to turn an export into an archive | 8 |
@@ -48,7 +48,7 @@ Audited 2026-08-29 after polish round 3. Counts treat hyphenated terms, product 
 | Save CSV and JSON | 4 |
 | Use CSV now. | 3 |
 | Keep JSON with consistent fields and conversion notes. | 8 |
-| The filled review table with CSV and JSON export buttons. | 10 |
+| Two filled food-log rows above Export CSV and Export JSON buttons. | 11 |
 | Privacy and limits | 3 |
 | How the app handles your files | 6 |
 | Your files stay local. | 4 |
@@ -119,4 +119,4 @@ Developer commands and project-map fragments use technical names only where they
 | Isolated sample environment | demo |
 | Source product category | food tracker |
 
-Catalog description: “Convert food tracker exports into local CSV and JSON archives.” (10 words, 62 characters)
+Catalog description: “Export food tracker history as local CSV and JSON files.” (10 words, 57 characters)

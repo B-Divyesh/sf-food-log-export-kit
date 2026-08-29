@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 describe('static hosting routes', () => {
@@ -42,6 +42,25 @@ describe('static hosting routes', () => {
     expect(readme).toContain('checks that the downloaded file was not changed');
     expect(readme).toContain('command so you can run it from a terminal');
     expect(readme).toContain('[release notes](https://github.com/B-Divyesh/sf-food-log-export-kit/releases/latest)');
+  });
+
+  it('keeps the review promise within the tested conversion-note scope', () => {
+    const pages = readFileSync(new URL('../../src/pages.ts', import.meta.url), 'utf8');
+    const app = readFileSync(new URL('../../src/app.ts', import.meta.url), 'utf8');
+    expect(pages).toContain('Review entries and conversion notes');
+    expect(pages).not.toContain('See every row before you export');
+    expect(app).toContain('Check entries and notes');
+    expect(app).not.toContain('Check every row');
+    expect(app).not.toContain('Try every export');
+  });
+
+  it('ships a current export walkthrough frame with precise alternative text', () => {
+    const pages = readFileSync(new URL('../../src/pages.ts', import.meta.url), 'utf8');
+    expect(pages).toContain('src="/screens/03-export.webp"');
+    expect(pages).toContain('Two filled food-log rows above Export CSV and Export JSON buttons.');
+    for (const screen of ['01-import.webp', '02-review.webp', '03-export.webp']) {
+      expect(statSync(new URL(`../../public/screens/${screen}`, import.meta.url)).size).toBeGreaterThan(10_000);
+    }
   });
 
   it('keeps drawer motion from lowering text contrast', () => {

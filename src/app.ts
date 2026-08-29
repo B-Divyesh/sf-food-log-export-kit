@@ -42,14 +42,14 @@ function appHeader(): string {
 
 function demoBanner(): string {
   if (!state.demo) return '';
-  return `<aside class="demo-banner" aria-label="Demo mode"><strong>Demo — sample data, nothing is saved</strong><span>Try every export with this separate sample.</span><div><button class="text-button" id="reset-demo">Reset demo</button><a class="text-button" href="/app" data-link>Start for real</a></div></aside>`;
+  return `<aside class="demo-banner" aria-label="Demo mode"><strong>Demo — sample data, nothing is saved</strong><span>Try CSV and JSON with this separate sample.</span><div><button class="text-button" id="reset-demo">Reset demo</button><a class="text-button" href="/app" data-link>Start for real</a></div></aside>`;
 }
 
 function steps(): string {
   const active = state.records.length ? 2 : 1;
   return `<ol class="stage-rail" aria-label="Archive stages">
     <li class="${active === 1 ? 'active' : 'done'}"><span>1</span><div><b>Import</b><small>Choose exports</small></div></li>
-    <li class="${active === 2 ? 'active' : ''}"><span>2</span><div><b>Review</b><small>Check every row</small></div></li>
+    <li class="${active === 2 ? 'active' : ''}"><span>2</span><div><b>Review</b><small>Check entries and notes</small></div></li>
     <li><span>3</span><div><b>Export</b><small>Save CSV + JSON</small></div></li>
     <li><span>4</span><div><b>Keep</b><small>Keep both files</small></div></li>
   </ol>`;
