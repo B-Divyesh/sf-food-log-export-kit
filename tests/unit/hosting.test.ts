@@ -43,4 +43,11 @@ describe('static hosting routes', () => {
     expect(readme).toContain('command so you can run it from a terminal');
     expect(readme).toContain('[release notes](https://github.com/B-Divyesh/sf-food-log-export-kit/releases/latest)');
   });
+
+  it('keeps drawer motion from lowering text contrast', () => {
+    const styles = readFileSync(new URL('../../src/styles.css', import.meta.url), 'utf8');
+    const drawer = styles.match(/@keyframes drawer \{([^}]+\}[^}]+)\}/)?.[1] ?? '';
+    expect(drawer).toContain('transform: translateY(8px)');
+    expect(drawer).not.toContain('opacity');
+  });
 });

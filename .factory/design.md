@@ -36,7 +36,7 @@ Focus uses a 3 px amber ring plus a dark offset. Touch targets are at least 44 p
 
 ## Motion
 
-The signature motion is a short “drawer opens” reveal: new panels translate upward 8 px while fading in over 220 ms. Progress fill moves only after a user action. Nothing loops. With `prefers-reduced-motion`, translation and smooth scrolling are removed; state changes are instant opacity swaps.
+The signature motion is a short “drawer opens” reveal: new panels translate upward 8 px over 220 ms while text stays fully opaque for stable contrast. Progress fill moves only after a user action. Nothing loops. With `prefers-reduced-motion`, translation and smooth scrolling are removed and state changes are instant.
 
 ## Asset plan and prompt sheet
 
