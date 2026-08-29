@@ -112,39 +112,6 @@
       "src_tauri_gen_schemas_linux_schema_value_description"
     ],
     "3": [
-      "src_app_appstate",
-      "src_csv",
-      "src_csv_countoutsidequotes",
-      "src_csv_detectdelimiter",
-      "src_csv_encodecsv",
-      "src_csv_parsecsv",
-      "src_exporter",
-      "src_exporter_csvheaders",
-      "src_exporter_exportarchive",
-      "src_exporter_exportcsv",
-      "src_importer",
-      "src_importer_aliases",
-      "src_importer_asdate",
-      "src_importer_asnumber",
-      "src_importer_astext",
-      "src_importer_collectunmappedfields",
-      "src_importer_findvalue",
-      "src_importer_hasvalue",
-      "src_importer_importtext",
-      "src_importer_mappedinputkeys",
-      "src_importer_maprecord",
-      "src_importer_normalized",
-      "src_importer_normalizedfield",
-      "src_importer_objectsfromjson",
-      "src_importer_valuefornote",
-      "src_types",
-      "src_types_foodrecord",
-      "src_types_importissue",
-      "src_types_importresult",
-      "src_types_recordkind",
-      "tests_unit_importer_test"
-    ],
-    "4": [
       "src_license",
       "src_license_acceptlicensefromurl",
       "src_license_cachedverdict",
@@ -177,10 +144,43 @@
       "tests_unit_release_test",
       "tests_unit_release_test_assets"
     ],
+    "4": [
+      "src_csv",
+      "src_csv_countoutsidequotes",
+      "src_csv_detectdelimiter",
+      "src_csv_encodecsv",
+      "src_csv_parsecsv",
+      "src_exporter",
+      "src_exporter_csvheaders",
+      "src_exporter_exportarchive",
+      "src_exporter_exportcsv",
+      "src_importer",
+      "src_importer_aliases",
+      "src_importer_asdate",
+      "src_importer_asnumber",
+      "src_importer_astext",
+      "src_importer_collectunmappedfields",
+      "src_importer_findvalue",
+      "src_importer_hasvalue",
+      "src_importer_importtext",
+      "src_importer_mappedinputkeys",
+      "src_importer_maprecord",
+      "src_importer_normalized",
+      "src_importer_normalizedfield",
+      "src_importer_objectsfromjson",
+      "src_importer_valuefornote",
+      "src_types",
+      "src_types_foodrecord",
+      "src_types_importissue",
+      "src_types_importresult",
+      "src_types_recordkind",
+      "tests_unit_importer_test"
+    ],
     "5": [
       "src_app",
       "src_app_announce",
       "src_app_appheader",
+      "src_app_appstate",
       "src_app_bindapp",
       "src_app_demobanner",
       "src_app_demofirstrecord",
@@ -424,9 +424,9 @@
     "0": 0.05398110661268556,
     "1": 0.062388591800356503,
     "2": 0.0625,
-    "3": 0.13333333333333333,
-    "4": 0.14193548387096774,
-    "5": 0.16666666666666666,
+    "3": 0.14193548387096774,
+    "4": 0.13793103448275862,
+    "5": 0.15763546798029557,
     "6": 0.07407407407407407,
     "7": 0.07407407407407407,
     "8": 0.08,
@@ -483,16 +483,6 @@
       "degree": 9
     },
     {
-      "id": "src_shell_footer",
-      "label": "footer()",
-      "degree": 8
-    },
-    {
-      "id": "src_app_startapp",
-      "label": "startApp()",
-      "degree": 8
-    },
-    {
       "id": "src_tauri_gen_schemas_linux_schema_definitions",
       "label": "definitions",
       "degree": 8
@@ -500,6 +490,16 @@
     {
       "id": "src_tauri_tauri_conf_bundle",
       "label": "bundle",
+      "degree": 8
+    },
+    {
+      "id": "src_tauri_gen_schemas_desktop_schema_definitions",
+      "label": "definitions",
+      "degree": 8
+    },
+    {
+      "id": "src_app_startapp",
+      "label": "startApp()",
       "degree": 8
     }
   ],
