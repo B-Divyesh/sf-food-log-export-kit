@@ -443,13 +443,13 @@
   },
   "gods": [
     {
-      "id": "tsconfig_compileroptions",
-      "label": "compilerOptions",
+      "id": "src_app_renderapp",
+      "label": "renderApp()",
       "degree": 14
     },
     {
-      "id": "src_app_renderapp",
-      "label": "renderApp()",
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
       "degree": 14
     },
     {
@@ -473,6 +473,11 @@
       "degree": 9
     },
     {
+      "id": "src_app_startapp",
+      "label": "startApp()",
+      "degree": 8
+    },
+    {
       "id": "src_tauri_gen_schemas_linux_schema_definitions",
       "label": "definitions",
       "degree": 8
@@ -486,36 +491,9 @@
       "id": "src_tauri_gen_schemas_desktop_schema_definitions",
       "label": "definitions",
       "degree": 8
-    },
-    {
-      "id": "src_app_startapp",
-      "label": "startApp()",
-      "degree": 8
     }
   ],
   "surprises": [
-    {
-      "source": "render()",
-      "target": "acceptLicenseFromUrl()",
-      "source_files": [
-        "src/main.ts",
-        "src/license.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "landingPage()",
-      "target": "checkoutUrl()",
-      "source_files": [
-        "src/pages.ts",
-        "src/license.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
     {
       "source": "bindApp()",
       "target": "exportArchive()",
@@ -544,6 +522,28 @@
       "source_files": [
         "src/app.ts",
         "src/importer.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "readFiles()",
+      "target": "importText()",
+      "source_files": [
+        "src/app.ts",
+        "src/importer.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "render()",
+      "target": "startApp()",
+      "source_files": [
+        "src/main.ts",
+        "src/app.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
