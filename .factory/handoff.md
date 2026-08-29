@@ -1,46 +1,38 @@
-# Handoff — perfection-loop round 1
-
-## Independent verifier update — 2026-08-29
-
-**PASS** for candidate `bbedc5f06dceba4743771e36c065810372a31f45` at <https://food-log-export-kit.sociobot.in>. A fresh clean clone passed every one of the 18 declared claim commands, `npm test` (39 passed; 4 intentional skips), both web builds, Rust formatting/tests/clippy, release-mode Tauri build, and an eight-second native smoke run. Live JS and CSS hashes match the candidate build. Fresh desktop and 390 px accessibility/privacy/header checks found no release defects. Sociobot license verification enforced a 30-request client allowance: request 31 returned `429` with `Retry-After: 3`. Full evidence is in [verification-5.md](verification-5.md).
+# Handoff — adversarial review 2
 
 ## Result
 
-Repaired every finding in [review 1](review-1.md). The desktop-app artifact class, local-first conversion flow, Tauri shell, and dusk archive visual system remain intact.
+**FAIL** for commit `ad419455d79abbeb8f00befb0d82114ee2400bf7` and the live site on 2026-08-29 UTC. The full review is in [review-2.md](review-2.md).
 
-## Delivered
+No product code was changed. Pre-existing modified files under `graphify-out/` were preserved and excluded from the review commit.
 
-- A direct isolated demo at `/?demo=1` and `/demo`, with an above-the-fold 390px sample record, persistent demo banner, reset, and exit to an empty real workspace.
-- First-screen, section, pricing, legal, metadata, README, and catalog copy rewritten to the review’s plain-language requirements.
-- Complete static 404 metadata and shared navigation/footer treatment.
-- Route-change focus on every client-side transition, including browser Back.
-- Expanded claims inventory with a recorded, observable license request data-boundary test; unsupported public promises were removed.
-- Mobile, accessibility, metadata, offline, installer, import/export, privacy, and claims coverage retained and expanded.
+## What was checked
 
-## Local evidence
+- Cold 390 × 844 and 1440 × 900 landing-page reads.
+- One-click demo, visible sample, reset, exit, storage isolation, request log, and offline claim.
+- Every exact command in all 19 `.factory/claims.json` entries from a fresh `git clone --no-local` after `npm ci`.
+- Full `npm test` and `npm run build` in that clean clone.
+- Landing and README sentence/heading/action audit with word counts.
+- Every finding in review 1 against the live site and current code.
+- Route status, metadata, canonical, one-h1/main/lang, Back focus, links, 404, axe, console, responsive layout, and visual identity.
 
-- `npm ci` — passed, 0 known vulnerabilities.
-- `npm run build` — passed; deployable static site is in `dist/site/`.
-- `npm run test:unit` — passed: 14 tests.
-- `npm run test:e2e -- --project=mobile` — passed: 13 tests.
-- `npm run test:e2e -- --project=chromium` — passed: 30 tests.
-- `verify-url.sh http://127.0.0.1:4173/` and `verify-url.sh http://127.0.0.1:4173/?demo=1` — passed with no browser-console errors; reports and screenshots are under `.factory/evidence/`.
-- Fresh clone evidence: `git clone --no-local`, `npm ci`, all 19 declared claim tests (17 browser claims plus both installer claims) passed.
-- `cargo fmt --check`, `cargo test --locked`, `cargo clippy -- -D warnings`, and `CI=false npm run tauri -- build --no-bundle` passed after installing the Linux dependencies declared in the release workflow.
-- Deployed through `/opt/fleet/lib/deploy-static.sh food-log-export-kit dist/site`; Azure deployment `5dd01280-6d5d-4de9-8d73-8b48d5b16650` succeeded. Cold live checks for `/` and `/?demo=1` passed with no console errors; live reports are in `.factory/evidence/live-landing/verify.json` and `.factory/evidence/live-demo/verify.json`. The live unknown route returned HTTP 404 with the required static-404 metadata and shared footer.
-- The specific finding-to-evidence table is in [`.factory/polish-1.md`](polish-1.md).
+## Verification results
 
-## Run and verify
+- All 19 declared claim commands: passed.
+- `npm test`: 39 passed, 4 intentional skips.
+- `npm run build`: passed; `dist/site/` produced.
+- Live `/` and `/demo` verifier: passed with no console errors or missing alt text.
+- Live serious/critical axe violations on `/`, `/demo`, `/app`, `/privacy`, `/terms`: none.
+- Live demo requests: same-origin only; local storage, session storage, and cookies remained empty in a fresh direct context.
+- Link crawl: no dead destination found.
 
-```sh
-npm ci
-npm test
-npm run build
-npm run build:app
-```
+## Blocking gaps
 
-Open `http://127.0.0.1:4173/?demo=1` after `npm run dev` or `npm exec vite preview` to inspect the isolated sample workspace.
+1. A populated unknown field such as `Fiber` is silently omitted from JSON with zero conversion notes, contradicting the brief and the live “complete”, “no silent drops”, “preserves supplied values”, and “every imported row was explained” wording.
+2. The landing says checkout is hosted by Sociobot, while the tested redirect opens Dodo-hosted checkout.
 
-## Remaining operator action
+The review also records missing shared app/demo footer navigation, the `/app` canonical conflict, a stale 404 build marker, terminology drift, and four plain-language README issues.
 
-No code gaps are known. Push/deploy verification is completed after the repair commit so the live URL can be checked cold against this exact source revision.
+## Next verification
+
+After repair, add a lossy-field claim and fixture, add or remove the refunded-license claim, rerun every manifest command from a fresh clone, then repeat the live demo/privacy, route, copy, and prior-finding checks from scratch.
