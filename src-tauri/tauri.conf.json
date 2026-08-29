@@ -28,7 +28,7 @@
     "targets": "all",
     "category": "Utility",
     "shortDescription": "Save food tracker exports as CSV and JSON",
-    "longDescription": "Validate and normalize user-provided food tracker exports into a readable CSV and portable JSON archive.",
+    "longDescription": "Validate and normalize food tracker exports into CSV and portable JSON files.",
     "copyright": "Copyright 2026 Param Factory",
     "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"]
   }
