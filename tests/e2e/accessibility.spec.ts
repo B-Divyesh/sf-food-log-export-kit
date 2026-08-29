@@ -78,7 +78,7 @@ test('app and demo use the shared navigation and footer', async ({ page }) => {
     await expect(navigation.getByRole('link', { name: 'Terms' })).toBeVisible();
     const footer = page.locator('footer');
     await expect(footer).toContainText('Built by Param Factory');
-    await expect(footer).toContainText('Version 0.1.2 · polish 2');
+    await expect(footer).toContainText('Version 0.1.3 · repair 4');
   }
 });
 

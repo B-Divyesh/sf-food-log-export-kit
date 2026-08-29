@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { detectDesktopPlatform, selectPlatformAsset } from '../../src/release';
 
 const assets = [
-  { name: 'Food.Log.Export.Kit_0.1.2_aarch64.dmg', browser_download_url: 'https://downloads.test/arm.dmg' },
-  { name: 'Food.Log.Export.Kit_0.1.2_x64.dmg', browser_download_url: 'https://downloads.test/intel.dmg' },
-  { name: 'Food.Log.Export.Kit_0.1.2_x64-setup.exe', browser_download_url: 'https://downloads.test/setup.exe' },
-  { name: 'Food.Log.Export.Kit_0.1.2_x64_en-US.msi', browser_download_url: 'https://downloads.test/setup.msi' },
-  { name: 'Food.Log.Export.Kit_0.1.2_amd64.AppImage', browser_download_url: 'https://downloads.test/appimage' }
+  { name: 'Food.Log.Export.Kit_0.1.3_aarch64.dmg', browser_download_url: 'https://downloads.test/arm.dmg' },
+  { name: 'Food.Log.Export.Kit_0.1.3_x64.dmg', browser_download_url: 'https://downloads.test/intel.dmg' },
+  { name: 'Food.Log.Export.Kit_0.1.3_x64-setup.exe', browser_download_url: 'https://downloads.test/setup.exe' },
+  { name: 'Food.Log.Export.Kit_0.1.3_x64_en-US.msi', browser_download_url: 'https://downloads.test/setup.msi' },
+  { name: 'Food.Log.Export.Kit_0.1.3_amd64.AppImage', browser_download_url: 'https://downloads.test/appimage' }
 ];
 
 describe('release asset selection', () => {

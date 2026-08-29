@@ -4,12 +4,19 @@ on:
   push:
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing v* tag to rebuild and verify
+        required: true
+        type: string
 
 permissions:
   contents: write
 
 jobs:
   build:
+    env:
+      RELEASE_TAG: ${{ github.ref_type == 'tag' && github.ref_name || inputs.release_tag }}
     strategy:
       fail-fast: false
       matrix:
@@ -29,6 +36,8 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_type == 'tag' && github.ref || inputs.release_tag }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -38,8 +47,15 @@ jobs:
           targets: ${{ matrix.target }}
       - name: Install Linux packages
         if: matrix.platform == 'ubuntu-22.04'
-        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+        run: sudo apt-get update && sudo apt-get install -y file libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
       - run: npm ci
+      - name: Verify release tag matches the desktop and site version
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$RELEASE_TAG" = "v$(node -p 'require("./package.json").version')"
+          test "$(node -p 'require("./package.json").version')" = "$(node -p 'require("./src-tauri/tauri.conf.json").version')"
+          test "$(node -p 'require("fs").readFileSync("src-tauri/Cargo.toml", "utf8").match(/^version = "([^"]+)"$/m)[1]')" = "$(node -p 'require("./package.json").version')"
       - name: Verify the Windows installer contract
         if: matrix.platform == 'windows-latest'
         run: npm run test:unit -- --testNamePattern '@claim:windows-installer'
@@ -47,8 +63,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.2' }}
-          releaseName: Food Log Export Kit ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.2' }}
+          tagName: ${{ env.RELEASE_TAG }}
+          releaseName: Food Log Export Kit ${{ env.RELEASE_TAG }}
           releaseBody: Unsigned desktop builds for macOS, Windows, and Linux. Verify downloads with SHA256SUMS.
           releaseDraft: false
           prerelease: false
@@ -57,16 +73,19 @@ jobs:
   checksums:
     needs: build
     runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.ref_type == 'tag' && github.ref_name || inputs.release_tag }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_type == 'tag' && github.ref || inputs.release_tag }}
       - name: Download release assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.2' }}
-        run: gh release download "$TAG" --dir release-assets
+        run: gh release download "$RELEASE_TAG" --dir release-assets
       - name: Create checksums and manifest
         env:
-          TAG: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.2' }}
+          TAG: ${{ env.RELEASE_TAG }}
         run: |
           cd release-assets
           sha256sum * > SHA256SUMS
@@ -85,7 +104,30 @@ jobs:
           PY
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.2' }}
+          tag_name: ${{ env.RELEASE_TAG }}
           files: |
             release-assets/SHA256SUMS
             release-assets/latest.json
+      - name: Verify published installer release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh release download "$RELEASE_TAG" --dir verify-release
+          cd verify-release
+          sha256sum -c SHA256SUMS
+          test "$(find . -maxdepth 1 -name '*.dmg' | wc -l)" -ge 2
+          test "$(find . -maxdepth 1 -name '*.msi' -o -name '*-setup.exe' | wc -l)" -ge 1
+          test "$(find . -maxdepth 1 -name '*.AppImage' -o -name '*.deb' | wc -l)" -ge 1
+          python3 - <<'PY'
+          import json, os
+          with open('latest.json') as source:
+              latest = json.load(source)
+          tag = os.environ['RELEASE_TAG']
+          assert latest['version'] == tag.removeprefix('v')
+          for platform in ('macos', 'windows', 'linux'):
+              assert latest['platforms'][platform]
+              assert all(f'/releases/download/{tag}/' in url for url in latest['platforms'][platform])
+          PY
+          remote_tag_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" --jq '.object.sha')"
+          test "$remote_tag_sha" = "$(git rev-parse HEAD)"
