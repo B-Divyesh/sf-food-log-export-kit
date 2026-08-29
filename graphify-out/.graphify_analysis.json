@@ -468,14 +468,24 @@
       "degree": 10
     },
     {
+      "id": "src_importer_importtext",
+      "label": "importText()",
+      "degree": 9
+    },
+    {
       "id": "package_scripts",
       "label": "scripts",
       "degree": 9
     },
     {
-      "id": "src_importer_importtext",
-      "label": "importText()",
-      "degree": 9
+      "id": "src_shell_footer",
+      "label": "footer()",
+      "degree": 8
+    },
+    {
+      "id": "src_app_startapp",
+      "label": "startApp()",
+      "degree": 8
     },
     {
       "id": "src_tauri_gen_schemas_linux_schema_definitions",
@@ -486,30 +496,9 @@
       "id": "src_tauri_gen_schemas_desktop_schema_definitions",
       "label": "definitions",
       "degree": 8
-    },
-    {
-      "id": "src_tauri_tauri_conf_bundle",
-      "label": "bundle",
-      "degree": 8
-    },
-    {
-      "id": "src_app_startapp",
-      "label": "startApp()",
-      "degree": 8
     }
   ],
   "surprises": [
-    {
-      "source": "licensePanel()",
-      "target": "checkoutUrl()",
-      "source_files": [
-        "src/app.ts",
-        "src/license.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
     {
       "source": "bindApp()",
       "target": "exportArchive()",
@@ -533,22 +522,33 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "renderApp()",
-      "target": "footer()",
+      "source": "loadSample()",
+      "target": "importText()",
       "source_files": [
         "src/app.ts",
-        "src/shell.ts"
+        "src/importer.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "bridges separate communities"
     },
     {
-      "source": "loadSample()",
+      "source": "readFiles()",
       "target": "importText()",
       "source_files": [
         "src/app.ts",
         "src/importer.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "licensePanel()",
+      "target": "checkoutUrl()",
+      "source_files": [
+        "src/app.ts",
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
