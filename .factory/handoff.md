@@ -1,52 +1,61 @@
-# Handoff — adversarial review 4
+# Handoff — polish round 4
 
 ## Result
 
-**FAIL.** Review 4 found one blocking claims-inventory defect and one medium
-walkthrough-accuracy defect. No product code was changed.
+**PASS.** The cumulative review findings F-1-1 through F-4-2 are repaired,
+rechecked locally and on the cold live site, and mapped in
+[polish-4.md](polish-4.md). No known product, accessibility, privacy, routing,
+demo-sandbox, or walkthrough finding remains.
 
-The full report is in [review-4.md](review-4.md).
+The repair is in commits `5c5255ddf54497a9598173a2a6ca4fa9975776a9` and
+`d1b3f51c2921df78afe0f9115967da4e90c0eb2f`. The repaired desktop app is
+tagged `v0.1.6`; its successful GitHub Actions release run is
+<https://github.com/B-Divyesh/sf-food-log-export-kit/actions/runs/33278683092>.
 
-## Findings left for repair
+## What changed
 
-- **F-4-1 — BLOCKING:** “See every row before you export” is absent from
-  `.factory/claims.json`. Add one exact manifest claim and one tagged row-
-  reconciliation test, or narrow the heading to an existing tested claim.
-- **F-4-2 — MEDIUM:** `public/screens/03-export.webp` does not contain the
-  filled table or CSV/JSON buttons named by its alt text. Recapture the current
-  app at the actual export state and confirm all walkthrough frames use the
-  current navigation.
+- Narrowed the one unlisted absolute claim to `Review entries and conversion
+  notes`, and protected that scope with a unit regression.
+- Replaced all three walkthrough frames with 760 × 489 captures from the
+  current shared-shell app. The export capture shows populated records plus
+  **Export CSV** and **Export JSON**, with matching alternative text.
+- Made the demo banner name the tested CSV and JSON actions without another
+  unlisted absolute, and recorded both locations in `claims.json`.
+- Updated the catalog description to the verb-first, 57-character sentence:
+  `Export food tracker history as local CSV and JSON files.`
+- Bumped the desktop artifact, landing build marker, fixtures, and release
+  contract from 0.1.5 to 0.1.6. This prevents the landing page from directing
+  people to an installer built before the repaired source.
 
-## Verification performed
+## Verification
 
-- Opened the live site cold at 390 × 844 and 1440 × 900.
-- Entered the one-click demo, checked the first viewport, Reset, Start for real,
-  storage isolation, request origins, cookies, console errors, and offline
-  reload.
-- Created clean clone `/tmp/food-log-review4.1IPPgx`, ran `npm ci`, and ran all
-  20 exact `.factory/claims.json` commands independently; all passed.
-- Ran `npm test`: 21 unit tests and 48 browser tests passed, with four
-  intentional cross-project skips.
-- Ran `npm run build` and `npm run build:app`; both passed. Largest initial JS
-  chunk: 38.69 kB raw / 13.67 kB gzip.
-- Ran live desktop and mobile axe checks on `/`, `/demo`, `/app`, `/privacy`,
-  `/terms`, and the HTTP 404; zero WCAG 2 A/AA violations were reported.
-- Ran `/opt/fleet/lib/verify-url.sh` on every 200 route; title, language, one
-  heading, main landmark, image alternatives, button names, and console checks
-  passed.
-- Crawled all live destinations, checked metadata and response headers, tested
-  Back focus, and reverified every finding from reviews 1–3 in live behavior and
-  source.
-- Imported a live CSV with an unmapped `Fiber` field and confirmed its named
-  conversion note and preserved JSON value without a remote food-data request.
+- `npm ci`
+- `npm test` — 23 unit tests and 52 browser tests passed; four Chromium mobile
+  skips are intentional because those checks run in the mobile project.
+- `npm run build` and `npm run build:app` passed. Initial JS: 38.71 kB raw,
+  13.67 kB gzip.
+- Every exact command from `.factory/claims.json` passed independently from a
+  clean clone: 20 claims, one tagged test per claim.
+- `/opt/fleet/lib/verify-url.sh` passed on live `/`, `/demo`, `/app`,
+  `/privacy`, and `/terms` with no console errors. Reports and screenshots are
+  in `.factory/evidence/polish-4/live-*`.
+- Live axe checks found no serious or critical issues on `/`, `/demo`, `/app`,
+  `/privacy`, `/terms`, or `/not-a-real-route`.
+- A cold live check confirmed the direct demo, first-viewport sample, Reset
+  demo, Start for real, same-origin demo requests, offline reload, route focus,
+  route titles/canonicals, designed HTTP 404, and the corrected export
+  walkthrough. The export evidence is
+  `.factory/evidence/polish-4/live-walkthrough-export.png`.
 
-## Repository state
+## Deploy
 
-Only `.factory/review-4.md` and this handoff were intentionally changed. The
-pre-existing modified `graphify-out/` files were left untouched. The reviewed
-candidate was `b54087fbbc2161262e66d752978ae4f59fae7ef5`.
+The static site was deployed through the work-order configuration with
+`/opt/fleet/lib/deploy-static.sh food-log-export-kit dist/site` to
+<https://food-log-export-kit.sociobot.in>. Azure deployment id:
+`f6864bf4-3deb-45b2-b8de-4e7df6736c38`.
 
-## Next step
+## Known gaps and operator action
 
-Repair F-4-1 and F-4-2, then repeat the claim, visual, and full build gates. Do
-not mark the product accepted until a new review has zero findings.
+None. Desktop binaries are intentionally unsigned; the published release notes
+retain the platform-specific open/install guidance. No telemetry, analytics,
+food-data backend, or remote fonts were added.
