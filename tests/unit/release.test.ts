@@ -29,14 +29,14 @@ describe('release asset selection', () => {
     };
     const currentRelease = {
       ...staleRelease,
-      tag_name: 'v0.1.5',
-      html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.5'
+      tag_name: 'v0.1.6',
+      html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.6'
     };
 
     // This is the exact v0.1.4-versus-new-candidate failure observed by verification 8.
-    expect(selectCurrentRelease(staleRelease, '0.1.5')).toBeUndefined();
-    expect(selectCurrentRelease(currentRelease, '0.1.5')).toEqual(currentRelease);
-    expect(selectCurrentRelease({ ...currentRelease, target_commitish: '5b770194cb02e41d70efb114f7e11a1a35f6766c' }, '0.1.5', 'new-source-commit')).toBeUndefined();
-    expect(selectCurrentRelease({ ...currentRelease, target_commitish: 'new-source-commit' }, '0.1.5', 'new-source-commit')).toEqual({ ...currentRelease, target_commitish: 'new-source-commit' });
+    expect(selectCurrentRelease(staleRelease, '0.1.6')).toBeUndefined();
+    expect(selectCurrentRelease(currentRelease, '0.1.6')).toEqual(currentRelease);
+    expect(selectCurrentRelease({ ...currentRelease, target_commitish: '5b770194cb02e41d70efb114f7e11a1a35f6766c' }, '0.1.6', 'new-source-commit')).toBeUndefined();
+    expect(selectCurrentRelease({ ...currentRelease, target_commitish: 'new-source-commit' }, '0.1.6', 'new-source-commit')).toEqual({ ...currentRelease, target_commitish: 'new-source-commit' });
   });
 });

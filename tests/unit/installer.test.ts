@@ -35,7 +35,7 @@ describe('Installer regression', () => {
     mkdirSync(fakeBin);
     mkdirSync(assets);
 
-    const linuxName = 'Food.Log.Export.Kit_0.1.5_amd64.AppImage';
+    const linuxName = 'Food.Log.Export.Kit_0.1.6_amd64.AppImage';
     const armName = 'Food.Log.Export.Kit_aarch64.app.tar.gz';
     const intelName = 'Food.Log.Export.Kit_x64.app.tar.gz';
     const linuxAsset = join(assets, linuxName);

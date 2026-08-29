@@ -78,7 +78,7 @@ test('app and demo use the shared navigation and footer', async ({ page }) => {
     await expect(navigation.getByRole('link', { name: 'Terms' })).toBeVisible();
     const footer = page.locator('footer');
     await expect(footer).toContainText('Built by Param Factory');
-    await expect(footer).toContainText('Version 0.1.5 · release repair');
+    await expect(footer).toContainText('Version 0.1.6 · release repair');
   }
 });
 
@@ -112,16 +112,16 @@ test('reduced motion removes visible movement', async ({ page }) => {
 });
 
 test('landing link crawl includes the selected release notes page', async ({ page, request }) => {
-  const releaseUrl = 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.5';
+  const releaseUrl = 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.6';
   await page.route('https://api.github.com/repos/B-Divyesh/sf-food-log-export-kit/releases/latest', (route) => route.fulfill({
     status: 200,
     contentType: 'application/json',
     body: JSON.stringify({
-      tag_name: 'v0.1.5',
+      tag_name: 'v0.1.6',
       html_url: releaseUrl,
       assets: [{
-        name: 'Food.Log.Export.Kit_0.1.5_amd64.AppImage',
-        browser_download_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.5/Food.Log.Export.Kit_0.1.5_amd64.AppImage'
+        name: 'Food.Log.Export.Kit_0.1.6_amd64.AppImage',
+        browser_download_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.6/Food.Log.Export.Kit_0.1.6_amd64.AppImage'
       }]
     })
   }));

@@ -27,12 +27,12 @@ Audited 2026-08-29 after polish round 4. Counts treat hyphenated terms, product 
 | Keep a CSV for spreadsheets. | 5 |
 | JSON keeps consistent fields and conversion notes. | 7 |
 | A recipe card archive box in a quiet kitchen at dusk. | 11 |
-| Desktop app · version 0.1.5 | 4 |
+| Desktop app · version 0.1.6 | 4 |
 | Download the desktop app | 4 |
 | The app reads CSV and JSON exports. | 7 |
 | It also works when your internet is off. | 8 |
 | Download for Linux | 3 |
-| Food.Log.Export.Kit_0.1.5_amd64.AppImage | 1 |
+| Food.Log.Export.Kit_0.1.6_amd64.AppImage | 1 |
 | Read release notes | 3 |
 | Review before export | 3 |
 | Review entries and conversion notes | 5 |
@@ -71,7 +71,7 @@ Audited 2026-08-29 after polish round 4. Counts treat hyphenated terms, product 
 | Read the terms. | 3 |
 | Turn food tracker exports into a local archive. | 8 |
 | Built by Param Factory | 4 |
-| Version 0.1.5 · release repair · Generated artwork | 6 |
+| Version 0.1.6 · release repair · Generated artwork | 6 |
 
 ## README
 

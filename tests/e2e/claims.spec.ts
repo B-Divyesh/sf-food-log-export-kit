@@ -303,14 +303,14 @@ test('@claim:revoked-license a replacement token never reuses another token verd
 
 test('@claim:detected-platform-downloads selects each published operating-system and Mac architecture asset', async ({ browser }) => {
   const release = {
-    tag_name: 'v0.1.5',
-    html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.5',
+    tag_name: 'v0.1.6',
+    html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.6',
     assets: [
-      ['Food.Log.Export.Kit_0.1.5_aarch64.dmg', 'mac-arm.dmg'],
-      ['Food.Log.Export.Kit_0.1.5_x64.dmg', 'mac-intel.dmg'],
-      ['Food.Log.Export.Kit_0.1.5_x64_en-US.msi', 'windows.msi'],
-      ['Food.Log.Export.Kit_0.1.5_amd64.AppImage', 'linux.AppImage']
-    ].map(([name, file]) => ({ name, browser_download_url: `https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.5/${file}` }))
+      ['Food.Log.Export.Kit_0.1.6_aarch64.dmg', 'mac-arm.dmg'],
+      ['Food.Log.Export.Kit_0.1.6_x64.dmg', 'mac-intel.dmg'],
+      ['Food.Log.Export.Kit_0.1.6_x64_en-US.msi', 'windows.msi'],
+      ['Food.Log.Export.Kit_0.1.6_amd64.AppImage', 'linux.AppImage']
+    ].map(([name, file]) => ({ name, browser_download_url: `https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.6/${file}` }))
   };
   const cases = [
     { userAgent: 'Mozilla/5.0 (X11; Linux x86_64)', architecture: '', label: 'Download for Linux', file: 'linux.AppImage' },
