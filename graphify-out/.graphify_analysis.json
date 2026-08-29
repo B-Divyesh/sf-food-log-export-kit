@@ -492,12 +492,12 @@
       "degree": 8
     },
     {
-      "id": "src_tauri_gen_schemas_linux_schema_definitions",
-      "label": "definitions",
+      "id": "src_shell_footer",
+      "label": "footer()",
       "degree": 8
     },
     {
-      "id": "src_tauri_gen_schemas_desktop_schema_definitions",
+      "id": "src_tauri_gen_schemas_linux_schema_definitions",
       "label": "definitions",
       "degree": 8
     },
@@ -514,17 +514,6 @@
       "source_files": [
         "src/app.ts",
         "src/license.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "render()",
-      "target": "startApp()",
-      "source_files": [
-        "src/main.ts",
-        "src/app.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
@@ -558,6 +547,17 @@
       "source_files": [
         "src/app.ts",
         "src/shell.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "render()",
+      "target": "startApp()",
+      "source_files": [
+        "src/main.ts",
+        "src/app.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
