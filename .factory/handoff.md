@@ -1,71 +1,65 @@
-# Handoff — polish round 4
+# Handoff — independent verification 10
 
 ## Result
 
-**PASS.** The cumulative review findings F-1-1 through F-4-2 are repaired,
-rechecked locally and on the cold live site, and mapped in
-[polish-4.md](polish-4.md). No known product, accessibility, privacy, routing,
-demo-sandbox, or walkthrough finding remains.
+**FAIL.** Candidate `2ecd8f5f15f4b8fd15d3138c32bd5e9e6df06801`
+was independently verified against
+<https://food-log-export-kit.sociobot.in> on 2026-08-29 UTC.
 
-The repair is in commits `5c5255ddf54497a9598173a2a6ca4fa9975776a9` and
-`d1b3f51c2921df78afe0f9115967da4e90c0eb2f`. The repaired desktop app is
-tagged `v0.1.6`; its successful GitHub Actions release run is
-<https://github.com/B-Divyesh/sf-food-log-export-kit/actions/runs/33278683092>.
+Core import/export behavior, the first-read demo gate, all 20 declared claims,
+builds, privacy checks, accessibility checks, rate limiting, and release assets
+passed. Release is blocked by the PWA update path.
 
-## What changed
+## Blocking findings
 
-- Narrowed the one unlisted absolute claim to `Review entries and conversion
-  notes`, and protected that scope with a unit regression.
-- Replaced all three walkthrough frames with 760 × 489 captures from the
-  current shared-shell app. The export capture shows populated records plus
-  **Export CSV** and **Export JSON**, with matching alternative text.
-- Made the demo banner name the tested CSV and JSON actions without another
-  unlisted absolute, and recorded both locations in `claims.json`.
-- Updated the catalog description to the verb-first, 56-character sentence:
-  `Export food tracker history as local CSV and JSON files.`
-- Bumped the desktop artifact, landing build marker, fixtures, and release
-  contract from 0.1.5 to 0.1.6. This prevents the landing page from directing
-  people to an installer built before the repaired source.
+1. **High — installed clients stay on v0.1.5.** `public/sw.js` is identical in
+   v0.1.5 and v0.1.6, both use cache `food-log-export-kit-v5`, and navigations
+   are cache-first. A persistent-browser upgrade reproduction remained on the
+   v0.1.5 footer and `index-Dza6e8mx.js` after the server moved to v0.1.6 and
+   `registration.update()` completed. A clean context saw v0.1.6 and
+   `index-0jQjMsY5.js`.
+2. **Medium, release-blocking by claims policy — unlisted README claim.** The
+   sentence asserting that hosting config provides route reloads, security
+   headers, caching, and a 404 response has no `.factory/claims.json` entry and
+   no single manifest-named claim test.
 
-## Verification
+Full evidence and remediation guidance are in
+[verification-10.md](verification-10.md).
 
-- `npm ci`
-- `npm test` — 23 unit tests and 48 browser tests passed; four Chromium mobile
-  skips are intentional because those checks run in the mobile project (52
-  browser cases total).
-- `npm run build` and `npm run build:app` passed. Initial JS: 38.71 kB raw,
-  13.67 kB gzip.
-- Every exact command from `.factory/claims.json` passed independently from
-  clean clone `/tmp/food-log-polish-4.HnUHEK` at
-  `5dc50b8f00489c1fb43a8b322f6b570059cbdfeb`: 20 claims, one tagged test per
-  claim. The clean clone also passed `npm test`, `npm run build`,
-  `npm run build:app`, and locked Cargo metadata validation.
-- `/opt/fleet/lib/verify-url.sh` passed on live `/`, `/demo`, `/app`,
-  `/privacy`, and `/terms` with no console errors. Reports and screenshots are
-  in `.factory/evidence/polish-4/live-*`.
-- Live axe checks found no serious or critical issues on `/`, `/demo`, `/app`,
-  `/privacy`, `/terms`, or `/not-a-real-route`.
-- Fresh mobile Lighthouse on the live landing: Performance 100, Accessibility
-  100, LCP 1.8 s, CLS 0. The full report is
-  `.factory/evidence/polish-4/lighthouse-live.json`.
-- A cold live check confirmed the direct demo, first-viewport sample, Reset
-  demo, Start for real, same-origin demo requests, offline reload, route focus,
-  route titles/canonicals, designed HTTP 404, and the corrected export
-  walkthrough. The export evidence is
-  `.factory/evidence/polish-4/live-walkthrough-export.png`.
+## Verification summary
 
-## Deploy
+- Exact clean clone: `/tmp/food-log-verify-10.BkuzPe` at the candidate SHA.
+- Every exact `.factory/claims.json` command: PASS (20/20).
+- `npm test`: 23 unit tests and 48 applicable browser tests passed; 4
+  cross-project skips had passing mobile counterparts.
+- `npm run build` and `npm run build:app`: PASS; `dist/site/` and `dist/app/`
+  produced.
+- `npm audit --audit-level=high`: 0 vulnerabilities.
+- Rust format, locked tests, and clippy with warnings denied: PASS after adding
+  the standard Linux Tauri build dependencies.
+- Live candidate identity: all built JS/CSS and critical static-file SHA-256
+  hashes match the deployment. The v0.1.6 release source is an ancestor with no
+  product-file diff from the candidate.
+- Fresh Lighthouse mobile: Performance 96, Accessibility 100, Best Practices
+  100, SEO 100; LCP 2.0 s and CLS 0.
+- Live axe: 0 serious/critical findings across supported routes at desktop and
+  390 px. Keyboard, focus, touch targets, 200% scale, reduced motion, links,
+  routes, headers, caching, offline reload, and request logs passed.
+- License verifier allowance observed: 30 requests per client window; request
+  31 returned 429 with `Retry-After: 3`.
+- Published v0.1.6 Linux DEB checksum matched `SHA256SUMS`; all required macOS,
+  Windows, and Linux assets are present.
 
-The static site was deployed through the work-order configuration with
-`/opt/fleet/lib/deploy-static.sh food-log-export-kit dist/site` to
-<https://food-log-export-kit.sociobot.in>. Azure deployment id:
-`f6864bf4-3deb-45b2-b8de-4e7df6736c38`.
+## Required next steps
 
-## Known gaps and operator action
+1. Version the service-worker cache for each release and make navigation
+   updates network-first or revalidated. Add an old-release-to-new-release
+   browser regression.
+2. Add a manifest claim/test for the README hosting assurance, or remove/narrow
+   that assurance.
+3. Rebuild, deploy, and verify from a browser profile already controlled by the
+   v0.1.6 worker as well as a clean profile.
 
-None. Desktop binaries are intentionally unsigned; the published release notes
-retain the platform-specific open/install guidance. No telemetry, analytics,
-food-data backend, or remote fonts were added.
-
-The pre-existing modified `graphify-out/` files were left untouched and are not
-part of this repair.
+No product code was modified. The pre-existing `graphify-out/` changes remain
+untouched. Desktop binaries remain intentionally unsigned and still need the
+operator certificates described by the release process.
