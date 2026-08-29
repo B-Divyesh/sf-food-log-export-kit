@@ -303,13 +303,13 @@ test('@claim:revoked-license a replacement token never reuses another token verd
 
 test('@claim:detected-platform-downloads selects each published operating-system and Mac architecture asset', async ({ browser }) => {
   const release = {
-    html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.3',
+    html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.4',
     assets: [
-      ['Food.Log.Export.Kit_0.1.3_aarch64.dmg', 'mac-arm.dmg'],
-      ['Food.Log.Export.Kit_0.1.3_x64.dmg', 'mac-intel.dmg'],
-      ['Food.Log.Export.Kit_0.1.3_x64_en-US.msi', 'windows.msi'],
-      ['Food.Log.Export.Kit_0.1.3_amd64.AppImage', 'linux.AppImage']
-    ].map(([name, file]) => ({ name, browser_download_url: `https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.3/${file}` }))
+      ['Food.Log.Export.Kit_0.1.4_aarch64.dmg', 'mac-arm.dmg'],
+      ['Food.Log.Export.Kit_0.1.4_x64.dmg', 'mac-intel.dmg'],
+      ['Food.Log.Export.Kit_0.1.4_x64_en-US.msi', 'windows.msi'],
+      ['Food.Log.Export.Kit_0.1.4_amd64.AppImage', 'linux.AppImage']
+    ].map(([name, file]) => ({ name, browser_download_url: `https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.4/${file}` }))
   };
   const cases = [
     { userAgent: 'Mozilla/5.0 (X11; Linux x86_64)', architecture: '', label: 'Download for Linux', file: 'linux.AppImage' },

@@ -13,7 +13,7 @@ describe('desktop release regression', () => {
     const footer = read('src/shell.ts');
     const notFound = read('public/404.html');
 
-    expect(packageVersion).toBe('0.1.3');
+    expect(packageVersion).toBe('0.1.4');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);
@@ -33,6 +33,8 @@ describe('desktop release regression', () => {
     expect(workflow).toContain('Verify published installer release');
     expect(workflow).toContain('sha256sum -c SHA256SUMS');
     expect(workflow).toContain('git/ref/tags/${RELEASE_TAG}');
+    expect(workflow).toContain('git/tags/${remote_tag_sha}');
+    expect(workflow).toContain('if [ "$remote_tag_type" = tag ]; then');
     expect(workflow).not.toContain("|| 'v0.1.2'");
   });
 });

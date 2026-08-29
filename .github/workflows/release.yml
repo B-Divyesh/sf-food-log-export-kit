@@ -129,5 +129,9 @@ jobs:
               assert latest['platforms'][platform]
               assert all(f'/releases/download/{tag}/' in url for url in latest['platforms'][platform])
           PY
+          remote_tag_type="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" --jq '.object.type')"
           remote_tag_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" --jq '.object.sha')"
+          if [ "$remote_tag_type" = tag ]; then
+            remote_tag_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/tags/${remote_tag_sha}" --jq '.object.sha')"
+          fi
           test "$remote_tag_sha" = "$(git rev-parse HEAD)"
