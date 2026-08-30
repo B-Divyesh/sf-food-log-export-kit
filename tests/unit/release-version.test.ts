@@ -13,7 +13,7 @@ describe('desktop release regression', () => {
     const footer = read('src/shell.ts');
     const notFound = read('public/404.html');
 
-    expect(packageVersion).toBe('0.1.7');
+    expect(packageVersion).toBe('0.1.8');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);
@@ -22,6 +22,7 @@ describe('desktop release regression', () => {
     expect(read('src/build.ts')).toContain(`appVersion = '${packageVersion}'`);
     expect(footer).toContain('Version ${appVersion} · release repair');
     expect(notFound).toContain(`Version ${packageVersion} · release repair`);
+    expect(read('vite.config.ts')).toContain("fileName: 'release-identity.json'");
   });
 
   it('@claim:release-workflow starts both Mac architectures, Windows, and Linux from a v* tag', () => {

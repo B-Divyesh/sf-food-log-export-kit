@@ -18,7 +18,7 @@ Demo: <https://food-log-export-kit.sociobot.in/demo>
 - Dates in `YYYY-MM-DD` order; impossible or ambiguous numeric dates appear in conversion notes
 - Dot decimals, grouped commas such as `1,234`, and decimal commas such as `1,5`; comma interpretations are noted
 
-The free app imports one file at a time. A $19 one-time batch-import license adds multi-file selection. Paste its token to restore it on another device. CSV and JSON export stay free. License checks send only the token to the Sociobot billing API.
+The free app imports one file at a time. A $19 one-time batch-import license adds multi-file selection. Paste its token to restore it on another device. CSV and JSON export stay free. License checks send only the token to the Sociobot billing API. Sociobot/Dodo is the merchant of record and handles refunds. A refund revokes the license.
 
 ## Install the desktop app
 
@@ -35,7 +35,7 @@ irm https://food-log-export-kit.sociobot.in/install.ps1 | iex
 ```
 
 Review the [release notes](https://github.com/B-Divyesh/sf-food-log-export-kit/releases/latest) for the steps to open the app on your system.
-The published manifest and checksum file name the source commit used for every desktop build.
+The published manifest and checksum file name the source commit used for every desktop build. Each site build publishes its matching release identity for the installers.
 
 ## Run locally
 

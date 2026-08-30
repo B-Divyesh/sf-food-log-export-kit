@@ -25,7 +25,7 @@ describe('static hosting routes', () => {
 
   it('gives the static 404 page the shared metadata, navigation, and footer', () => {
     const page = readFileSync(new URL('../../public/404.html', import.meta.url), 'utf8');
-    for (const marker of ['rel="canonical"', 'property="og:title"', 'property="og:url"', 'name="twitter:card"', 'apple-touch-icon', 'Main navigation', 'href="/terms"', 'Built by Param Factory', 'Version 0.1.7 · release repair']) {
+    for (const marker of ['rel="canonical"', 'property="og:title"', 'property="og:url"', 'name="twitter:card"', 'apple-touch-icon', 'Main navigation', 'href="/terms"', 'Built by Param Factory', 'Version 0.1.8 · release repair']) {
       expect(page).toContain(marker);
     }
   });
@@ -34,7 +34,7 @@ describe('static hosting routes', () => {
     const page = readFileSync(new URL('../../public/404.html', import.meta.url), 'utf8');
     const shell = readFileSync(new URL('../../src/shell.ts', import.meta.url), 'utf8');
     const build = 'Version ${appVersion} · release repair · Generated artwork';
-    expect(page).toContain(build.replace('${appVersion}', '0.1.7'));
+    expect(page).toContain(build.replace('${appVersion}', '0.1.8'));
     expect(shell).toContain(build);
   });
 
@@ -90,5 +90,14 @@ describe('static hosting routes', () => {
     const drawer = styles.match(/@keyframes drawer \{([^}]+\}[^}]+)\}/)?.[1] ?? '';
     expect(drawer).toContain('transform: translateY(8px)');
     expect(drawer).not.toContain('opacity');
+  });
+
+  it('@regression:V14-payment-copy names the merchant of record and refund effect', () => {
+    const pages = readFileSync(new URL('../../src/pages.ts', import.meta.url), 'utf8');
+    const readme = readFileSync(new URL('../../README.md', import.meta.url), 'utf8');
+    for (const copy of ['Sociobot/Dodo is the merchant of record', 'handles refunds', 'refund revokes']) {
+      expect(pages).toContain(copy);
+      expect(readme).toContain(copy);
+    }
   });
 });

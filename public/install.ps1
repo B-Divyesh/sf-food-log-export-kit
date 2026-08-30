@@ -1,9 +1,14 @@
 $ErrorActionPreference = "Stop"
 $repo = "B-Divyesh/sf-food-log-export-kit"
-$expectedSourceCommit = "6f4bb7f207528aa36ed7e1a2e8f13ace474f4066"
 $api = if ($env:FOOD_LOG_RELEASE_API_URL) { $env:FOOD_LOG_RELEASE_API_URL } else { "https://api.github.com/repos/$repo/releases/latest" }
+$identityApi = if ($env:FOOD_LOG_RELEASE_IDENTITY_URL) { $env:FOOD_LOG_RELEASE_IDENTITY_URL } else { "https://food-log-export-kit.sociobot.in/release-identity.json" }
+$identity = Invoke-RestMethod $identityApi
+$expectedSourceCommit = [string]$identity.source_commit
+$expectedReleaseTag = [string]$identity.release_tag
+if ($expectedSourceCommit -notmatch '^[0-9a-fA-F]{40}$' -or !$expectedReleaseTag) { throw "This site's release identity is invalid." }
 $release = Invoke-RestMethod $api
 if ($release.target_commitish -ne $expectedSourceCommit) { throw "The published download does not match this app version." }
+if ($release.tag_name -ne $expectedReleaseTag) { throw "The published download has the wrong version." }
 $asset = $release.assets | Where-Object { $_.name -match '_x64_en-US\.msi$' } | Select-Object -First 1
 if (!$asset) { $asset = $release.assets | Where-Object { $_.name -match '_x64-setup\.exe$' } | Select-Object -First 1 }
 $sums = $release.assets | Where-Object { $_.name -eq 'SHA256SUMS' } | Select-Object -First 1
@@ -18,6 +23,7 @@ $download = Join-Path $workDir $asset.name
 try {
   Invoke-WebRequest $asset.browser_download_url -OutFile $download
   $sumText = (Invoke-WebRequest $sums.browser_download_url).Content
+  if (($sumText -split "`r?`n")[0] -ne "# source_commit=$expectedSourceCommit") { throw "SHA256SUMS belongs to a different app build." }
   $expected = ($sumText -split "`r?`n" | ForEach-Object {
     if ($_ -match '^(?<hash>[0-9a-fA-F]{64})\s+\*?(?<name>.+?)\s*$' -and $Matches.name -eq $asset.name) {
       $Matches.hash.ToLower()

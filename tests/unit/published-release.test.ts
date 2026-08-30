@@ -1,9 +1,12 @@
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const repository = 'B-Divyesh/sf-food-log-export-kit';
-const releaseTag = 'v0.1.7';
-const requiredSourceCommit = '6f4bb7f207528aa36ed7e1a2e8f13ace474f4066';
+const version = (JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')) as { version: string }).version;
+const releaseTag = `v${version}`;
+const requiredSourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 
 interface Asset {
   name: string;
@@ -38,7 +41,7 @@ async function requireResponse(url: string, init?: RequestInit): Promise<Respons
 }
 
 describe('published candidate release', () => {
-  it('@regression:F13-1 @claim:candidate-installers binds every installer URL and checksum to candidate 6f4bb7f', async () => {
+  it('@regression:V14-release-identity @claim:candidate-installers binds every installer URL and checksum to the checked-out candidate', async () => {
     const release = await requireResponse(`https://api.github.com/repos/${repository}/releases/latest`, { headers: apiHeaders })
       .then((response) => response.json()) as PublishedRelease;
     expect(release.tag_name).toBe(releaseTag);
@@ -59,7 +62,7 @@ describe('published candidate release', () => {
 
     const manifest = await requireResponse(manifestAsset!.browser_download_url).then((response) => response.json()) as ReleaseManifest;
     const sumsText = await requireResponse(sumsAsset!.browser_download_url).then((response) => response.text());
-    expect(manifest).toMatchObject({ version: '0.1.7', release_tag: releaseTag, source_commit: requiredSourceCommit });
+    expect(manifest).toMatchObject({ version, release_tag: releaseTag, source_commit: requiredSourceCommit });
     expect(sumsText.split(/\r?\n/)[0]).toBe(`# source_commit=${requiredSourceCommit}`);
 
     const publishedSums = new Map(sumsText.split(/\r?\n/).flatMap((line) => {

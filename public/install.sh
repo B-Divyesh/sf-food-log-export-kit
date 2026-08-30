@@ -2,9 +2,9 @@
 set -eu
 
 repo="B-Divyesh/sf-food-log-export-kit"
-expected_source_commit="6f4bb7f207528aa36ed7e1a2e8f13ace474f4066"
 release_page="https://github.com/$repo/releases/latest"
 api="${FOOD_LOG_RELEASE_API_URL:-https://api.github.com/repos/$repo/releases/latest}"
+identity_api="${FOOD_LOG_RELEASE_IDENTITY_URL:-https://food-log-export-kit.sociobot.in/release-identity.json}"
 
 fail() {
   echo "$1" >&2
@@ -33,9 +33,16 @@ case "$os:$arch" in
   *) fail "Use install.ps1 on Windows. See $release_page" ;;
 esac
 
+identity_json="$(curl -fsSL "$identity_api")" || fail "This site's release identity could not be loaded. See $release_page"
+expected_source_commit="$(printf '%s\n' "$identity_json" | sed -n 's/.*"source_commit"[[:space:]]*:[[:space:]]*"\([0-9a-fA-F]*\)".*/\1/p' | head -n 1 | tr 'A-F' 'a-f')"
+expected_release_tag="$(printf '%s\n' "$identity_json" | sed -n 's/.*"release_tag"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -n 1)"
+[ "${#expected_source_commit}" -eq 40 ] && [ -n "$expected_release_tag" ] || fail "This site's release identity is invalid. See $release_page"
+
 release_json="$(curl -fsSL "$api")" || fail "Release details could not be loaded. See $release_page"
 release_source="$(printf '%s\n' "$release_json" | sed -n 's/.*"target_commitish"[[:space:]]*:[[:space:]]*"\([0-9a-fA-F]*\)".*/\1/p' | head -n 1 | tr 'A-F' 'a-f')"
+release_tag="$(printf '%s\n' "$release_json" | sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -n 1)"
 [ "$release_source" = "$expected_source_commit" ] || fail "The published download does not match this app version. See $release_page"
+[ "$release_tag" = "$expected_release_tag" ] || fail "The published download has the wrong version. See $release_page"
 
 # GitHub formats JSON with spaces around the colon. Keep this parser portable for
 # stock macOS and Linux systems, where jq is not guaranteed to be installed.
@@ -52,6 +59,8 @@ sums_path="$work_dir/SHA256SUMS"
 
 curl -fL "$asset_url" -o "$archive_path"
 curl -fsSL "$sums_url" -o "$sums_path"
+sums_source="$(sed -n 's/^# source_commit=\([0-9a-fA-F]*\)$/\1/p' "$sums_path" | head -n 1 | tr 'A-F' 'a-f')"
+[ "$sums_source" = "$expected_source_commit" ] || fail "SHA256SUMS belongs to a different app build."
 expected="$(awk -v name="$archive_name" '$2 == name {print tolower($1); exit}' "$sums_path")"
 [ -n "$expected" ] || fail "SHA256SUMS has no entry for $archive_name."
 if command -v sha256sum >/dev/null 2>&1; then

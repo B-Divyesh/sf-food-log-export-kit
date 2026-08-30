@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 2026-08-30 after repair 8. Counts treat hyphenated terms, product names, file names, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
+Audited 2026-08-30 after repair 9. Counts treat hyphenated terms, product names, file names, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
 
 ## Landing page
 
@@ -27,12 +27,12 @@ Audited 2026-08-30 after repair 8. Counts treat hyphenated terms, product names,
 | Keep a CSV for spreadsheets. | 5 |
 | JSON keeps consistent fields and conversion notes. | 7 |
 | A recipe card archive box in a quiet kitchen at dusk. | 11 |
-| Desktop app · version 0.1.7 | 4 |
+| Desktop app · version 0.1.8 | 4 |
 | Download the desktop app | 4 |
 | The app reads CSV and JSON exports. | 7 |
 | It also works when your internet is off. | 8 |
 | Download for Linux | 3 |
-| Food.Log.Export.Kit_0.1.7_amd64.AppImage | 1 |
+| Food.Log.Export.Kit_0.1.8_amd64.AppImage | 1 |
 | Read release notes | 3 |
 | Review before export | 3 |
 | Review entries and conversion notes | 5 |
@@ -67,11 +67,12 @@ Audited 2026-08-30 after repair 8. Counts treat hyphenated terms, product names,
 | Paste the license token on another device | 7 |
 | CSV and JSON export stay free | 6 |
 | Buy the batch-import license | 4 |
-| Sociobot opens a checkout page hosted by Dodo. | 8 |
+| Sociobot/Dodo is the merchant of record. | 6 |
+| It handles refunds, which revoke the license. | 7 |
 | Read the terms. | 3 |
 | Turn food tracker exports into a local archive. | 8 |
 | Built by Param Factory | 4 |
-| Version 0.1.7 · release repair · Generated artwork | 6 |
+| Version 0.1.8 · release repair · Generated artwork | 6 |
 
 ## README
 
@@ -93,6 +94,7 @@ Audited 2026-08-30 after repair 8. Counts treat hyphenated terms, product names,
 | On Windows, this command verifies and starts the MSI installer. | 10 |
 | Review the release notes for the steps to open the app on your system. | 13 |
 | The published manifest and checksum file name the source commit used for every desktop build. | 15 |
+| Each site build publishes its matching release identity for the installers. | 11 |
 | Requires Node.js 22. | 3 |
 | Rust is needed only to build the desktop app. | 9 |
 | Open `http://127.0.0.1:4173/demo` for the isolated sample workspace. | 7 |
@@ -106,6 +108,16 @@ Audited 2026-08-30 after repair 8. Counts treat hyphenated terms, product names,
 | The factory handles DNS and deployment. | 6 |
 | The MIT license covers the source code. | 7 |
 | Product terms for the batch-import license are available at `/terms`; data handling details are at `/privacy`. | 16 |
+| Sociobot/Dodo is the merchant of record and handles refunds. | 9 |
+| A refund revokes the license. | 5 |
+
+## Terms additions
+
+| Copy | Words |
+|---|---:|
+| Purchases and refunds | 3 |
+| Sociobot/Dodo is the merchant of record and handles refunds. | 9 |
+| A refund revokes the batch-import license. | 7 |
 
 Developer commands and project-map fragments use technical names only where they identify code or build output.
 

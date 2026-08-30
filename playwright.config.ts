@@ -16,9 +16,9 @@ export default defineConfig({
     { name: 'mobile', testMatch: /accessibility\.spec\.ts/, use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } }
   ],
   webServer: {
-    command: 'VITE_FOOD_LOG_SOURCE_COMMIT=6f4bb7f207528aa36ed7e1a2e8f13ace474f4066 npm run build:site && npm exec vite preview',
+    command: 'npm run build:site && npm exec vite preview',
     url: 'http://127.0.0.1:4173',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 120_000
   }
 });

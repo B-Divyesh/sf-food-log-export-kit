@@ -1,14 +1,16 @@
 param(
   [Parameter(Mandatory = $true)][string]$InstallerPath,
   [Parameter(Mandatory = $true)][string]$ReleasePath,
+  [Parameter(Mandatory = $true)][string]$IdentityPath,
   [Parameter(Mandatory = $true)][string]$AssetsPath,
   [Parameter(Mandatory = $true)][string]$LaunchLog
 )
 
 function Invoke-RestMethod {
   param([Parameter(Position = 0)][string]$Uri)
-  if ($Uri -ne $env:FOOD_LOG_RELEASE_API_URL) { throw "Unexpected release URL: $Uri" }
-  Get-Content -Raw $ReleasePath | ConvertFrom-Json
+  if ($Uri -eq $env:FOOD_LOG_RELEASE_API_URL) { return (Get-Content -Raw $ReleasePath | ConvertFrom-Json) }
+  if ($Uri -eq $env:FOOD_LOG_RELEASE_IDENTITY_URL) { return (Get-Content -Raw $IdentityPath | ConvertFrom-Json) }
+  throw "Unexpected release URL: $Uri"
 }
 
 function Invoke-WebRequest {

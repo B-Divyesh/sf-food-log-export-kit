@@ -1,4 +1,5 @@
 import { execFileSync, spawnSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import viteConfig from '../../vite.config';
@@ -21,5 +22,10 @@ describe('release tooling regressions', () => {
     expect(resolveSourceCommit({ ...process.env, VITE_FOOD_LOG_SOURCE_COMMIT: '' })).toBe(head);
     expect(viteConfig.define?.['import.meta.env.VITE_FOOD_LOG_SOURCE_COMMIT']).toBe(JSON.stringify(head));
     expect(() => resolveSourceCommit({ ...process.env, VITE_FOOD_LOG_SOURCE_COMMIT: 'not-a-commit' })).toThrow(/40-character Git commit/);
+    expect(viteConfig.plugins).toBeDefined();
+    for (const installer of ['public/install.sh', 'public/install.ps1']) {
+      expect(readFileSync(installer, 'utf8')).not.toMatch(/[0-9a-f]{40}/);
+      expect(readFileSync(installer, 'utf8')).toContain('release-identity.json');
+    }
   });
 });

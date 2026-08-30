@@ -1,14 +1,14 @@
 {
-  "target_commitish": "6f4bb7f207528aa36ed7e1a2e8f13ace474f4066",
-  "tag_name": "v0.1.6",
+  "target_commitish": "1111111111111111111111111111111111111111",
+  "tag_name": "v0.1.8",
   "assets": [
     {
-      "name": "Food.Log.Export.Kit_0.1.6_x64-setup.exe",
-      "browser_download_url": "https://downloads.test/Food.Log.Export.Kit_0.1.6_x64-setup.exe"
+      "name": "Food.Log.Export.Kit_0.1.8_x64-setup.exe",
+      "browser_download_url": "https://downloads.test/Food.Log.Export.Kit_0.1.8_x64-setup.exe"
     },
     {
-      "name": "Food.Log.Export.Kit_0.1.6_x64_en-US.msi",
-      "browser_download_url": "https://downloads.test/Food.Log.Export.Kit_0.1.6_x64_en-US.msi"
+      "name": "Food.Log.Export.Kit_0.1.8_x64_en-US.msi",
+      "browser_download_url": "https://downloads.test/Food.Log.Export.Kit_0.1.8_x64_en-US.msi"
     },
     {
       "name": "SHA256SUMS",

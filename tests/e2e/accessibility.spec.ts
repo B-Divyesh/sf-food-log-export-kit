@@ -1,7 +1,10 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import { execFileSync } from 'node:child_process';
+import packageJson from '../../package.json' with { type: 'json' };
 
-const testedSourceCommit = '6f4bb7f207528aa36ed7e1a2e8f13ace474f4066';
+const testedSourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+const testedVersion = packageJson.version;
 
 for (const path of ['/', '/demo', '/app', '/privacy', '/terms', '/missing-page']) {
   test(`has no serious accessibility errors on ${path}`, async ({ page }) => {
@@ -89,7 +92,7 @@ test('every route uses the same primary navigation destinations and shared foote
     expect(destinations, `${path} navigation`).toEqual(expectedNavigation);
     const footer = page.locator('footer');
     await expect(footer).toContainText('Built by Param Factory');
-    await expect(footer).toContainText('Version 0.1.7 · release repair');
+    await expect(footer).toContainText(`Version ${testedVersion} · release repair`);
   }
 });
 
@@ -123,17 +126,17 @@ test('reduced motion removes visible movement', async ({ page }) => {
 });
 
 test('landing link crawl includes the selected release notes page', async ({ page, request }) => {
-  const releaseUrl = 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.7';
+  const releaseUrl = `https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v${testedVersion}`;
   await page.route('https://api.github.com/repos/B-Divyesh/sf-food-log-export-kit/releases/latest', (route) => route.fulfill({
     status: 200,
     contentType: 'application/json',
     body: JSON.stringify({
-      tag_name: 'v0.1.7',
+      tag_name: `v${testedVersion}`,
       target_commitish: testedSourceCommit,
       html_url: releaseUrl,
       assets: [{
-        name: 'Food.Log.Export.Kit_0.1.7_amd64.AppImage',
-        browser_download_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/Food.Log.Export.Kit_0.1.7_amd64.AppImage'
+        name: `Food.Log.Export.Kit_${testedVersion}_amd64.AppImage`,
+        browser_download_url: `https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v${testedVersion}/Food.Log.Export.Kit_${testedVersion}_amd64.AppImage`
       }]
     })
   }));

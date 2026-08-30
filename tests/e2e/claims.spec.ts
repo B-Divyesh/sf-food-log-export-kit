@@ -1,7 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { execFileSync } from 'node:child_process';
+import packageJson from '../../package.json' with { type: 'json' };
 
 const licenseKey = 'sb_license:food-log-export-kit';
 const verdictKey = `${licenseKey}:verdict`;
+const testedSourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+const testedVersion = packageJson.version;
 
 test('@claim:csv-export exports one CSV row per sample entry', async ({ page }) => {
   await page.goto('/demo');
@@ -50,12 +54,24 @@ test('@claim:local-only demo conversion sends no cross-origin request', async ({
   expect(crossOrigin).toEqual([]);
 });
 
-test('@claim:demo-discard keeps sample data isolated and discards it on exit', async ({ page }) => {
+test('@regression:V14-demo-filter @claim:demo-discard keeps sample data isolated, exposes filter state, and discards it on exit', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('real-workspace-probe', 'untouched'));
   await page.goto('/demo');
   await expect(page.getByRole('heading', { name: '12 entries are ready' })).toBeVisible();
-  await page.getByRole('button', { name: 'Recipes' }).click();
+  const recipes = page.getByRole('button', { name: 'Recipes' });
+  const originalRecipes = await recipes.elementHandle();
+  await recipes.click();
+  await expect(recipes).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('button', { name: 'All entries' })).toHaveAttribute('aria-pressed', 'false');
   await expect(page.getByText('0 shown')).toBeVisible();
+  expect(await originalRecipes?.evaluate((element) => element.isConnected)).toBe(true);
+  for (let attempt = 0; attempt < 12; attempt += 1) {
+    const filter = attempt % 2 === 0 ? page.getByRole('button', { name: 'Meals' }) : recipes;
+    const count = attempt % 2 === 0 ? '11 shown' : '0 shown';
+    await filter.click();
+    await expect(filter).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByText(count)).toBeVisible();
+  }
   await page.getByRole('button', { name: 'Reset demo' }).click();
   await expect(page.getByText('12 shown')).toBeVisible();
   const keysDuringDemo = await page.evaluate(() => Object.keys(localStorage));
@@ -274,6 +290,8 @@ test('@claim:license-request-data-boundary sends only the license token during v
 
 test('@claim:paid-purchase live checkout redirects to Dodo hosted checkout', async ({ page, request }) => {
   await page.goto('/');
+  await expect(page.getByText('Sociobot/Dodo is the merchant of record.')).toBeVisible();
+  await expect(page.getByText('It handles refunds, which revoke the license.')).toBeVisible();
   const buy = page.getByRole('link', { name: 'Buy the batch-import license' });
   await expect(buy).toHaveAttribute('href', 'https://api.sociobot.in/api/v1/products/food-log-export-kit/checkout');
   const response = await request.get(await buy.getAttribute('href') as string, { maxRedirects: 0 });
@@ -281,6 +299,9 @@ test('@claim:paid-purchase live checkout redirects to Dodo hosted checkout', asy
   const redirect = new URL(response.headers().location);
   expect(redirect.origin).toBe('https://checkout.dodopayments.com');
   expect(redirect.pathname).toMatch(/^\/session\/cks_/);
+  await page.goto('/terms');
+  await expect(page.getByText('Sociobot/Dodo is the merchant of record and handles refunds.')).toBeVisible();
+  await expect(page.getByText('A refund revokes the batch-import license.')).toBeVisible();
 });
 
 test('@regression:F12-1 live license verification stays available and rate-limited', async ({ request }, testInfo) => {
@@ -333,15 +354,15 @@ test('@claim:revoked-license a replacement token never reuses another token verd
 
 test('@claim:detected-platform-downloads selects each published operating-system and Mac architecture asset', async ({ browser }) => {
   const release = {
-    tag_name: 'v0.1.7',
-    target_commitish: '6f4bb7f207528aa36ed7e1a2e8f13ace474f4066',
-    html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.7',
+    tag_name: `v${testedVersion}`,
+    target_commitish: testedSourceCommit,
+    html_url: `https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v${testedVersion}`,
     assets: [
-      ['Food.Log.Export.Kit_0.1.7_aarch64.dmg', 'mac-arm.dmg'],
-      ['Food.Log.Export.Kit_0.1.7_x64.dmg', 'mac-intel.dmg'],
-      ['Food.Log.Export.Kit_0.1.7_x64_en-US.msi', 'windows.msi'],
-      ['Food.Log.Export.Kit_0.1.7_amd64.AppImage', 'linux.AppImage']
-    ].map(([name, file]) => ({ name, browser_download_url: `https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/${file}` }))
+      [`Food.Log.Export.Kit_${testedVersion}_aarch64.dmg`, 'mac-arm.dmg'],
+      [`Food.Log.Export.Kit_${testedVersion}_x64.dmg`, 'mac-intel.dmg'],
+      [`Food.Log.Export.Kit_${testedVersion}_x64_en-US.msi`, 'windows.msi'],
+      [`Food.Log.Export.Kit_${testedVersion}_amd64.AppImage`, 'linux.AppImage']
+    ].map(([name, file]) => ({ name, browser_download_url: `https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v${testedVersion}/${file}` }))
   };
   const cases = [
     { userAgent: 'Mozilla/5.0 (X11; Linux x86_64)', architecture: '', label: 'Download for Linux', file: 'linux.AppImage' },

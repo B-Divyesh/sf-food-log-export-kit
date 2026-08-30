@@ -39,4 +39,16 @@ describe('release asset selection', () => {
     expect(selectCurrentRelease({ ...currentRelease, target_commitish: '5b770194cb02e41d70efb114f7e11a1a35f6766c' }, '0.1.6', 'new-source-commit')).toBeUndefined();
     expect(selectCurrentRelease({ ...currentRelease, target_commitish: 'new-source-commit' }, '0.1.6', 'new-source-commit')).toEqual({ ...currentRelease, target_commitish: 'new-source-commit' });
   });
+
+  it('@regression:V14-release-identity requires both current version and current candidate identity', () => {
+    const current = {
+      tag_name: 'v0.1.8',
+      target_commitish: 'current-candidate',
+      html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.8',
+      assets
+    };
+    expect(selectCurrentRelease(current, '0.1.8', 'current-candidate')).toEqual(current);
+    expect(selectCurrentRelease({ ...current, tag_name: 'v0.1.7' }, '0.1.8', 'current-candidate')).toBeUndefined();
+    expect(selectCurrentRelease({ ...current, target_commitish: 'older-candidate' }, '0.1.8', 'current-candidate')).toBeUndefined();
+  });
 });

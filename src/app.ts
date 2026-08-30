@@ -86,8 +86,8 @@ function reviewPanel(): string {
     </div>
     <div class="summary-strip" aria-label="Import summary"><div><strong>${summary.meals}</strong><span>meals</span></div><div><strong>${summary.recipes}</strong><span>recipes</span></div><div><strong>${summary.weights}</strong><span>weights</span></div><div><strong>${summary.dates}</strong><span>days</span></div></div>
     ${state.issues.length ? `<details class="issues"><summary>${icons.warn} Review ${state.issues.length} conversion ${state.issues.length === 1 ? 'note' : 'notes'}</summary><ol>${state.issues.map((issue) => `<li><b>${issue.row > 0 ? `Row ${issue.row}: ${escapeHtml(issue.field)}` : `File: ${escapeHtml(issue.field)}`}</b><span>${escapeHtml(issue.message)}</span></li>`).join('')}</ol></details>` : `<p class="success-line">${icons.check} No rows or populated fields need a conversion note.</p>`}
-    <div class="table-tools"><div class="filter-group" role="group" aria-label="Filter entries">${(['all', 'meal', 'recipe', 'weight'] as const).map((filter) => `<button class="filter ${state.filter === filter ? 'selected' : ''}" data-filter="${filter}">${filter === 'all' ? 'All entries' : `${filter[0].toUpperCase()}${filter.slice(1)}s`}</button>`).join('')}</div><span>${shown.length} shown</span></div>
-    <div class="record-table-wrap"><table class="record-table"><caption class="sr-only">Food log entries with consistent fields</caption><thead><tr><th>Date</th><th>Meal</th><th>Item</th><th>Amount</th><th>Calories</th><th>Protein</th><th>Carbs</th><th>Fat</th></tr></thead><tbody>${shown.map((record) => `<tr><td data-label="Date">${escapeHtml(record.date || 'Date missing')}</td><td data-label="Meal">${escapeHtml(record.kind === 'weight' ? 'Weight' : record.meal || '—')}</td><td data-label="Item"><b>${escapeHtml(record.item)}</b>${record.notes ? `<small>${escapeHtml(record.notes)}</small>` : ''}</td><td data-label="Amount">${escapeHtml([record.amount, record.unit].filter(Boolean).join(' ') || '—')}</td><td data-label="Calories">${number(record.calories)}</td><td data-label="Protein">${number(record.protein_g, ' g')}</td><td data-label="Carbs">${number(record.carbs_g, ' g')}</td><td data-label="Fat">${number(record.fat_g, ' g')}</td></tr>`).join('')}</tbody></table></div>
+    <div class="table-tools"><div class="filter-group" role="group" aria-label="Filter entries">${(['all', 'meal', 'recipe', 'weight'] as const).map((filter) => `<button type="button" class="filter ${state.filter === filter ? 'selected' : ''}" data-filter="${filter}" aria-pressed="${state.filter === filter}">${filter === 'all' ? 'All entries' : `${filter[0].toUpperCase()}${filter.slice(1)}s`}</button>`).join('')}</div><span id="shown-count" aria-live="polite">${shown.length} shown</span></div>
+    <div class="record-table-wrap"><table class="record-table"><caption class="sr-only">Food log entries with consistent fields</caption><thead><tr><th>Date</th><th>Meal</th><th>Item</th><th>Amount</th><th>Calories</th><th>Protein</th><th>Carbs</th><th>Fat</th></tr></thead><tbody>${state.records.map((record) => `<tr data-record-kind="${record.kind}"${state.filter !== 'all' && state.filter !== record.kind ? ' hidden' : ''}><td data-label="Date">${escapeHtml(record.date || 'Date missing')}</td><td data-label="Meal">${escapeHtml(record.kind === 'weight' ? 'Weight' : record.meal || '—')}</td><td data-label="Item"><b>${escapeHtml(record.item)}</b>${record.notes ? `<small>${escapeHtml(record.notes)}</small>` : ''}</td><td data-label="Amount">${escapeHtml([record.amount, record.unit].filter(Boolean).join(' ') || '—')}</td><td data-label="Calories">${number(record.calories)}</td><td data-label="Protein">${number(record.protein_g, ' g')}</td><td data-label="Carbs">${number(record.carbs_g, ' g')}</td><td data-label="Fat">${number(record.fat_g, ' g')}</td></tr>`).join('')}</tbody></table></div>
     <div class="export-bar"><div><p class="eyebrow">Stage 3 · Export</p><h3>Save your archive</h3><p>CSV opens in spreadsheets. JSON keeps consistent fields, unrecognized field values, and conversion notes.</p></div><div class="export-actions"><button class="primary-button" id="export-csv">${icons.download} Export CSV</button><button class="secondary-button" id="export-json">${icons.archive} Export JSON</button></div></div>
     <button class="danger-link" id="clear-import">Clear this import</button>
   </section>`;
@@ -158,7 +158,9 @@ function bindApp(root: HTMLElement): void {
   root.querySelector('#load-sample')?.addEventListener('click', () => loadSample());
   root.querySelector('#reset-demo')?.addEventListener('click', () => { state = emptyState(true); loadSample(); });
   root.querySelector('#clear-import')?.addEventListener('click', () => { state.records = []; state.issues = []; state.sources = []; state.status = 'The imported entries were cleared.'; rerender(); });
-  root.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((button) => button.addEventListener('click', () => { state.filter = button.dataset.filter as AppState['filter']; rerender(); }));
+  root.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((button) => button.addEventListener('click', () => {
+    applyRecordFilter(root, button.dataset.filter as AppState['filter']);
+  }));
   root.querySelector('#export-csv')?.addEventListener('click', async () => { await saveText('food-log.csv', exportCsv(state.records), 'text/csv;charset=utf-8'); state.status = `CSV exported with ${state.records.length} entries.`; announce(); });
   root.querySelector('#export-json')?.addEventListener('click', async () => { await saveText('food-log-archive.json', exportArchive(state.records, state.issues), 'application/json'); state.status = `JSON archive exported with ${state.records.length} entries.`; announce(); });
   root.querySelector('#show-license')?.addEventListener('click', () => { root.querySelector('#license-form')?.classList.remove('hidden'); root.querySelector<HTMLInputElement>('#license-token')?.focus(); });
@@ -166,6 +168,25 @@ function bindApp(root: HTMLElement): void {
 }
 
 function announce() { const live = document.querySelector('#app-status'); if (live) live.textContent = state.status; }
+
+function applyRecordFilter(root: HTMLElement, filter: AppState['filter']): void {
+  state.filter = filter;
+  root.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((button) => {
+    const selected = button.dataset.filter === filter;
+    button.classList.toggle('selected', selected);
+    button.setAttribute('aria-pressed', String(selected));
+  });
+  let shown = 0;
+  root.querySelectorAll<HTMLTableRowElement>('[data-record-kind]').forEach((row) => {
+    const visible = filter === 'all' || row.dataset.recordKind === filter;
+    row.hidden = !visible;
+    if (visible) shown += 1;
+  });
+  const count = root.querySelector('#shown-count');
+  if (count) count.textContent = `${shown} shown`;
+  state.status = `${shown} ${shown === 1 ? 'entry' : 'entries'} shown.`;
+  announce();
+}
 
 window.addEventListener('online', () => { const value = document.querySelector('#connection'); if (value) value.textContent = '● Ready offline'; });
 window.addEventListener('offline', () => { const value = document.querySelector('#connection'); if (value) value.textContent = '○ You are offline'; });

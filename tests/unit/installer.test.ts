@@ -6,6 +6,7 @@ import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const installer = resolve('public/install.sh');
+const fixtureSourceCommit = '1111111111111111111111111111111111111111';
 
 function sha256(path: string): string {
   return execFileSync('sha256sum', [path], { encoding: 'utf8' }).split(/\s+/)[0];
@@ -35,7 +36,7 @@ describe('Installer regression', () => {
     mkdirSync(fakeBin);
     mkdirSync(assets);
 
-    const linuxName = 'Food.Log.Export.Kit_0.1.6_amd64.AppImage';
+    const linuxName = 'Food.Log.Export.Kit_0.1.8_amd64.AppImage';
     const armName = 'Food.Log.Export.Kit_aarch64.app.tar.gz';
     const intelName = 'Food.Log.Export.Kit_x64.app.tar.gz';
     const linuxAsset = join(assets, linuxName);
@@ -55,15 +56,18 @@ describe('Installer regression', () => {
       .map((name) => `${sha256(join(assets, name))}  ${name}`)
       .join('\n');
     const sumsPath = join(assets, 'SHA256SUMS');
-    writeFileSync(sumsPath, `${sums}\n`);
+    writeFileSync(sumsPath, `# source_commit=${fixtureSourceCommit}\n${sums}\n`);
     const releasePath = join(root, 'release.json');
     writeFileSync(releasePath, JSON.stringify({
-      target_commitish: '6f4bb7f207528aa36ed7e1a2e8f13ace474f4066',
+      tag_name: 'v0.1.8',
+      target_commitish: fixtureSourceCommit,
       assets: [linuxName, armName, intelName, 'SHA256SUMS'].map((name) => ({
         name,
         browser_download_url: `https://downloads.test/${name}`
       }))
     }, null, 2));
+    const identityPath = join(root, 'release-identity.json');
+    writeFileSync(identityPath, JSON.stringify({ version: '0.1.8', release_tag: 'v0.1.8', source_commit: fixtureSourceCommit }, null, 2));
 
     const curl = join(fakeBin, 'curl');
     writeFileSync(curl, `#!/bin/sh
@@ -78,6 +82,7 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 case "$url" in
+  mock://identity) source="$MOCK_IDENTITY" ;;
   mock://release) source="$MOCK_RELEASE" ;;
   */SHA256SUMS) source="$MOCK_ASSETS/SHA256SUMS" ;;
   *) source="$MOCK_ASSETS/\${url##*/}" ;;
@@ -105,9 +110,11 @@ if [ -n "$out" ]; then cp "$source" "$out"; else exec /bin/cat "$source"; fi
           ...process.env,
           PATH: `${fakeBin}:${installDir}:/usr/bin:/bin`,
           FOOD_LOG_RELEASE_API_URL: 'mock://release',
+          FOOD_LOG_RELEASE_IDENTITY_URL: 'mock://identity',
           FOOD_LOG_INSTALL_DIR: installDir,
           FOOD_LOG_APP_DIR: appDir,
           MOCK_RELEASE: releasePath,
+          MOCK_IDENTITY: identityPath,
           MOCK_ASSETS: assets,
           MOCK_OS: item.os,
           MOCK_ARCH: item.arch
@@ -122,8 +129,8 @@ if [ -n "$out" ]; then cp "$source" "$out"; else exec /bin/cat "$source"; fi
 
     const staleReleasePath = join(root, 'stale-release.json');
     writeFileSync(staleReleasePath, readFileSync(releasePath, 'utf8').replace(
-      '6f4bb7f207528aa36ed7e1a2e8f13ace474f4066',
-      'b39d3a283685b66fb25fbcb0f9b5bb9518aec143'
+      fixtureSourceCommit,
+      '2222222222222222222222222222222222222222'
     ));
     const stale = spawnSync('sh', [installer], {
       encoding: 'utf8',
@@ -131,7 +138,9 @@ if [ -n "$out" ]; then cp "$source" "$out"; else exec /bin/cat "$source"; fi
         ...process.env,
         PATH: `${fakeBin}:/usr/bin:/bin`,
         FOOD_LOG_RELEASE_API_URL: 'mock://release',
+        FOOD_LOG_RELEASE_IDENTITY_URL: 'mock://identity',
         MOCK_RELEASE: staleReleasePath,
+        MOCK_IDENTITY: identityPath,
         MOCK_ASSETS: assets,
         MOCK_OS: 'Linux',
         MOCK_ARCH: 'x86_64'
@@ -153,7 +162,7 @@ if [ -n "$out" ]; then cp "$source" "$out"; else exec /bin/cat "$source"; fi
     const exe = release.assets.find(({ name }) => name.endsWith('_x64-setup.exe'))!;
     writeFileSync(join(assets, msi.name), 'checksummed fake MSI payload\n');
     writeFileSync(join(assets, exe.name), 'fake EXE must not be selected while the MSI exists\n');
-    writeFileSync(join(assets, 'SHA256SUMS'), [
+    writeFileSync(join(assets, 'SHA256SUMS'), [`# source_commit=${fixtureSourceCommit}`,
       `${nodeSha256(join(assets, exe.name))}  ${exe.name}`,
       `${nodeSha256(join(assets, msi.name))}  ${msi.name}`
     ].join('\n') + '\n');
@@ -161,10 +170,12 @@ if [ -n "$out" ]; then cp "$source" "$out"; else exec /bin/cat "$source"; fi
     const script = readFileSync(resolve('public/install.ps1'), 'utf8');
     expect(script).toContain("_x64_en-US\\.msi$");
     expect(script).toContain('$env:FOOD_LOG_RELEASE_API_URL');
+    expect(script).toContain('$env:FOOD_LOG_RELEASE_IDENTITY_URL');
     expect(script).toContain('Get-FileHash');
     expect(script).toContain('Move-Item -Force $download $target');
     expect(script).toContain('Start-Process -FilePath $target');
     expect(script).toContain('$release.target_commitish -ne $expectedSourceCommit');
+    expect(script).toContain('SHA256SUMS belongs to a different app build.');
     expect(script).not.toContain('Join-Path (Get-Location)');
 
     const powershell = availablePowerShell();
@@ -172,12 +183,13 @@ if [ -n "$out" ]; then cp "$source" "$out"; else exec /bin/cat "$source"; fi
       const output = execFileSync(powershell, [
         '-NoProfile', '-NonInteractive', '-File', resolve('tests/fixtures/windows-installer-harness.ps1'),
         '-InstallerPath', resolve('public/install.ps1'), '-ReleasePath', releasePath,
-        '-AssetsPath', assets, '-LaunchLog', launchLog
+        '-IdentityPath', resolve('tests/fixtures/release-identity.json'), '-AssetsPath', assets, '-LaunchLog', launchLog
       ], {
         encoding: 'utf8',
         env: {
           ...process.env,
           FOOD_LOG_RELEASE_API_URL: 'mock://recorded-release',
+          FOOD_LOG_RELEASE_IDENTITY_URL: 'mock://release-identity',
           FOOD_LOG_INSTALL_DIR: installDir
         }
       });
@@ -191,9 +203,9 @@ if [ -n "$out" ]; then cp "$source" "$out"; else exec /bin/cat "$source"; fi
       mkdirSync(installDir, { recursive: true });
       const target = join(installDir, selected!.name);
       copyFileSync(join(assets, selected!.name), target);
-      const sums = new Map(readFileSync(join(assets, 'SHA256SUMS'), 'utf8').trim().split(/\r?\n/).map((line) => {
-        const match = line.match(/^([0-9a-f]{64})\s+\*?(.+?)\s*$/i)!;
-        return [match[2], match[1].toLowerCase()];
+      const sums = new Map(readFileSync(join(assets, 'SHA256SUMS'), 'utf8').trim().split(/\r?\n/).flatMap((line) => {
+        const match = line.match(/^([0-9a-f]{64})\s+\*?(.+?)\s*$/i);
+        return match ? [[match[2], match[1].toLowerCase()] as const] : [];
       }));
       expect(nodeSha256(target)).toBe(sums.get(selected!.name));
       writeFileSync(launchLog, target);
@@ -206,24 +218,25 @@ if [ -n "$out" ]; then cp "$source" "$out"; else exec /bin/cat "$source"; fi
 
     const rejectedInstallDir = join(root, 'rejected-installer');
     const rejectedLaunchLog = join(root, 'rejected-launch.log');
-    writeFileSync(join(assets, 'SHA256SUMS'), `${'0'.repeat(64)}  ${msi.name}\n`);
+    writeFileSync(join(assets, 'SHA256SUMS'), `# source_commit=${fixtureSourceCommit}\n${'0'.repeat(64)}  ${msi.name}\n`);
     if (powershell) {
       const rejected = spawnSync(powershell, [
         '-NoProfile', '-NonInteractive', '-File', resolve('tests/fixtures/windows-installer-harness.ps1'),
         '-InstallerPath', resolve('public/install.ps1'), '-ReleasePath', releasePath,
-        '-AssetsPath', assets, '-LaunchLog', rejectedLaunchLog
+        '-IdentityPath', resolve('tests/fixtures/release-identity.json'), '-AssetsPath', assets, '-LaunchLog', rejectedLaunchLog
       ], {
         encoding: 'utf8',
         env: {
           ...process.env,
           FOOD_LOG_RELEASE_API_URL: 'mock://recorded-release',
+          FOOD_LOG_RELEASE_IDENTITY_URL: 'mock://release-identity',
           FOOD_LOG_INSTALL_DIR: rejectedInstallDir
         }
       });
       expect(rejected.status).not.toBe(0);
       expect(`${rejected.stdout}${rejected.stderr}`).toContain(`Checksum failed for ${msi.name}`);
     } else {
-      const rejectedHash = readFileSync(join(assets, 'SHA256SUMS'), 'utf8').slice(0, 64);
+      const rejectedHash = readFileSync(join(assets, 'SHA256SUMS'), 'utf8').match(/^([0-9a-f]{64})\s+/m)?.[1];
       expect(nodeSha256(join(assets, msi.name))).not.toBe(rejectedHash);
     }
     expect(existsSync(join(rejectedInstallDir, msi.name))).toBe(false);
