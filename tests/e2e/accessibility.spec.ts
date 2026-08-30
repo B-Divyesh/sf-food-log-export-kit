@@ -26,6 +26,17 @@ test('keyboard path loads sample and reaches export', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Export CSV' })).toBeVisible();
 });
 
+test('@regression:V14-filter-state exposes the selected entry filter to keyboard and assistive technology', async ({ page }) => {
+  await page.goto('/demo');
+  const recipes = page.getByRole('button', { name: 'Recipes' });
+  await recipes.focus();
+  await page.keyboard.press('Space');
+  await expect(recipes).toBeFocused();
+  await expect(recipes).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('button', { name: 'All entries' })).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.getByText('0 shown')).toBeVisible();
+});
+
 test('mobile landing has no horizontal overflow', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile');
   await page.goto('/');
