@@ -1,4 +1,4 @@
-HTTP/2 200 
+HTTP/2 200
 content-type: text/html
 date: Sun, 30 Aug 2026 04:48:55 GMT
 accept-ranges: bytes
@@ -14,7 +14,7 @@ x-dns-prefetch-control: off
 content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://api.sociobot.in; upgrade-insecure-requests
 permissions-policy: camera=(), microphone=(), geolocation=()
 
-HTTP/2 200 
+HTTP/2 200
 content-type: text/html
 date: Sun, 30 Aug 2026 04:48:56 GMT
 accept-ranges: bytes
@@ -30,7 +30,7 @@ x-dns-prefetch-control: off
 content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://api.sociobot.in; upgrade-insecure-requests
 permissions-policy: camera=(), microphone=(), geolocation=()
 
-HTTP/2 200 
+HTTP/2 200
 content-type: text/javascript
 date: Sun, 30 Aug 2026 04:48:55 GMT
 accept-ranges: bytes
@@ -46,7 +46,7 @@ x-dns-prefetch-control: off
 content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://api.sociobot.in; upgrade-insecure-requests
 permissions-policy: camera=(), microphone=(), geolocation=()
 
-HTTP/2 200 
+HTTP/2 200
 content-type: text/javascript
 date: Sun, 30 Aug 2026 04:48:56 GMT
 accept-ranges: bytes
