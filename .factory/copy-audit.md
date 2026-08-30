@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 2026-08-30 after polish round 5. Counts treat hyphenated terms, product names, file names, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
+Audited 2026-08-30 after repair 8. Counts treat hyphenated terms, product names, file names, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
 
 ## Landing page
 
@@ -92,10 +92,13 @@ Audited 2026-08-30 after polish round 5. Counts treat hyphenated terms, product 
 | It installs the `food-log-export-kit` command so you can run it from a terminal. | 12 |
 | On Windows, this command verifies and starts the MSI installer. | 10 |
 | Review the release notes for the steps to open the app on your system. | 13 |
+| The published manifest and checksum file name the source commit used for every desktop build. | 15 |
 | Requires Node.js 22. | 3 |
 | Rust is needed only to build the desktop app. | 9 |
 | Open `http://127.0.0.1:4173/demo` for the isolated sample workspace. | 7 |
 | The release workflow builds macOS, Windows, and Linux installers after a `v*` tag is pushed. | 15 |
+| Site builds embed the current Git commit. | 7 |
+| Set `VITE_FOOD_LOG_SOURCE_COMMIT` only when deploying a site for an exact published desktop candidate. | 13 |
 | Tested product claims are listed in `.factory/claims.json`. | 7 |
 | Demo behavior is documented in `.factory/demo.md`. | 6 |
 | Publish `dist/site/` as a static site. | 6 |

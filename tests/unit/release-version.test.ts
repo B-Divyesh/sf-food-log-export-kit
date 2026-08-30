@@ -46,6 +46,11 @@ describe('desktop release regression', () => {
     expect(workflow).toContain('VITE_FOOD_LOG_SOURCE_COMMIT');
     expect(workflow).toContain("'source_commit': source_commit");
     expect(workflow).toContain("latest['source_commit'] == source_commit");
+    expect(workflow).toContain("printf '# source_commit=%s\\n'");
+    expect(workflow).toContain("--pattern 'Food*'");
+    expect(workflow).toContain('sha256sum "${release_files[@]}"');
+    expect(workflow).toContain("'checksums': checksums");
+    expect(workflow).toContain('grep -Fx "# source_commit=$FOOD_LOG_SOURCE_COMMIT" SHA256SUMS');
     expect(workflow).not.toContain("|| 'v0.1.2'");
   });
 });

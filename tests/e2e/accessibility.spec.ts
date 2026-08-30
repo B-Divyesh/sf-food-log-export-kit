@@ -1,6 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
+const testedSourceCommit = '6f4bb7f207528aa36ed7e1a2e8f13ace474f4066';
+
 for (const path of ['/', '/demo', '/app', '/privacy', '/terms', '/missing-page']) {
   test(`has no serious accessibility errors on ${path}`, async ({ page }) => {
     await page.goto(path);
@@ -127,6 +129,7 @@ test('landing link crawl includes the selected release notes page', async ({ pag
     contentType: 'application/json',
     body: JSON.stringify({
       tag_name: 'v0.1.7',
+      target_commitish: testedSourceCommit,
       html_url: releaseUrl,
       assets: [{
         name: 'Food.Log.Export.Kit_0.1.7_amd64.AppImage',

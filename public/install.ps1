@@ -1,7 +1,9 @@
 $ErrorActionPreference = "Stop"
 $repo = "B-Divyesh/sf-food-log-export-kit"
+$expectedSourceCommit = "6f4bb7f207528aa36ed7e1a2e8f13ace474f4066"
 $api = if ($env:FOOD_LOG_RELEASE_API_URL) { $env:FOOD_LOG_RELEASE_API_URL } else { "https://api.github.com/repos/$repo/releases/latest" }
 $release = Invoke-RestMethod $api
+if ($release.target_commitish -ne $expectedSourceCommit) { throw "The published download does not match this app version." }
 $asset = $release.assets | Where-Object { $_.name -match '_x64_en-US\.msi$' } | Select-Object -First 1
 if (!$asset) { $asset = $release.assets | Where-Object { $_.name -match '_x64-setup\.exe$' } | Select-Object -First 1 }
 $sums = $release.assets | Where-Object { $_.name -eq 'SHA256SUMS' } | Select-Object -First 1

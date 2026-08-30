@@ -5,7 +5,7 @@
 export const appVersion = '0.1.7';
 
 /**
- * Static deployment and the release workflow set this to the checked-out commit.
- * An empty value is intentional for local development and recorded browser tests.
+ * Vite always supplies this from VITE_FOOD_LOG_SOURCE_COMMIT or the checked-out
+ * Git commit. Production downloads are therefore never checked without identity.
  */
-export const sourceCommit = import.meta.env.VITE_FOOD_LOG_SOURCE_COMMIT ?? '';
+export const sourceCommit = import.meta.env.VITE_FOOD_LOG_SOURCE_COMMIT;

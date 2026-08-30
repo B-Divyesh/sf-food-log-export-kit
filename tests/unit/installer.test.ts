@@ -58,6 +58,7 @@ describe('Installer regression', () => {
     writeFileSync(sumsPath, `${sums}\n`);
     const releasePath = join(root, 'release.json');
     writeFileSync(releasePath, JSON.stringify({
+      target_commitish: '6f4bb7f207528aa36ed7e1a2e8f13ace474f4066',
       assets: [linuxName, armName, intelName, 'SHA256SUMS'].map((name) => ({
         name,
         browser_download_url: `https://downloads.test/${name}`
@@ -118,6 +119,26 @@ if [ -n "$out" ]; then cp "$source" "$out"; else exec /bin/cat "$source"; fi
       expect(existsSync(launcher)).toBe(true);
       expect(execFileSync(launcher, { encoding: 'utf8' }).trim()).toMatch(/food-log-export-kit|arm64|x64/);
     }
+
+    const staleReleasePath = join(root, 'stale-release.json');
+    writeFileSync(staleReleasePath, readFileSync(releasePath, 'utf8').replace(
+      '6f4bb7f207528aa36ed7e1a2e8f13ace474f4066',
+      'b39d3a283685b66fb25fbcb0f9b5bb9518aec143'
+    ));
+    const stale = spawnSync('sh', [installer], {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        PATH: `${fakeBin}:/usr/bin:/bin`,
+        FOOD_LOG_RELEASE_API_URL: 'mock://release',
+        MOCK_RELEASE: staleReleasePath,
+        MOCK_ASSETS: assets,
+        MOCK_OS: 'Linux',
+        MOCK_ARCH: 'x86_64'
+      }
+    });
+    expect(stale.status).not.toBe(0);
+    expect(stale.stderr).toContain('does not match this app version');
   });
 
   it('@claim:windows-installer uses recorded release metadata, verifies a fake MSI, places it stably, and records launch intent', () => {
@@ -143,6 +164,7 @@ if [ -n "$out" ]; then cp "$source" "$out"; else exec /bin/cat "$source"; fi
     expect(script).toContain('Get-FileHash');
     expect(script).toContain('Move-Item -Force $download $target');
     expect(script).toContain('Start-Process -FilePath $target');
+    expect(script).toContain('$release.target_commitish -ne $expectedSourceCommit');
     expect(script).not.toContain('Join-Path (Get-Location)');
 
     const powershell = availablePowerShell();

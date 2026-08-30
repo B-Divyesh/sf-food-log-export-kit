@@ -2,6 +2,7 @@
 set -eu
 
 repo="B-Divyesh/sf-food-log-export-kit"
+expected_source_commit="6f4bb7f207528aa36ed7e1a2e8f13ace474f4066"
 release_page="https://github.com/$repo/releases/latest"
 api="${FOOD_LOG_RELEASE_API_URL:-https://api.github.com/repos/$repo/releases/latest}"
 
@@ -33,6 +34,8 @@ case "$os:$arch" in
 esac
 
 release_json="$(curl -fsSL "$api")" || fail "Release details could not be loaded. See $release_page"
+release_source="$(printf '%s\n' "$release_json" | sed -n 's/.*"target_commitish"[[:space:]]*:[[:space:]]*"\([0-9a-fA-F]*\)".*/\1/p' | head -n 1 | tr 'A-F' 'a-f')"
+[ "$release_source" = "$expected_source_commit" ] || fail "The published download does not match this app version. See $release_page"
 
 # GitHub formats JSON with spaces around the colon. Keep this parser portable for
 # stock macOS and Linux systems, where jq is not guaranteed to be installed.

@@ -334,6 +334,7 @@ test('@claim:revoked-license a replacement token never reuses another token verd
 test('@claim:detected-platform-downloads selects each published operating-system and Mac architecture asset', async ({ browser }) => {
   const release = {
     tag_name: 'v0.1.7',
+    target_commitish: '6f4bb7f207528aa36ed7e1a2e8f13ace474f4066',
     html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.7',
     assets: [
       ['Food.Log.Export.Kit_0.1.7_aarch64.dmg', 'mac-arm.dmg'],

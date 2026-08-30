@@ -75,7 +75,9 @@ jobs:
         with:
           tagName: ${{ env.RELEASE_TAG }}
           releaseName: Food Log Export Kit ${{ env.RELEASE_TAG }}
-          releaseBody: Unsigned desktop builds for macOS, Windows, and Linux. Verify downloads with SHA256SUMS.
+          releaseBody: |
+            Unsigned desktop builds for macOS, Windows, and Linux. Verify downloads with SHA256SUMS.
+            Source commit: ${{ env.FOOD_LOG_SOURCE_COMMIT }}
           releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
@@ -100,13 +102,14 @@ jobs:
       - name: Download release assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release download "$RELEASE_TAG" --dir release-assets
+        run: gh release download "$RELEASE_TAG" --dir release-assets --pattern 'Food*'
       - name: Create checksums and manifest
         env:
           TAG: ${{ env.RELEASE_TAG }}
         run: |
           cd release-assets
-          sha256sum * > SHA256SUMS
+          release_files=(*);
+          { printf '# source_commit=%s\n' "$FOOD_LOG_SOURCE_COMMIT"; sha256sum "${release_files[@]}"; } > SHA256SUMS
           python3 - <<'PY'
           import json, os
           tag = os.environ['TAG']
@@ -118,8 +121,15 @@ jobs:
             'windows': [f for f in files if f.endswith(('.msi', '.exe'))],
             'linux': [f for f in files if f.endswith(('.AppImage', '.deb', '.rpm'))]
           }
+          checksums = {}
+          with open('SHA256SUMS') as source:
+              for line in source:
+                  if line.startswith('#'):
+                      continue
+                  digest, name = line.rstrip().split(maxsplit=1)
+                  checksums[name.lstrip('*')] = digest
           with open('latest.json', 'w') as out:
-              json.dump({'version': tag.lstrip('v'), 'release_tag': tag, 'source_commit': source_commit, 'platforms': {k: [f'{base}/{name}' for name in v] for k, v in platforms.items()}}, out, indent=2)
+              json.dump({'version': tag.lstrip('v'), 'release_tag': tag, 'source_commit': source_commit, 'platforms': {k: [f'{base}/{name}' for name in v] for k, v in platforms.items()}, 'checksums': checksums}, out, indent=2)
           PY
       - uses: softprops/action-gh-release@v2
         with:
@@ -134,6 +144,7 @@ jobs:
           set -euo pipefail
           gh release download "$RELEASE_TAG" --dir verify-release
           cd verify-release
+          grep -Fx "# source_commit=$FOOD_LOG_SOURCE_COMMIT" SHA256SUMS
           sha256sum -c SHA256SUMS
           test "$(find . -maxdepth 1 -name '*.dmg' | wc -l)" -ge 2
           test "$(find . -maxdepth 1 -name '*.msi' | wc -l)" -ge 1
@@ -150,9 +161,12 @@ jobs:
           assert latest['version'] == tag.removeprefix('v')
           assert latest['release_tag'] == tag
           assert latest['source_commit'] == source_commit
+          assert latest['checksums']
           for platform in ('macos', 'windows', 'linux'):
               assert latest['platforms'][platform]
               assert all(f'/releases/download/{tag}/' in url for url in latest['platforms'][platform])
+              for url in latest['platforms'][platform]:
+                  assert url.rsplit('/', 1)[-1] in latest['checksums']
           assert sum(url.endswith('.dmg') for url in latest['platforms']['macos']) >= 2
           assert any(url.endswith('.msi') for url in latest['platforms']['windows'])
           assert any(url.endswith('-setup.exe') for url in latest['platforms']['windows'])

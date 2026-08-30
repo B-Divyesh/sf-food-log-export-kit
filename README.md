@@ -35,6 +35,7 @@ irm https://food-log-export-kit.sociobot.in/install.ps1 | iex
 ```
 
 Review the [release notes](https://github.com/B-Divyesh/sf-food-log-export-kit/releases/latest) for the steps to open the app on your system.
+The published manifest and checksum file name the source commit used for every desktop build.
 
 ## Run locally
 
@@ -57,6 +58,8 @@ npm run tauri build
 ```
 
 `npm run build:site` writes the deployable website to `dist/site/`, with `index.html` at that root. `npm run build:app` writes the Tauri frontend to `dist/app/`. The release workflow builds macOS, Windows, and Linux installers after a `v*` tag is pushed.
+
+Site builds embed the current Git commit. Set `VITE_FOOD_LOG_SOURCE_COMMIT` only when deploying a site for an exact published desktop candidate.
 
 Tested product claims are listed in [`.factory/claims.json`](.factory/claims.json). Demo behavior is documented in [`.factory/demo.md`](.factory/demo.md).
 

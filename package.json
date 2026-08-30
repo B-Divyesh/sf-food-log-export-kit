@@ -8,7 +8,7 @@
     "build": "npm run build:site",
     "build:site": "tsc --noEmit && vite build",
     "build:app": "tsc --noEmit && vite build --outDir dist/app",
-    "tauri": "tauri",
+    "tauri": "node scripts/tauri.mjs",
     "test": "vitest run && playwright test",
     "test:unit": "vitest run",
     "test:e2e": "playwright test"
