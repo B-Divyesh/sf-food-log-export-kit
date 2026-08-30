@@ -1,87 +1,61 @@
-# Handoff — perfection loop round 5
+# Handoff — verification 12
 
-## Result
+## Result: FAIL — release blocked
 
-All findings in `.factory/review-1.md` through `.factory/review-5.md` are
-resolved. Food Log Export Kit remains a Tauri 2 desktop app with its static
-landing and browser workspace. The archive-at-dusk visual system is unchanged.
+**Candidate:** `1a202dc7385b41d0d1a854d704f4bea6f672c7fc`
+**Live URL:** <https://food-log-export-kit.sociobot.in>
+**Verified:** 2026-08-30 UTC
 
-The repaired source is commit `b39d3a283685b66fb25fbcb0f9b5bb9518aec143`.
-The final documentation commit is on `main`. The live site is
-<https://food-log-export-kit.sociobot.in>, and the desktop release is
-<https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.7>.
+The local-first food archive itself passes its demo, import/export, privacy,
+PWA, accessibility, mobile, bundle, deployment-match, and published-installer
+checks. It must not be accepted because the live Sociobot paid endpoints are
+unavailable: checkout and 35 synthetic license verification requests returned
+HTTP 503. The required `@claim:paid-purchase` test now fails reproducibly
+(expected Dodo 303, got 503), and rate-limit enforcement cannot be verified.
 
-## What changed
+## What passed
 
-- One shared primary navigation now serves landing, demo, app, legal, and 404
-  routes: Demo, How it works, Privacy, and Terms. The wordmark links Home.
-- All eight review-5 wording defects were replaced with concrete language in
-  the landing page and README.
-- `.factory/claims.json` now has 22 unique claims. The release-workflow claim
-  has one tagged test for the `v*` trigger and all four build targets.
-- The site and native package moved to version 0.1.7. The service-worker cache,
-  rendered/static footers, test fixtures, and release resolver moved with it.
-- The verb-first catalog description is 53 characters:
-  `Convert food tracker exports into CSV and JSON archives.`
-- Review history, claim coverage, copy counts, local/live screenshots, and the
-  complete finding map are recorded in `.factory/polish-5.md` and
-  `.factory/evidence/polish-5/`.
+- `npm ci`; all 22 `.factory/claims.json` commands passed individually after
+  install. The clean clone's pre-install attempts all stopped at the expected
+  missing `vitest` dependency.
+- `npm run build` and `npm run build:app`; initial JS is 16.93 kB gzip and CSS
+  is 6.10 kB gzip.
+- Direct live demo: 12 sample records, CSV/JSON export, isolated banner/reset,
+  no cookies/localStorage, and no cross-origin food-data requests. Offline
+  reload and the service-worker update regression passed.
+- Live desktop/mobile/keyboard/reduced-motion checks, `verify-url.sh`, and Axe
+  found no supported-route console errors or serious/critical violations.
+- Five candidate/live hashes (HTML, JS, CSS, service worker, manifest) match.
+  Release `v0.1.7` has all platform artifacts; its downloaded DEB matches
+  `SHA256SUMS`, and its product-source diff to this candidate is empty.
 
-## Verification evidence
+## Blocking defect
 
-- Fresh clone: `/tmp/food-log-polish5.bXFqCQ/repo` at implementation commit
-  `b39d3a2`.
-- Every one of the 22 exact claim commands passed independently.
-- `npm test`: 24 unit tests passed; 49 Playwright tests passed; four Chromium
-  skips are mobile-only tests that passed in the mobile project.
-- `npm run build` and `npm run build:app` passed. Largest final production JS:
-  38.67 kB raw / 13.71 kB gzip. CSS: 23.48 kB raw / 6.10 kB gzip.
-- `cargo test --manifest-path src-tauri/Cargo.toml` passed after installing the
-  Linux packages named by the release workflow.
-- `/opt/fleet/lib/verify-url.sh` passed the live landing, demo, app, privacy,
-  and terms routes with no console errors.
-- `.factory/evidence/polish-5/live-audit.json` records 14 cold
-  route/viewport checks, zero serious/critical Axe findings, matching route
-  navigation, correct titles/metadata, HTTP 404, focus restoration, and the
-  complete demo/privacy/product checks.
-- The live demo kept its sample record at 615.55 px in an 844 px viewport,
-  exported 12 CSV rows and 12 JSON records, reset correctly, touched no real
-  storage, made no cross-origin request, exited to an empty `/app`, and
-  reloaded offline.
-- A live Fiber import produced its conversion note and preserved the original
-  value in JSON. The live checkout returned 303 to Dodo.
-- Mobile Lighthouse is 100 Performance, 100 Accessibility, 100 Best Practices,
-  and 100 SEO; LCP 1.79 s, CLS 0, TBT 0 ms. Report:
-  `.factory/evidence/polish-5/lighthouse-live.json`.
-- Static deployment `74ae6625-8d6d-41bb-9e07-026a086bdada` succeeded. The
-  deployed bundle embeds the exact release source commit.
-- GitHub Actions run `33286832663` passed both macOS builds, Windows, Linux,
-  and checksums. Release `v0.1.7` has 11 assets, `SHA256SUMS`, and
-  `latest.json`. A downloaded AppImage passed `sha256sum --check`.
+**F12-1 — Critical: Sociobot checkout/license API returns 503.**
 
-## Run and verify
+`GET /api/v1/products/food-log-export-kit/checkout` must return 303 to a Dodo
+checkout but returns 503. `/verify` likewise returned 503 for 35 invalid
+synthetic tokens, so no 429 or `Retry-After` could be observed. Restore the
+registered billing product, prove checkout's 303 redirect, and prove the
+per-client rate limit with a 429 plus `Retry-After`; then rerun every claim and
+the full `npm test` suite.
+
+## Verification details
+
+See `.factory/verification-12.md` for exact commands, timestamps, headers,
+test results, no-code-change environment limitation for a native Linux build,
+and the full acceptance evidence.
+
+## How to run after repair
 
 ```sh
 npm ci
 npm test
 npm run build
 npm run build:app
-cargo test --manifest-path src-tauri/Cargo.toml
+CI=false npm run tauri -- build --no-bundle
 ```
 
-Use <https://food-log-export-kit.sociobot.in/?demo=1> for the isolated sample.
-Use **Reset demo** to restore all 12 entries and **Start for real** to discard
-the sample and open an empty workspace.
-
-## Known gaps
-
-None for the brief or reviews 1–5.
-
-## Needs operator action
-
-The v0.1.7 installers are unsigned, matching the existing release policy.
-Future signed releases require owner-managed `APPLE_CERTIFICATE` and
-`WINDOWS_CERT_PFX` secrets plus the corresponding signing configuration.
-
-The pre-existing `graphify-out/` working-tree changes were not part of this
-repair and remain uncommitted.
+Use <https://food-log-export-kit.sociobot.in/demo> for the isolated sample.
+The published installers are unsigned; future signed releases require the
+owner-managed `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` secrets.
