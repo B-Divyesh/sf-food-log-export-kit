@@ -39,7 +39,11 @@ The published manifest and checksum file name the source commit used for every d
 
 ## Run locally
 
-Requires Node.js 22. Rust is needed only to build the desktop app.
+Requires Node.js 22. Rust is needed only to build the desktop app. On Debian or Ubuntu, a native desktop build also needs the same GTK/WebKit packages as the release workflow:
+
+```sh
+sudo apt-get update && sudo apt-get install -y file pkg-config libglib2.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+```
 
 ```sh
 npm install

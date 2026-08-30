@@ -13,7 +13,7 @@ describe('desktop release regression', () => {
     const footer = read('src/shell.ts');
     const notFound = read('public/404.html');
 
-    expect(packageVersion).toBe('0.1.8');
+    expect(packageVersion).toBe('0.1.9');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);
@@ -35,7 +35,8 @@ describe('desktop release regression', () => {
     expect(workflow).toContain('release_tag:');
     expect(workflow).toContain('ref: ${{ github.ref_type == \'tag\' && github.ref || inputs.release_tag }}');
     expect(workflow).toContain('Verify release tag matches the desktop and site version');
-    expect(workflow).toContain('apt-get install -y file libwebkit2gtk-4.1-dev');
+    expect(workflow).toContain('Install Linux build prerequisites');
+    expect(workflow).toContain('apt-get install -y file pkg-config libglib2.0-dev libwebkit2gtk-4.1-dev');
     expect(workflow).toContain('test "$RELEASE_TAG" = "v$(node -p');
     expect(workflow).toContain('Verify published installer release');
     expect(workflow).toContain('sha256sum -c SHA256SUMS');
@@ -53,5 +54,14 @@ describe('desktop release regression', () => {
     expect(workflow).toContain("'checksums': checksums");
     expect(workflow).toContain('grep -Fx "# source_commit=$FOOD_LOG_SOURCE_COMMIT" SHA256SUMS');
     expect(workflow).not.toContain("|| 'v0.1.2'");
+  });
+
+  it('@regression:R10-native-build-prerequisites documents the direct Linux dependency that Cargo needs', () => {
+    const readme = read('README.md');
+    const workflow = read('.github/workflows/release.yml');
+    for (const prerequisite of ['pkg-config', 'libglib2.0-dev', 'libwebkit2gtk-4.1-dev', 'libappindicator3-dev', 'librsvg2-dev', 'patchelf']) {
+      expect(readme).toContain(prerequisite);
+      expect(workflow).toContain(prerequisite);
+    }
   });
 });

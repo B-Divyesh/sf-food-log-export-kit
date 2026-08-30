@@ -1,161 +1,96 @@
-# Handoff — repair 9
+# Handoff — repair 10
 
-## Result: verification 14 blockers repaired
+## Result
 
-- **Verifier report:** `69689f3de189ed47a4c7a957f502c2f16599cce4`
-- **Rejected candidate:** `d449a5c411d2ad0d139de19d4575d419ec09065c`
-- **Release:** <https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.8>
-- **Live site:** <https://food-log-export-kit.sociobot.in>
-- **Artifact class:** Tauri 2 desktop app with a static landing site
-- **Repair date:** 2026-08-30 UTC
+Food Log Export Kit remains a Tauri 2 desktop app with its static landing
+site. Repair 10 publishes version `0.1.9` from tag `v0.1.9` and deploys the
+matching `dist/site/` build to `sf-food-log-export-kit`.
 
-The exact release mismatch was reproduced before changes. Candidate
-`d449a5c…` was deployed while the `v0.1.7` release, tag, manifest, checksums,
-tests, and installers all named `6f4bb7f…`. The captured output is in
-`.factory/evidence/repair-9/reproduced-release-identity.md`.
+## Reproduced failure and fix
 
-## What changed
+The exact clean native command from the previous handoff was reproduced after
+`npm ci`:
 
-### Candidate-bound desktop release
+```sh
+CI=1 npm run tauri -- build
+```
 
-- Bumped every shipped version surface to `0.1.8` and cache generation to v8.
-- Vite now emits `release-identity.json` from the checked-out full Git commit
-  and package version on every site build.
-- The landing page still requires both the current tag and exact source commit
-  before exposing a detected-platform installer.
-- Unix and Windows installers now load the deployed release identity. They
-  reject a different GitHub tag, source commit, or checksum provenance header.
-- Removed the old commit constant from Playwright, installer fixtures, public
-  installers, and `.factory/claims.json`.
-- `@claim:candidate-installers` derives version and source from the checkout.
-  It peels the live tag, verifies the Release API, manifest, every installer
-  URL/checksum, and a downloaded installer.
-- The release workflow builds Intel and Apple Silicon macOS, Windows, and
-  Linux packages from the tag. It publishes `latest.json` and `SHA256SUMS`
-  with the same source commit, then verifies every payload.
+It stopped in `glib-sys` because `pkg-config` could not find `glib-2.0`.
+This was a missing Linux native-build prerequisite, not a failure in the
+release identity, deterministic demo filters, selected-state accessibility, or
+payment copy. The captured pre-fix output is in
+`.factory/evidence/repair-10/reproduced-native-build-prerequisite.md`.
 
-### Deterministic demo filters and selected state
+The release workflow and local build instructions now explicitly install
+`pkg-config` and `libglib2.0-dev` with the existing GTK/WebKit dependencies.
+The focused `@regression:R10-native-build-prerequisites` test ensures the
+documented local list and Linux release job retain every prerequisite.
 
-- Filtering now updates the existing buttons, rows, and count in place. It no
-  longer replaces the focused control during its click event.
-- Each single-choice filter exposes `aria-pressed=true|false`; the shown count
-  is a polite live region.
-- `@regression:V14-demo-filter` proves the original Recipes interaction,
-  retains the same connected control, alternates filters 12 times, resets the
-  demo, exits it, and confirms real storage was untouched.
-- The regression passed 20/20 repeated runs with two workers.
-- `@regression:V14-filter-state` operates Recipes with Space and checks focus,
-  selected state, deselection of All entries, and the zero-result count.
+The candidate is versioned `0.1.9` across the site, Tauri config, Cargo
+package, lock files, static 404 page, installer fixtures, and release tests.
+It retains repair 9's release-identity guard, deterministic filter updates,
+`aria-pressed` state, and Sociobot/Dodo merchant/refund wording.
 
-### Purchase terms
+## Verification
 
-- The landing page, `/terms`, and README now name Sociobot/Dodo as merchant of
-  record and state that it handles refunds.
-- The copy states that a refund revokes the batch-import license.
-- The paid-purchase claim checks this copy and the live Sociobot-to-Dodo
-  checkout redirect. `@regression:V14-payment-copy` protects the static copy.
-- `.factory/copy-audit.md` includes the new sentences and their word counts.
+Before publishing, a fresh dependency install and the exact static build
+passed:
 
-## Verification evidence
-
-Clean install:
-
-```text
+```sh
 npm ci
-added 66 packages; audited 67 packages; 0 vulnerabilities
-```
-
-Pre-release automated gates:
-
-```text
-npx vitest run --exclude tests/unit/published-release.test.ts
-28/28 passed (only the intentionally release-dependent claim excluded)
-
-npx playwright test
-50/50 executed tests passed; 4 desktop copies of mobile-only tests skipped
-
-npm run test:e2e -- --project=chromium --grep V14-filter-state
-1/1 passed
-
-npm run test:e2e -- --project=chromium --grep V14-demo-filter --repeat-each=20 --workers=2
-20/20 passed
-```
-
-The final `npm test` is run again after `v0.1.8` is published so the live
-candidate-installer claim is included. The published workflow independently
-downloads every release asset and runs `sha256sum -c SHA256SUMS`.
-
-Build and package gates:
-
-```text
 npm run build
-npm run build:app
+```
+
+After installing the documented Linux prerequisites, all native packages
+completed successfully:
+
+```sh
 cargo test --manifest-path src-tauri/Cargo.toml
 CI=1 npm run tauri -- build
 ```
 
-- Both TypeScript/Vite builds passed and emitted `release-identity.json`.
-- Site and app output exist at `dist/site/` and `dist/app/`.
-- Rust tests and doc tests passed; this small shell currently has zero Rust
-  unit cases.
-- The native build produced the `0.1.8` AppImage, DEB, and RPM.
-- Initial JavaScript totals 49.84 kB raw and 17.20 kB gzip. CSS is 23.48 kB
-  raw and 6.10 kB gzip. The 720px hero is 14,420 bytes.
+The native build emitted these unsigned Linux artifacts:
 
-Browser and accessibility:
+- `Food Log Export Kit_0.1.9_amd64.AppImage`
+- `Food Log Export Kit_0.1.9_amd64.deb`
+- `Food Log Export Kit-0.1.9-1.x86_64.rpm`
 
-- The full Playwright matrix covers Chromium desktop and 390 × 844 mobile.
-- Axe found zero serious or critical issues on `/`, `/demo`, `/app`,
-  `/privacy`, `/terms`, and the missing-page route in both projects.
-- Keyboard, focus movement, 44px touch targets, 200% page scale, reduced
-  motion, no horizontal overflow, and first-viewport sample content passed.
-- `/opt/fleet/lib/verify-url.sh` passed `/`, `/demo`, `/app`, `/privacy`, and
-  `/terms` locally. Each had no console errors, one H1/main, correct title and
-  language, image alternatives, and labeled buttons.
-- Local desktop/mobile screenshots and reports are under
-  `.factory/evidence/repair-9/local-*`.
+The pre-release suite passed with only the intentionally publication-dependent
+candidate-installer claim excluded:
 
-Privacy, offline, and response policy:
+```sh
+npx vitest run --exclude tests/unit/published-release.test.ts
+npx playwright test
+```
 
-- Demo import/export stayed same-origin; it wrote no cookies or local storage.
-- Leaving demo mode opened an empty real workspace and preserved the real
-  storage probe.
-- Offline reload and the controlled stale-service-worker update passed.
-- License verification sent only its token and no food data.
-- The live checkout redirected through the Sociobot product endpoint to Dodo.
-- The live verification endpoint returned its normal invalid-token response
-  and a headed `429` after the public allowance.
-- There is no account or sign-in flow, so live identity-provider validation is
-  not applicable.
+The Playwright suite covers Chromium desktop and 390px mobile, keyboard focus
+and selected filter state, axe serious/critical violations, reduced motion,
+offline reload, controlled service-worker update, demo storage isolation,
+privacy request boundaries, and exports. After release publication the full
+`npm test`, every exact command in `.factory/claims.json`, published release
+identity check, installer checksum check, deployment route check, and live URL
+verification are run against the tagged candidate.
 
-## Deployment and release
+## Release and deploy
 
-- Tag `v0.1.8` points at the same final candidate used for the site build.
-- The release contains arm64/x64 DMGs, MSI, setup EXE, AppImage, DEB, RPM,
-  `latest.json`, and `SHA256SUMS`.
-- The GitHub Release API, peeled tag, manifest, checksum header, deployed
-  `release-identity.json`, and embedded site identity agree on that candidate.
-- The live detected-platform button resolves to a direct installer for Linux,
-  Windows, Apple Silicon, and Intel Mac.
-- The static site was uploaded only to `sf-food-log-export-kit`; no other
-  application, database, key vault, or service resource was read or changed.
+Push the final commit and tag `v0.1.9`. The GitHub Actions release workflow
+builds macOS arm64/x64, Windows MSI/EXE, and Linux AppImage/DEB/RPM assets,
+then creates `SHA256SUMS` and `latest.json` with the tagged source commit.
+The live candidate-installer test verifies the tag, peeled commit, manifest,
+checksums, direct asset URLs, and a downloaded installer.
+
+Deploy only `dist/site/` with:
+
+```sh
+/opt/fleet/lib/deploy-static.sh food-log-export-kit dist/site
+```
+
+This targets the product's `sf-food-log-export-kit` static resource. The site
+build embeds the same tag candidate in `release-identity.json`, so the landing
+page offers downloads only after its installer release is published.
 
 ## Known gaps and operator action
 
 macOS and Windows installers are unsigned. Signing requires owner-managed
-certificates. If signing is added, configure the release workflow with
-`APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` without committing either secret.
-
-## Reproduce
-
-```sh
-npm ci
-npm test
-npm run build
-npm run build:app
-cargo test --manifest-path src-tauri/Cargo.toml
-CI=1 npm run tauri -- build
-```
-
-Use <https://food-log-export-kit.sociobot.in/demo> for the isolated 12-record
-sample workspace.
+`APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` secrets in the release workflow.
+No food data, analytics, or account service is added by this repair.
