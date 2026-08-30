@@ -13,7 +13,7 @@ describe('desktop release regression', () => {
     const footer = read('src/shell.ts');
     const notFound = read('public/404.html');
 
-    expect(packageVersion).toBe('0.1.9');
+    expect(packageVersion).toBe('0.1.10');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);
@@ -59,9 +59,12 @@ describe('desktop release regression', () => {
   it('@regression:R10-native-build-prerequisites documents the direct Linux dependency that Cargo needs', () => {
     const readme = read('README.md');
     const workflow = read('.github/workflows/release.yml');
+    const preflight = read('scripts/linux-native-prereqs.mjs');
     for (const prerequisite of ['pkg-config', 'libglib2.0-dev', 'libwebkit2gtk-4.1-dev', 'libappindicator3-dev', 'librsvg2-dev', 'patchelf']) {
       expect(readme).toContain(prerequisite);
       expect(workflow).toContain(prerequisite);
+      expect(preflight).toContain(prerequisite);
     }
+    expect(workflow).toContain('npm run native:prereqs');
   });
 });

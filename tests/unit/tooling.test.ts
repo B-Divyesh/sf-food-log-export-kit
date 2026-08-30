@@ -3,6 +3,9 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import viteConfig from '../../vite.config';
+// This Node-only executable is deliberately JavaScript so npm can run it before TypeScript is available.
+// @ts-expect-error The test exercises its runtime exports directly.
+import { checkLinuxNativePrerequisites, linuxNativeBuildPackages, linuxNativePrerequisiteMessage } from '../../scripts/linux-native-prereqs.mjs';
 import { resolveSourceCommit } from '../../scripts/source-commit';
 
 describe('release tooling regressions', () => {
@@ -27,5 +30,25 @@ describe('release tooling regressions', () => {
       expect(readFileSync(installer, 'utf8')).not.toMatch(/[0-9a-f]{40}/);
       expect(readFileSync(installer, 'utf8')).toContain('release-identity.json');
     }
+  });
+
+  it('@regression:R11-native-preflight names the missing Linux library and exact setup command before Cargo runs', () => {
+    const missingWebKit = checkLinuxNativePrerequisites({
+      platform: 'linux',
+      probe: (moduleName: string) => moduleName === 'glib-2.0'
+    });
+    expect(missingWebKit).toEqual({ ready: false, missing: ['webkit2gtk-4.1'] });
+    expect(linuxNativePrerequisiteMessage(missingWebKit.missing)).toContain('sudo apt-get update && sudo apt-get install -y');
+    for (const packageName of linuxNativeBuildPackages) {
+      expect(linuxNativePrerequisiteMessage(missingWebKit.missing)).toContain(packageName);
+    }
+    expect(checkLinuxNativePrerequisites({ platform: 'linux', probe: () => true })).toEqual({ ready: true, missing: [] });
+    expect(checkLinuxNativePrerequisites({ platform: 'darwin', probe: () => false })).toEqual({ ready: true, missing: [] });
+
+    const wrapper = readFileSync(new URL('../../scripts/tauri.mjs', import.meta.url), 'utf8');
+    const workflow = readFileSync(new URL('../../.github/workflows/release.yml', import.meta.url), 'utf8');
+    expect(wrapper).toContain('ensureLinuxNativePrerequisites');
+    expect(workflow).toContain('Verify Linux native build prerequisites');
+    expect(workflow).toContain('npm run native:prereqs');
   });
 });

@@ -1,96 +1,89 @@
-# Handoff — repair 10
+# Handoff — repair 11
 
 ## Result
 
-Food Log Export Kit remains a Tauri 2 desktop app with its static landing
-site. Repair 10 publishes version `0.1.9` from tag `v0.1.9` and deploys the
-matching `dist/site/` build to `sf-food-log-export-kit`.
+Food Log Export Kit remains a Tauri 2 desktop app with a static landing site.
+Repair 11 publishes version `0.1.10` from tag `v0.1.10` and deploys its
+matching `dist/site/` build only to `sf-food-log-export-kit`.
 
-## Reproduced failure and fix
+## Reproduced failure and repair
 
-The exact clean native command from the previous handoff was reproduced after
-`npm ci`:
+An isolated `git clone --no-local` of failed candidate
+`1fb7633669c3e88c0148d9ec28b110484fdd8f43` reproduced the exact command from
+the prior handoff after `npm ci`:
 
 ```sh
 CI=1 npm run tauri -- build
 ```
 
-It stopped in `glib-sys` because `pkg-config` could not find `glib-2.0`.
-This was a missing Linux native-build prerequisite, not a failure in the
-release identity, deterministic demo filters, selected-state accessibility, or
-payment copy. The captured pre-fix output is in
-`.factory/evidence/repair-10/reproduced-native-build-prerequisite.md`.
+The existing wrapper correctly translated `CI=1` to Tauri's required boolean
+value. The frontend built, then Cargo stopped in `glib-sys` because
+`pkg-config` could not locate `glib-2.0.pc`. The full captured evidence is in
+`.factory/evidence/repair-11/reproduced-clean-native-build.md`; repair 10's
+original evidence remains unchanged.
 
-The release workflow and local build instructions now explicitly install
-`pkg-config` and `libglib2.0-dev` with the existing GTK/WebKit dependencies.
-The focused `@regression:R10-native-build-prerequisites` test ensures the
-documented local list and Linux release job retain every prerequisite.
+The repair keeps the prior candidate-release identity guard and adds a
+deterministic Linux native preflight. It checks `glib-2.0` and
+`webkit2gtk-4.1` through `pkg-config` before Cargo runs. On a clean machine it
+prints the exact documented Debian or Ubuntu package command instead of
+leaving a low-level Cargo error. `npm run native:prereqs` is available for a
+standalone check. The Linux GitHub release job installs the same packages and
+runs that check before the Tauri action.
 
-The candidate is versioned `0.1.9` across the site, Tauri config, Cargo
-package, lock files, static 404 page, installer fixtures, and release tests.
-It retains repair 9's release-identity guard, deterministic filter updates,
-`aria-pressed` state, and Sociobot/Dodo merchant/refund wording.
+`@regression:R11-native-preflight` covers a missing-library result, its exact
+setup command, a successful Linux result, the non-Linux path, the Tauri
+wrapper, and the release workflow. `@regression:R10-native-build-prerequisites`
+keeps the README, workflow, and preflight package lists aligned.
 
 ## Verification
 
-Before publishing, a fresh dependency install and the exact static build
-passed:
+The failing clone was preserved only under `/tmp`; it was not changed. After
+installing the documented Linux package set, a second isolated clone passed
+the exact native command and emitted unsigned Linux AppImage, DEB, and RPM
+bundles. The repaired checkout also passes:
 
 ```sh
 npm ci
+npm run native:prereqs
+npm run test:unit -- --testNamePattern 'R11-native-preflight|R10-native-build-prerequisites|F13-2'
+npx vitest run --exclude tests/unit/published-release.test.ts
+npx playwright test
 npm run build
-```
-
-After installing the documented Linux prerequisites, all native packages
-completed successfully:
-
-```sh
+npm run build:app
 cargo test --manifest-path src-tauri/Cargo.toml
 CI=1 npm run tauri -- build
 ```
 
-The native build emitted these unsigned Linux artifacts:
+Before deployment, the full `npm test` suite, every exact command in
+`.factory/claims.json`, published-release checksum and identity test, and
+installer tests are run again after `v0.1.10` is published. The browser suite
+covers Chromium desktop and 390 px mobile, keyboard operation, focus, serious
+and critical Axe findings, reduced motion, offline reload, service-worker
+update, demo storage isolation, local-only conversion, and CSV/JSON exports.
 
-- `Food Log Export Kit_0.1.9_amd64.AppImage`
-- `Food Log Export Kit_0.1.9_amd64.deb`
-- `Food Log Export Kit-0.1.9-1.x86_64.rpm`
+## Release and deployment
 
-The pre-release suite passed with only the intentionally publication-dependent
-candidate-installer claim excluded:
+The `v0.1.10` GitHub Actions release workflow builds Apple Silicon and Intel
+macOS DMGs, Windows MSI and setup EXE, and Linux AppImage, DEB, and RPM. It
+publishes `SHA256SUMS` and `latest.json` with the tagged source commit and
+checks every asset before completing. The landing page exposes a platform
+installer only when its release tag and source commit match the deployed
+`release-identity.json`.
 
-```sh
-npx vitest run --exclude tests/unit/published-release.test.ts
-npx playwright test
-```
-
-The Playwright suite covers Chromium desktop and 390px mobile, keyboard focus
-and selected filter state, axe serious/critical violations, reduced motion,
-offline reload, controlled service-worker update, demo storage isolation,
-privacy request boundaries, and exports. After release publication the full
-`npm test`, every exact command in `.factory/claims.json`, published release
-identity check, installer checksum check, deployment route check, and live URL
-verification are run against the tagged candidate.
-
-## Release and deploy
-
-Push the final commit and tag `v0.1.9`. The GitHub Actions release workflow
-builds macOS arm64/x64, Windows MSI/EXE, and Linux AppImage/DEB/RPM assets,
-then creates `SHA256SUMS` and `latest.json` with the tagged source commit.
-The live candidate-installer test verifies the tag, peeled commit, manifest,
-checksums, direct asset URLs, and a downloaded installer.
-
-Deploy only `dist/site/` with:
+Build and deploy the final site with:
 
 ```sh
+npm run build:site
 /opt/fleet/lib/deploy-static.sh food-log-export-kit dist/site
 ```
 
-This targets the product's `sf-food-log-export-kit` static resource. The site
-build embeds the same tag candidate in `release-identity.json`, so the landing
-page offers downloads only after its installer release is published.
+The deployment target is the allowed `sf-food-log-export-kit` static resource.
+Post-deploy verification covers `/`, `/demo`, `/app`, `/privacy`, and `/terms`
+with `/opt/fleet/lib/verify-url.sh`, plus live release identity and direct
+installer checks.
 
-## Known gaps and operator action
+## Known gap and operator action
 
-macOS and Windows installers are unsigned. Signing requires owner-managed
-`APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` secrets in the release workflow.
-No food data, analytics, or account service is added by this repair.
+macOS and Windows desktop builds are unsigned. Signing requires the
+owner-managed `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` workflow secrets.
+The app adds no food-data server, account service, analytics, or telemetry.

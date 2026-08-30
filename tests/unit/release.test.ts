@@ -42,13 +42,13 @@ describe('release asset selection', () => {
 
   it('@regression:V14-release-identity requires both current version and current candidate identity', () => {
     const current = {
-      tag_name: 'v0.1.9',
+      tag_name: 'v0.1.10',
       target_commitish: 'current-candidate',
-      html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.9',
+      html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.10',
       assets
     };
-    expect(selectCurrentRelease(current, '0.1.9', 'current-candidate')).toEqual(current);
-    expect(selectCurrentRelease({ ...current, tag_name: 'v0.1.8' }, '0.1.9', 'current-candidate')).toBeUndefined();
-    expect(selectCurrentRelease({ ...current, target_commitish: 'older-candidate' }, '0.1.9', 'current-candidate')).toBeUndefined();
+    expect(selectCurrentRelease(current, '0.1.10', 'current-candidate')).toEqual(current);
+    expect(selectCurrentRelease({ ...current, tag_name: 'v0.1.9' }, '0.1.10', 'current-candidate')).toBeUndefined();
+    expect(selectCurrentRelease({ ...current, target_commitish: 'older-candidate' }, '0.1.10', 'current-candidate')).toBeUndefined();
   });
 });

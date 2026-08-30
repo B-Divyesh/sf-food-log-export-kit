@@ -58,6 +58,7 @@ Open `http://127.0.0.1:4173/demo` for the isolated sample workspace.
 npm test
 npm run build:site
 npm run build:app
+npm run native:prereqs # Linux only; verifies the packages above
 npm run tauri build
 ```
 
