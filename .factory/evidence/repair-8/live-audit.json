@@ -1,0 +1,65 @@
+{
+  "checkedAt": "2026-08-30T04:43:02.023Z",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "Food Log Export Kit — Save your food history",
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/demo",
+      "status": 200,
+      "title": "Demo — Food Log Export Kit",
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/app",
+      "status": 200,
+      "title": "Archive — Food Log Export Kit",
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/privacy",
+      "status": 200,
+      "title": "Privacy — Food Log Export Kit",
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/terms",
+      "status": 200,
+      "title": "Terms — Food Log Export Kit",
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/missing-repair-8",
+      "status": 404,
+      "title": "Page not found — Food Log Export Kit",
+      "serious": 0,
+      "errors": []
+    }
+  ],
+  "desktop": {
+    "download": "https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/Food.Log.Export.Kit_0.1.7_amd64.AppImage",
+    "keyboardExport": "food-log.csv"
+  },
+  "mobile": {
+    "width": 390,
+    "overflow": 0,
+    "undersizedTargets": 0,
+    "sampleVisible": true
+  },
+  "privacy": {
+    "demoCrossOriginRequests": 0
+  },
+  "offline": {
+    "controlled": true,
+    "sampleReloaded": true,
+    "notice": true
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "version": "0.1.7",
+  "release_tag": "v0.1.7",
+  "source_commit": "6f4bb7f207528aa36ed7e1a2e8f13ace474f4066",
+  "platforms": {
+    "macos": [
+      "https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/Food.Log.Export.Kit_0.1.7_aarch64.dmg",
+      "https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/Food.Log.Export.Kit_0.1.7_x64.dmg"
+    ],
+    "windows": [
+      "https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/Food.Log.Export.Kit_0.1.7_x64-setup.exe",
+      "https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/Food.Log.Export.Kit_0.1.7_x64_en-US.msi"
+    ],
+    "linux": [
+      "https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/Food.Log.Export.Kit-0.1.7-1.x86_64.rpm",
+      "https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/Food.Log.Export.Kit_0.1.7_amd64.AppImage",
+      "https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/Food.Log.Export.Kit_0.1.7_amd64.deb"
+    ]
+  },
+  "checksums": {
+    "Food.Log.Export.Kit-0.1.7-1.x86_64.rpm": "efc5c544dbea48876767566de532a311bf8c8d91337514c85219b76f42ead174",
+    "Food.Log.Export.Kit_0.1.7_aarch64.dmg": "f43995be0025add0679ec5f6a1510773c631da029bde3d844ed630b4525f625d",
+    "Food.Log.Export.Kit_0.1.7_amd64.AppImage": "bc0882f2f3c09e87eef36c98dacd28b37ae87e6a577d6bbcfd51802c7ff69ecd",
+    "Food.Log.Export.Kit_0.1.7_amd64.deb": "af7cc5513a523e681b13e5d2dc6ebc6a0ea5b9df478488a2fdd1cf1f3cad7d39",
+    "Food.Log.Export.Kit_0.1.7_x64-setup.exe": "1ea2edbc7e24701e6e7bb2fb1ac79cf97e410de62aff140c311150ea6652216e",
+    "Food.Log.Export.Kit_0.1.7_x64.dmg": "2dc358ce88e9154a29f36439710218898083fe77ec6fea0f08c2c894d9884c3c",
+    "Food.Log.Export.Kit_0.1.7_x64_en-US.msi": "ec3d12722c3d7d6a5a49b73ccbdc4bce42e3b3124518f2e4664117121addd3bf",
+    "Food.Log.Export.Kit_aarch64.app.tar.gz": "a856b6559f6f8709831be70eee10861498c2df220ba269e8f3028ec01ef659d0",
+    "Food.Log.Export.Kit_x64.app.tar.gz": "6fc6f12c42465a0827c15263a3a2879250636a3e391ab64c9f0acf5a78a23b5f"
+  }
+}
