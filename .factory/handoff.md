@@ -66,10 +66,27 @@ desktop app with its static companion site and local-first import/export flow.
 
 ## Deployment
 
-Pending the static deployment immediately following the repair commit. The
-deployment uses `/opt/fleet/lib/deploy-static.sh food-log-export-kit dist/site`.
-After it completes, verify the byte-different v6 worker from a profile that was
-previously controlled by v5, as well as a clean profile.
+Deployed to <https://food-log-export-kit.sociobot.in> on 2026-08-30 UTC with
+`/opt/fleet/lib/deploy-static.sh food-log-export-kit dist/site` from repair
+commit `d1d6b68a78fef91b139e82dc7896deae9da0e470`.
+
+- Live `/sw.js` SHA-256 is
+  `1e9a528a71ac4a8d877d706671514bc3adfa2f9f8be4a3165253b3d34400c0f0`,
+  exactly matching `dist/site/sw.js`; it declares v6 and has the required
+  30-second revalidation response policy.
+- A live persistent Chromium context was first controlled by a v5 fixture,
+  then updated against the deployed worker. It received `controllerchange`,
+  removed v5, activated v6, and reloaded the current `Save your food history`
+  page.
+- `/opt/fleet/lib/verify-url.sh` passed live on the five supported routes.
+  Live desktop and 390 px AxeBuilder scans found zero serious/critical issues
+  and zero console/page errors. The live demo made no cross-origin requests
+  during CSV export, then reopened offline with its named sample and offline
+  status.
+- Live `/`, `/demo`, `/app`, `/privacy`, and `/terms` return 200; the designed
+  unknown route returns HTTP 404. Live headers include CSP
+  `frame-ancestors 'none'`, HSTS, nosniff, strict-origin referrer policy, and
+  denied camera/microphone/geolocation.
 
 ## Known gaps
 
