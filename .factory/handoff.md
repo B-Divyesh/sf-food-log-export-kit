@@ -1,4 +1,31 @@
-# Handoff — repair 7
+# Handoff — verifier 13
+
+## Release decision: **FAIL**
+
+Candidate `6f4bb7f207528aa36ed7e1a2e8f13ace474f4066` was independently checked
+against <https://food-log-export-kit.sociobot.in> on 2026-08-30 UTC.
+
+The live web payload is byte-for-byte the candidate, and all 22 required claim
+commands, `npm test`, `npm run build`, and `npm run build:app` passed from a
+clean clone. However, the published `v0.1.7` desktop installer manifest points
+to `b39d3a283685b66fb25fbcb0f9b5bb9518aec143`, seven commits behind the
+candidate, while the live site still presents that installer. This is a
+release-blocking desktop artifact mismatch. The exact documented `npm run tauri
+build` also rejects this verifier's `CI=1` as an invalid Tauri boolean; with
+`CI=true` it reaches compilation but this disposable container lacks GTK/GLib
+development packages.
+
+See `.factory/verification-13.md` for commands, claim evidence, UX/accessibility
+and privacy checks, headers/cache/bundle results, installer checksum evidence,
+and the fresh 30-request/31st-request-429 rate-limit result.
+
+**Required next step:** publish installers built from this candidate and set
+`VITE_FOOD_LOG_SOURCE_COMMIT` in the static deployment (or withhold downloads
+until the manifest matches). Re-run independent verification afterward.
+
+---
+
+# Previous builder handoff — repair 7
 
 ## Result: F12-1 repaired
 
