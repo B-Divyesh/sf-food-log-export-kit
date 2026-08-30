@@ -83,15 +83,79 @@
       "src_tauri_gen_schemas_linux_schema_windows_type"
     ],
     "2": [
-      "src_build",
-      "src_build_appversion",
-      "src_build_sourcecommit",
+      "src_app",
+      "src_app_announce",
+      "src_app_appheader",
+      "src_app_appstate",
+      "src_app_bindapp",
+      "src_app_demobanner",
+      "src_app_demofirstrecord",
+      "src_app_emptypanel",
+      "src_app_emptystate",
+      "src_app_escapehtml",
+      "src_app_licensepanel",
+      "src_app_loadsample",
+      "src_app_number",
+      "src_app_readfiles",
+      "src_app_renderapp",
+      "src_app_rerender",
+      "src_app_reviewpanel",
+      "src_app_startapp",
+      "src_app_state",
+      "src_app_steps",
+      "src_app_totals",
+      "src_icons",
+      "src_icons_icons",
       "src_license",
       "src_license_acceptlicensefromurl",
       "src_license_cachedverdict",
       "src_license_checkouturl",
       "src_license_licensestate",
+      "src_license_optimisticlicense",
       "src_license_removelicense",
+      "src_license_storedlicense",
+      "src_license_verifylicense",
+      "src_sample",
+      "src_sample_samplecsv",
+      "src_shell_mainnavigation"
+    ],
+    "3": [
+      "src_csv",
+      "src_csv_countoutsidequotes",
+      "src_csv_detectdelimiter",
+      "src_csv_encodecsv",
+      "src_csv_parsecsv",
+      "src_exporter",
+      "src_exporter_csvheaders",
+      "src_exporter_exportarchive",
+      "src_exporter_exportcsv",
+      "src_exporter_savetext",
+      "src_importer",
+      "src_importer_aliases",
+      "src_importer_asdate",
+      "src_importer_asnumber",
+      "src_importer_astext",
+      "src_importer_collectunmappedfields",
+      "src_importer_findvalue",
+      "src_importer_hasvalue",
+      "src_importer_importtext",
+      "src_importer_mappedinputkeys",
+      "src_importer_maprecord",
+      "src_importer_normalized",
+      "src_importer_normalizedfield",
+      "src_importer_objectsfromjson",
+      "src_importer_valuefornote",
+      "src_types",
+      "src_types_foodrecord",
+      "src_types_importissue",
+      "src_types_importresult",
+      "src_types_recordkind",
+      "tests_unit_importer_test"
+    ],
+    "4": [
+      "src_build",
+      "src_build_appversion",
+      "src_build_sourcecommit",
       "src_main",
       "src_main_bindlinks",
       "src_main_istauri",
@@ -116,72 +180,8 @@
       "src_shell",
       "src_shell_footer",
       "src_shell_header",
-      "src_shell_mainnavigation",
       "tests_unit_release_test",
       "tests_unit_release_test_assets"
-    ],
-    "3": [
-      "src_app",
-      "src_app_announce",
-      "src_app_appheader",
-      "src_app_appstate",
-      "src_app_bindapp",
-      "src_app_demobanner",
-      "src_app_demofirstrecord",
-      "src_app_emptypanel",
-      "src_app_emptystate",
-      "src_app_escapehtml",
-      "src_app_licensepanel",
-      "src_app_loadsample",
-      "src_app_number",
-      "src_app_readfiles",
-      "src_app_renderapp",
-      "src_app_rerender",
-      "src_app_reviewpanel",
-      "src_app_startapp",
-      "src_app_state",
-      "src_app_steps",
-      "src_app_totals",
-      "src_exporter_savetext",
-      "src_icons",
-      "src_icons_icons",
-      "src_importer_importtext",
-      "src_license_optimisticlicense",
-      "src_license_storedlicense",
-      "src_license_verifylicense",
-      "src_sample",
-      "src_sample_samplecsv"
-    ],
-    "4": [
-      "src_csv",
-      "src_csv_countoutsidequotes",
-      "src_csv_detectdelimiter",
-      "src_csv_encodecsv",
-      "src_csv_parsecsv",
-      "src_exporter",
-      "src_exporter_csvheaders",
-      "src_exporter_exportarchive",
-      "src_exporter_exportcsv",
-      "src_importer",
-      "src_importer_aliases",
-      "src_importer_asdate",
-      "src_importer_asnumber",
-      "src_importer_astext",
-      "src_importer_collectunmappedfields",
-      "src_importer_findvalue",
-      "src_importer_hasvalue",
-      "src_importer_mappedinputkeys",
-      "src_importer_maprecord",
-      "src_importer_normalized",
-      "src_importer_normalizedfield",
-      "src_importer_objectsfromjson",
-      "src_importer_valuefornote",
-      "src_types",
-      "src_types_foodrecord",
-      "src_types_importissue",
-      "src_types_importresult",
-      "src_types_recordkind",
-      "tests_unit_importer_test"
     ],
     "5": [
       "ref_icons_128x128_2x_png",
@@ -362,88 +362,104 @@
       "src_tauri_gen_schemas_linux_schema_json_ref_permissions"
     ],
     "13": [
+      "tests_unit_published_release_test",
+      "tests_unit_published_release_test_apiheaders",
+      "tests_unit_published_release_test_asset",
+      "tests_unit_published_release_test_publishedrelease",
+      "tests_unit_published_release_test_releasemanifest",
+      "tests_unit_published_release_test_requireresponse"
+    ],
+    "14": [
       "factory_evidence_polish_5_live_audit",
       "factory_evidence_polish_5_live_audit_downloadtext",
       "factory_evidence_polish_5_live_audit_expectednavigation",
       "factory_evidence_polish_5_live_audit_report",
       "factory_evidence_polish_5_live_audit_routes"
     ],
-    "14": [
+    "15": [
+      "scripts_source_commit",
+      "scripts_source_commit_resolvesourcecommit",
+      "tests_unit_tooling_test",
+      "vite_config",
+      "vite_config_sourcecommit"
+    ],
+    "16": [
       "tests_unit_installer_test",
       "tests_unit_installer_test_availablepowershell",
       "tests_unit_installer_test_installer",
       "tests_unit_installer_test_nodesha256",
       "tests_unit_installer_test_sha256"
     ],
-    "15": [
+    "17": [
       "public_install_choose_bin_dir",
       "public_install_fail",
       "public_install_sh__entry",
       "public_install_sh_public_install"
     ],
-    "16": [
+    "18": [
       "public_sw",
       "public_sw_cachefirst",
       "public_sw_networkfirst",
       "public_sw_shell"
     ],
-    "17": [
+    "19": [
       "tests_fixtures_windows_installer_harness",
       "tests_fixtures_windows_installer_harness_invoke_restmethod",
       "tests_fixtures_windows_installer_harness_invoke_webrequest",
       "tests_fixtures_windows_installer_harness_start_process"
     ],
-    "18": [
+    "20": [
+      "cli",
+      "scripts_tauri"
+    ],
+    "21": [
       "src_tauri_build",
       "src_tauri_build_main"
     ],
-    "19": [
+    "22": [
       "src_tauri_src_lib",
       "src_tauri_src_lib_run"
     ],
-    "20": [
+    "23": [
       "src_tauri_src_main",
       "src_tauri_src_main_main"
     ],
-    "21": [
+    "24": [
       "tests_e2e_service_worker_update_spec",
       "tests_e2e_service_worker_update_spec_worker"
     ],
-    "22": [
+    "25": [
       "tests_unit_release_version_test",
       "tests_unit_release_version_test_read"
     ],
-    "23": [
+    "26": [
       "pkg_food_log_export_kit"
     ],
-    "24": [
+    "27": [
       "playwright_config"
     ],
-    "25": [
-      "public_install"
-    ],
-    "26": [
-      "tests_e2e_accessibility_spec"
-    ],
-    "27": [
-      "tests_e2e_claims_spec"
-    ],
     "28": [
-      "tests_unit_hosting_test"
+      "public_install_ps1_public_install"
     ],
     "29": [
-      "vite_config"
+      "tests_e2e_accessibility_spec"
     ],
     "30": [
+      "tests_e2e_claims_spec"
+    ],
+    "31": [
+      "tests_unit_hosting_test"
+    ],
+    "32": [
       "vitest_config"
     ]
   },
   "cohesion": {
     "0": 0.05398110661268556,
     "1": 0.05398110661268556,
-    "2": 0.1253968253968254,
-    "3": 0.15402298850574714,
-    "4": 0.1330049261083744,
+    "2": 0.12773109243697478,
+    "3": 0.13118279569892474,
+    "4": 0.1625615763546798,
     "5": 0.07407407407407407,
     "6": 0.07407407407407407,
     "7": 0.07407407407407407,
@@ -452,13 +468,13 @@
     "10": 0.13333333333333333,
     "11": 0.2,
     "12": 0.2222222222222222,
-    "13": 0.4,
+    "13": 0.3333333333333333,
     "14": 0.4,
-    "15": 0.6666666666666666,
-    "16": 0.5,
-    "17": 0.5,
-    "18": 1.0,
-    "19": 1.0,
+    "15": 0.7,
+    "16": 0.4,
+    "17": 0.6666666666666666,
+    "18": 0.5,
+    "19": 0.5,
     "20": 1.0,
     "21": 1.0,
     "22": 1.0,
@@ -469,7 +485,9 @@
     "27": 1.0,
     "28": 1.0,
     "29": 1.0,
-    "30": 1.0
+    "30": 1.0,
+    "31": 1.0,
+    "32": 1.0
   },
   "gods": [
     {
@@ -525,10 +543,21 @@
   ],
   "surprises": [
     {
-      "source": "licensePanel()",
+      "source": "render()",
+      "target": "acceptLicenseFromUrl()",
+      "source_files": [
+        "src/main.ts",
+        "src/license.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "landingPage()",
       "target": "checkoutUrl()",
       "source_files": [
-        "src/app.ts",
+        "src/pages.ts",
         "src/license.ts"
       ],
       "confidence": "EXTRACTED",
@@ -549,17 +578,6 @@
     {
       "source": "renderApp()",
       "target": "footer()",
-      "source_files": [
-        "src/app.ts",
-        "src/shell.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "appHeader()",
-      "target": "mainNavigation()",
       "source_files": [
         "src/app.ts",
         "src/shell.ts"
