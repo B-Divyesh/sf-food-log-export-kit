@@ -2528,7 +2528,7 @@
       "source_file": "src-tauri/Cargo.toml",
       "source_location": "L1",
       "type": "package",
-      "version": "0.1.8"
+      "version": "0.1.9"
     },
     {
       "id": "playwright_config",
@@ -9943,5 +9943,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "0f13c9e0bd84aaea8208c806852dbbc2952b693e"
+  "built_at_commit": "1fb7633669c3e88c0148d9ec28b110484fdd8f43"
 }
