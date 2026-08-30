@@ -1,0 +1,443 @@
+{
+  "checkedAt": "2026-08-30T02:06:08.232Z",
+  "routes": [
+    {
+      "path": "/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": 200,
+      "title": "Food Log Export Kit — Save your food history",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/?demo=1",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": 200,
+      "title": "Demo — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/demo",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": 200,
+      "title": "Demo — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/app",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": 200,
+      "title": "Archive — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/privacy",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": 200,
+      "title": "Privacy — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/terms",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": 200,
+      "title": "Terms — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/not-a-real-route",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": 404,
+      "title": "Page not found — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": 200,
+      "title": "Food Log Export Kit — Save your food history",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/?demo=1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": 200,
+      "title": "Demo — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/demo",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": 200,
+      "title": "Demo — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/app",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": 200,
+      "title": "Archive — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/privacy",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": 200,
+      "title": "Privacy — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/terms",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": 200,
+      "title": "Terms — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    },
+    {
+      "path": "/not-a-real-route",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": 404,
+      "title": "Page not found — Food Log Export Kit",
+      "navigation": [
+        [
+          "Demo",
+          "/demo"
+        ],
+        [
+          "How it works",
+          "/#how"
+        ],
+        [
+          "Privacy",
+          "/privacy"
+        ],
+        [
+          "Terms",
+          "/terms"
+        ]
+      ],
+      "serious": 0,
+      "errors": []
+    }
+  ],
+  "demo": {
+    "firstRecordBottom": 615.546875,
+    "resetCount": 12,
+    "csvRows": 12,
+    "jsonRecords": 12,
+    "storageUntouched": true,
+    "crossOriginRequests": 0,
+    "exitPath": "/app",
+    "offlineReload": true
+  },
+  "import": {
+    "fiberNote": true,
+    "fiberPreserved": true,
+    "crossOriginRequests": 0
+  },
+  "payment": {
+    "status": 303,
+    "checkoutOrigin": "https://checkout.dodopayments.com"
+  },
+  "release": {
+    "downloadUrl": "https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/Food.Log.Export.Kit_0.1.7_amd64.AppImage",
+    "notesUrl": "https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.7"
+  },
+  "focus": {
+    "privacy": true,
+    "backToLanding": true
+  },
+  "copy": {
+    "oldPhrasesAbsent": true,
+    "replacementsPresent": true
+  },
+  "errors": []
+}
