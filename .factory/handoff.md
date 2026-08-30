@@ -107,9 +107,12 @@ Static deployment target identified from the work-order identity:
 - Default hostname: `victorious-bush-0989e0710.7.azurestaticapps.net`
 - Custom domain: `food-log-export-kit.sociobot.in` (status `Ready`)
 
-Deploy the already-built `dist/site/` to that production Static Web App after
-this repair commit. The native release workflow remains the existing tag-driven
-GitHub Actions workflow; no native product source changed in this repair.
+Deployment completed to production on 2026-08-30 at 03:26:35 UTC using the
+work-order Azure identity and the verified `dist/site/` payload. The live
+`index.html`, `sw.js`, and `manifest.webmanifest` SHA-256 values match the
+local production output exactly. The native release workflow remains the
+existing tag-driven GitHub Actions workflow; no native product source changed
+in this repair.
 
 ## Known gaps / operator action
 
