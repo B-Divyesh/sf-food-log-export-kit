@@ -2,9 +2,9 @@
 
 Turn food tracker exports into a local archive.
 
-Food Log Export Kit is for people leaving a food tracker. It reads CSV and JSON food tracker exports. It keeps meal, recipe, nutrition, and weight fields. It exports a CSV and JSON archive. Files, rows, and populated fields it cannot map appear in conversion notes. JSON preserves those unmapped field values.
+Food Log Export Kit is for people leaving a food tracker. It reads CSV and JSON food tracker exports. It keeps meal, recipe, nutrition, and weight fields. It exports a CSV and JSON archive. Files, rows, and populated fields the app does not recognize appear in conversion notes. JSON preserves those original field values.
 
-The website and desktop app convert food data on your device. The project has no tracker, account system, food-data server, or medical advice. The sample demo contacts only this website.
+The website and desktop app convert food data on your device. The project does not track meals, require an account, store food data on a server, or give medical advice. The sample demo contacts only this website.
 
 Live site: <https://food-log-export-kit.sociobot.in>
 
@@ -34,11 +34,11 @@ On Windows, this command verifies and starts the MSI installer:
 irm https://food-log-export-kit.sociobot.in/install.ps1 | iex
 ```
 
-Review the [release notes](https://github.com/B-Divyesh/sf-food-log-export-kit/releases/latest) for the platform-specific open step.
+Review the [release notes](https://github.com/B-Divyesh/sf-food-log-export-kit/releases/latest) for the steps to open the app on your system.
 
 ## Run locally
 
-Requires Node.js 22. Rust is needed only for the desktop shell.
+Requires Node.js 22. Rust is needed only to build the desktop app.
 
 ```sh
 npm install
@@ -65,7 +65,7 @@ Tested product claims are listed in [`.factory/claims.json`](.factory/claims.jso
 - `src/importer.ts` — format detection and normalization
 - `src/exporter.ts` — CSV and portable JSON output
 - `src/app.ts` — local workspace and demo
-- `src-tauri/` — Tauri 2 desktop shell
+- `src-tauri/` — Tauri 2 desktop app code
 - `.github/workflows/release.yml` — cross-platform release builds
 
 ## Deploy

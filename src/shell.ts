@@ -1,14 +1,18 @@
 import { appVersion } from './build';
 
+export function mainNavigation(active = ''): string {
+  return `<nav aria-label="Main navigation">
+      <a href="/demo" data-link ${active === 'demo' ? 'aria-current="page"' : ''}>Demo</a>
+      <a href="/#how" data-link>How it works</a>
+      <a href="/privacy" data-link ${active === 'privacy' ? 'aria-current="page"' : ''}>Privacy</a>
+      <a href="/terms" data-link ${active === 'terms' ? 'aria-current="page"' : ''}>Terms</a>
+    </nav>`;
+}
+
 export function header(active = ''): string {
   return `<header class="site-header">
     <a class="wordmark" href="/" data-link aria-label="Food Log Export Kit home"><span class="wordmark-mark" aria-hidden="true">F</span><span>Food Log<br><b>Export Kit</b></span></a>
-    <nav aria-label="Main navigation">
-      <a href="/demo" data-link ${active === 'demo' ? 'aria-current="page"' : ''}>Demo</a>
-      <a href="/#how">How it works</a>
-      <a href="/privacy" data-link ${active === 'privacy' ? 'aria-current="page"' : ''}>Privacy</a>
-      <a href="/terms" data-link ${active === 'terms' ? 'aria-current="page"' : ''}>Terms</a>
-    </nav>
+    ${mainNavigation(active)}
   </header>`;
 }
 

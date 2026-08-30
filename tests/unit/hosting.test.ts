@@ -25,7 +25,7 @@ describe('static hosting routes', () => {
 
   it('gives the static 404 page the shared metadata, navigation, and footer', () => {
     const page = readFileSync(new URL('../../public/404.html', import.meta.url), 'utf8');
-    for (const marker of ['rel="canonical"', 'property="og:title"', 'property="og:url"', 'name="twitter:card"', 'apple-touch-icon', 'Main navigation', 'href="/terms"', 'Built by Param Factory', 'Version 0.1.6 · release repair']) {
+    for (const marker of ['rel="canonical"', 'property="og:title"', 'property="og:url"', 'name="twitter:card"', 'apple-touch-icon', 'Main navigation', 'href="/terms"', 'Built by Param Factory', 'Version 0.1.7 · release repair']) {
       expect(page).toContain(marker);
     }
   });
@@ -34,7 +34,7 @@ describe('static hosting routes', () => {
     const page = readFileSync(new URL('../../public/404.html', import.meta.url), 'utf8');
     const shell = readFileSync(new URL('../../src/shell.ts', import.meta.url), 'utf8');
     const build = 'Version ${appVersion} · release repair · Generated artwork';
-    expect(page).toContain(build.replace('${appVersion}', '0.1.6'));
+    expect(page).toContain(build.replace('${appVersion}', '0.1.7'));
     expect(shell).toContain(build);
   });
 
@@ -50,6 +50,20 @@ describe('static hosting routes', () => {
     expect(readme).toContain('checks that the downloaded file was not changed');
     expect(readme).toContain('command so you can run it from a terminal');
     expect(readme).toContain('[release notes](https://github.com/B-Divyesh/sf-food-log-export-kit/releases/latest)');
+  });
+
+  it('keeps review 5 wording concrete and consistent', () => {
+    const pages = readFileSync(new URL('../../src/pages.ts', import.meta.url), 'utf8');
+    const readme = readFileSync(new URL('../../README.md', import.meta.url), 'utf8');
+    for (const oldCopy of ['Use CSV now', 'No account scraping', 'Unmapped fields are reported']) {
+      expect(pages).not.toContain(oldCopy);
+    }
+    for (const replacement of ['Use the CSV in a spreadsheet', 'does not sign in to your tracker', 'Unrecognized fields appear in conversion notes']) {
+      expect(pages).toContain(replacement);
+    }
+    for (const oldCopy of ['it cannot map', 'unmapped field values', 'has no tracker, account system', 'platform-specific open step', 'desktop shell']) {
+      expect(readme).not.toContain(oldCopy);
+    }
   });
 
   it('keeps the review promise within the tested conversion-note scope', () => {

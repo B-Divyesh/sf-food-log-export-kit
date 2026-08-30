@@ -1,1 +1,1 @@
-Export food tracker history as local CSV and JSON files.
+Convert food tracker exports into CSV and JSON archives.

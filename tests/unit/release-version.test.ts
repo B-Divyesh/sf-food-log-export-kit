@@ -13,7 +13,7 @@ describe('desktop release regression', () => {
     const footer = read('src/shell.ts');
     const notFound = read('public/404.html');
 
-    expect(packageVersion).toBe('0.1.6');
+    expect(packageVersion).toBe('0.1.7');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);
@@ -24,9 +24,13 @@ describe('desktop release regression', () => {
     expect(notFound).toContain(`Version ${packageVersion} · release repair`);
   });
 
-  it('requires a matching tag and verifies the published installer assets and checksums', () => {
+  it('@claim:release-workflow starts both Mac architectures, Windows, and Linux from a v* tag', () => {
     const workflow = read('.github/workflows/release.yml');
     expect(workflow).toContain("tags: ['v*']");
+    expect(workflow).toContain('target: x86_64-apple-darwin');
+    expect(workflow).toContain('target: aarch64-apple-darwin');
+    expect(workflow).toContain('platform: windows-latest');
+    expect(workflow).toContain('platform: ubuntu-22.04');
     expect(workflow).toContain('release_tag:');
     expect(workflow).toContain('ref: ${{ github.ref_type == \'tag\' && github.ref || inputs.release_tag }}');
     expect(workflow).toContain('Verify release tag matches the desktop and site version');

@@ -3,7 +3,7 @@ import { icons } from './icons';
 import { importText } from './importer';
 import { checkoutUrl, optimisticLicense, storedLicense, verifyLicense } from './license';
 import { sampleCsv } from './sample';
-import { footer } from './shell';
+import { footer, mainNavigation } from './shell';
 import type { FoodRecord, ImportIssue } from './types';
 
 interface AppState {
@@ -36,7 +36,7 @@ function totals(records: FoodRecord[]) {
 function appHeader(): string {
   return `<header class="app-header">
     <a class="wordmark" href="/" data-link aria-label="Food Log Export Kit home"><span class="wordmark-mark" aria-hidden="true">F</span><span>Food Log <b>Export Kit</b></span></a>
-    <div class="app-header-actions"><span class="local-badge">${icons.shield} On this device</span><nav aria-label="Main navigation"><a href="/" data-link>Home</a><a href="/demo" data-link ${state.demo ? 'aria-current="page"' : ''}>Demo</a><a href="/privacy" data-link>Privacy</a><a href="/terms" data-link>Terms</a></nav></div>
+    <div class="app-header-actions"><span class="local-badge">${icons.shield} On this device</span>${mainNavigation(state.demo ? 'demo' : '')}</div>
   </header>`;
 }
 
@@ -88,7 +88,7 @@ function reviewPanel(): string {
     ${state.issues.length ? `<details class="issues"><summary>${icons.warn} Review ${state.issues.length} conversion ${state.issues.length === 1 ? 'note' : 'notes'}</summary><ol>${state.issues.map((issue) => `<li><b>${issue.row > 0 ? `Row ${issue.row}: ${escapeHtml(issue.field)}` : `File: ${escapeHtml(issue.field)}`}</b><span>${escapeHtml(issue.message)}</span></li>`).join('')}</ol></details>` : `<p class="success-line">${icons.check} No rows or populated fields need a conversion note.</p>`}
     <div class="table-tools"><div class="filter-group" role="group" aria-label="Filter entries">${(['all', 'meal', 'recipe', 'weight'] as const).map((filter) => `<button class="filter ${state.filter === filter ? 'selected' : ''}" data-filter="${filter}">${filter === 'all' ? 'All entries' : `${filter[0].toUpperCase()}${filter.slice(1)}s`}</button>`).join('')}</div><span>${shown.length} shown</span></div>
     <div class="record-table-wrap"><table class="record-table"><caption class="sr-only">Food log entries with consistent fields</caption><thead><tr><th>Date</th><th>Meal</th><th>Item</th><th>Amount</th><th>Calories</th><th>Protein</th><th>Carbs</th><th>Fat</th></tr></thead><tbody>${shown.map((record) => `<tr><td data-label="Date">${escapeHtml(record.date || 'Date missing')}</td><td data-label="Meal">${escapeHtml(record.kind === 'weight' ? 'Weight' : record.meal || '—')}</td><td data-label="Item"><b>${escapeHtml(record.item)}</b>${record.notes ? `<small>${escapeHtml(record.notes)}</small>` : ''}</td><td data-label="Amount">${escapeHtml([record.amount, record.unit].filter(Boolean).join(' ') || '—')}</td><td data-label="Calories">${number(record.calories)}</td><td data-label="Protein">${number(record.protein_g, ' g')}</td><td data-label="Carbs">${number(record.carbs_g, ' g')}</td><td data-label="Fat">${number(record.fat_g, ' g')}</td></tr>`).join('')}</tbody></table></div>
-    <div class="export-bar"><div><p class="eyebrow">Stage 3 · Export</p><h3>Save your archive</h3><p>CSV opens in spreadsheets. JSON keeps consistent fields, unmapped values, and conversion notes.</p></div><div class="export-actions"><button class="primary-button" id="export-csv">${icons.download} Export CSV</button><button class="secondary-button" id="export-json">${icons.archive} Export JSON</button></div></div>
+    <div class="export-bar"><div><p class="eyebrow">Stage 3 · Export</p><h3>Save your archive</h3><p>CSV opens in spreadsheets. JSON keeps consistent fields, unrecognized field values, and conversion notes.</p></div><div class="export-actions"><button class="primary-button" id="export-csv">${icons.download} Export CSV</button><button class="secondary-button" id="export-json">${icons.archive} Export JSON</button></div></div>
     <button class="danger-link" id="clear-import">Clear this import</button>
   </section>`;
 }

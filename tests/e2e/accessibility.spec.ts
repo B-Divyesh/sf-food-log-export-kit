@@ -70,15 +70,24 @@ test('back navigation restores focus to the landing heading', async ({ page }) =
   await expect(page.getByRole('heading', { name: 'Save your food history' })).toBeFocused();
 });
 
-test('app and demo use the shared navigation and footer', async ({ page }) => {
-  for (const path of ['/app', '/demo']) {
+test('every route uses the same primary navigation destinations and shared footer', async ({ page }) => {
+  const expectedNavigation = [
+    ['Demo', '/demo'],
+    ['How it works', '/#how'],
+    ['Privacy', '/privacy'],
+    ['Terms', '/terms']
+  ];
+  for (const path of ['/', '/demo', '/app', '/privacy', '/terms', '/missing-page', '/404.html']) {
     await page.goto(path);
     const navigation = page.getByLabel('Main navigation');
-    await expect(navigation.getByRole('link', { name: 'Privacy' })).toBeVisible();
-    await expect(navigation.getByRole('link', { name: 'Terms' })).toBeVisible();
+    const destinations = await navigation.locator('a').evaluateAll((links) => links.map((link) => [
+      link.textContent?.trim() ?? '',
+      `${(link as HTMLAnchorElement).pathname}${(link as HTMLAnchorElement).hash}`
+    ]));
+    expect(destinations, `${path} navigation`).toEqual(expectedNavigation);
     const footer = page.locator('footer');
     await expect(footer).toContainText('Built by Param Factory');
-    await expect(footer).toContainText('Version 0.1.6 · release repair');
+    await expect(footer).toContainText('Version 0.1.7 · release repair');
   }
 });
 
@@ -112,16 +121,16 @@ test('reduced motion removes visible movement', async ({ page }) => {
 });
 
 test('landing link crawl includes the selected release notes page', async ({ page, request }) => {
-  const releaseUrl = 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.6';
+  const releaseUrl = 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.7';
   await page.route('https://api.github.com/repos/B-Divyesh/sf-food-log-export-kit/releases/latest', (route) => route.fulfill({
     status: 200,
     contentType: 'application/json',
     body: JSON.stringify({
-      tag_name: 'v0.1.6',
+      tag_name: 'v0.1.7',
       html_url: releaseUrl,
       assets: [{
-        name: 'Food.Log.Export.Kit_0.1.6_amd64.AppImage',
-        browser_download_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.6/Food.Log.Export.Kit_0.1.6_amd64.AppImage'
+        name: 'Food.Log.Export.Kit_0.1.7_amd64.AppImage',
+        browser_download_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/download/v0.1.7/Food.Log.Export.Kit_0.1.7_amd64.AppImage'
       }]
     })
   }));
