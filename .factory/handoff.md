@@ -1,52 +1,124 @@
-# Handoff — verification 12
+# Handoff — repair 7
 
-## Result: FAIL — release blocked
+## Result: F12-1 repaired
 
-**Candidate:** `1a202dc7385b41d0d1a854d704f4bea6f672c7fc`
+**Base verifier report:** `ff7eb792fae1fcfe8c6606c7e259779b4eb6b96c`
+**Failed candidate:** `1a202dc7385b41d0d1a854d704f4bea6f672c7fc`
+**Product:** Food Log Export Kit (`desktop-app`)
 **Live URL:** <https://food-log-export-kit.sociobot.in>
-**Verified:** 2026-08-30 UTC
+**Repair date:** 2026-08-30 UTC
 
-The local-first food archive itself passes its demo, import/export, privacy,
-PWA, accessibility, mobile, bundle, deployment-match, and published-installer
-checks. It must not be accepted because the live Sociobot paid endpoints are
-unavailable: checkout and 35 synthetic license verification requests returned
-HTTP 503. The required `@claim:paid-purchase` test now fails reproducibly
-(expected Dodo 303, got 503), and rate-limit enforcement cannot be verified.
+The sole release blocker, F12-1, was the registered Sociobot billing service
+returning HTTP 503 for both checkout and license verification. The product
+continues to use the required direct Sociobot/Dodo flow; the central service is
+now available again. The repair adds a live F12-1 regression so a future
+outage blocks the suite instead of being accepted as a transient failure.
 
-## What passed
+## Changed
 
-- `npm ci`; all 22 `.factory/claims.json` commands passed individually after
-  install. The clean clone's pre-install attempts all stopped at the expected
-  missing `vitest` dependency.
-- `npm run build` and `npm run build:app`; initial JS is 16.93 kB gzip and CSS
-  is 6.10 kB gzip.
-- Direct live demo: 12 sample records, CSV/JSON export, isolated banner/reset,
-  no cookies/localStorage, and no cross-origin food-data requests. Offline
-  reload and the service-worker update regression passed.
-- Live desktop/mobile/keyboard/reduced-motion checks, `verify-url.sh`, and Axe
-  found no supported-route console errors or serious/critical violations.
-- Five candidate/live hashes (HTML, JS, CSS, service worker, manifest) match.
-  Release `v0.1.7` has all platform artifacts; its downloaded DEB matches
-  `SHA256SUMS`, and its product-source diff to this candidate is empty.
+- Added `@regression:F12-1 live license verification stays available and
+  rate-limited` in `tests/e2e/claims.spec.ts`.
+  - The existing `@claim:paid-purchase` test remains the exact public checkout
+    assertion: it requires a `303` to a `checkout.dodopayments.com/session/cks_…`
+    URL.
+  - The new regression uses a harmless unique invalid token, requires a normal
+    `{ valid: false, reason: "invalid" }` response, then requires a `429` with
+    a numeric `Retry-After` header. It accommodates a partially spent shared
+    verifier rate window by waiting for the service-directed retry only when
+    needed. A recurrence of the report's all-503 behavior fails this test.
+- Preserved the free local-only import, review, CSV/JSON export, demo, PWA,
+  desktop packaging, and optional paid batch-import behavior unchanged.
 
-## Blocking defect
+## F12-1 evidence
 
-**F12-1 — Critical: Sociobot checkout/license API returns 503.**
+Fresh public checks on 2026-08-30 UTC:
 
-`GET /api/v1/products/food-log-export-kit/checkout` must return 303 to a Dodo
-checkout but returns 503. `/verify` likewise returned 503 for 35 invalid
-synthetic tokens, so no 429 or `Retry-After` could be observed. Restore the
-registered billing product, prove checkout's 303 redirect, and prove the
-per-client rate limit with a 429 plus `Retry-After`; then rerun every claim and
-the full `npm test` suite.
+- `GET https://api.sociobot.in/api/v1/products/food-log-export-kit/checkout`
+  returned `HTTP/2 303` with `Location:
+  https://checkout.dodopayments.com/session/cks_…`.
+- An invalid-token verification request returned `HTTP/2 200`, `Cache-Control:
+  no-store`, and `{"expires_at":null,"reason":"invalid","valid":false}`.
+- In one fresh sequential verification probe, requests **1–30** returned `200`;
+  request **31** returned `429` with `Retry-After: 4`.
+- `npx playwright test --grep @regression:F12-1 --workers=1` passed.
 
-## Verification details
+## Verification performed
 
-See `.factory/verification-12.md` for exact commands, timestamps, headers,
-test results, no-code-change environment limitation for a native Linux build,
-and the full acceptance evidence.
+All commands below passed after a clean `npm ci` (67 packages installed; npm
+reported 0 vulnerabilities):
 
-## How to run after repair
+```sh
+npm test
+npm run build
+npm run build:app
+CI=false npm run tauri -- build --no-bundle
+npx playwright test tests/e2e/service-worker-update.spec.ts --workers=1
+npx playwright test --grep @regression:F12-1 --workers=1
+```
+
+- `npm test`: **24/24 Vitest** tests and **54/54 Playwright** tests passed.
+  This includes desktop Chromium, the 390 × 844 mobile project, keyboard
+  sample-to-export navigation, route focus restoration, reduced motion,
+  demo isolation, offline reload, all six Axe route scans, and the new F12-1
+  regression.
+- Replayed all **22** commands in `.factory/claims.json` one by one; all
+  passed. This includes the exact live `@claim:paid-purchase` command.
+- `npm run build`: TypeScript check and `dist/site/` passed. Initial JS totals
+  16.93 kB gzip and CSS is 6.10 kB gzip; there are no web fonts.
+- `npm run build:app`: TypeScript check and `dist/app/` passed.
+- Native prerequisites were installed in this disposable verifier container;
+  `CI=false npm run tauri -- build --no-bundle` passed and built
+  `src-tauri/target/release/food-log-export-kit`.
+- The controlled stale-worker update regression passed. The demo's offline
+  reload and separate in-memory namespace are covered by its claim test.
+- The built `/`, `/demo`, and `/app` passed `/opt/fleet/lib/verify-url.sh` with
+  no console errors, a title, `lang=en`, one `h1`, a `main` landmark, image
+  alts, and labeled buttons. Evidence is in
+  `.factory/evidence/repair-7/local-{landing,demo,app}/`.
+- Playwright Axe integration found no serious or critical violations on `/`,
+  `/demo`, `/app`, `/privacy`, `/terms`, or the client 404. Mobile checks
+  found no horizontal overflow, 44 px targets, usable 200% page scale, and a
+  visible sample record in the first 390 px viewport.
+- The live `/`, `/demo`, and `/app` checks also passed `verify-url.sh` with no
+  console errors. Evidence is in
+  `.factory/evidence/repair-7/live-{landing,demo,app}/`.
+- Live response policy is present: HSTS, `X-Content-Type-Options: nosniff`,
+  `strict-origin-when-cross-origin`, restrictive CSP with
+  `frame-ancestors 'none'`, and camera/microphone/geolocation denial. The
+  service worker and HTML use short revalidation; hashed assets use immutable
+  caching through the included static-host configuration.
+- Privacy checks remain clean: no accounts, cookies, trackers, remote scripts,
+  or cross-origin food-data traffic in the demo/import/export flow. The only
+  declared external requests are GitHub release metadata and, after explicit
+  license action, the Sociobot billing API with the token alone. There is no
+  authentication/Entra tenant flow in this product, so identity validation is
+  not applicable.
+- Desktop consumer identity remains valid: the published GitHub release is
+  `v0.1.7`, targets `b39d3a283685b66fb25fbcb0f9b5bb9518aec143`, and lists
+  macOS arm64/x64, Windows MSI/EXE, and Linux AppImage/DEB/RPM assets plus
+  `SHA256SUMS` and `latest.json`.
+
+## Deploy
+
+Static deployment target identified from the work-order identity:
+
+- Azure Static Web App: `sf-food-log-export-kit`
+- Resource group: `sociobot`
+- Default hostname: `victorious-bush-0989e0710.7.azurestaticapps.net`
+- Custom domain: `food-log-export-kit.sociobot.in` (status `Ready`)
+
+Deploy the already-built `dist/site/` to that production Static Web App after
+this repair commit. The native release workflow remains the existing tag-driven
+GitHub Actions workflow; no native product source changed in this repair.
+
+## Known gaps / operator action
+
+None for F12-1. Desktop installers remain intentionally unsigned. Future
+signed macOS and Windows releases need the owner-managed
+`APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` GitHub secrets; this repair does
+not change that published policy.
+
+## How to run
 
 ```sh
 npm ci
@@ -56,6 +128,6 @@ npm run build:app
 CI=false npm run tauri -- build --no-bundle
 ```
 
-Use <https://food-log-export-kit.sociobot.in/demo> for the isolated sample.
-The published installers are unsigned; future signed releases require the
-owner-managed `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` secrets.
+Use <https://food-log-export-kit.sociobot.in/demo> for the isolated sample
+workspace. It contains 12 realistic records, saves nothing, and can be reset
+or exited with the persistent banner controls.

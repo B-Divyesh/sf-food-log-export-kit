@@ -283,6 +283,36 @@ test('@claim:paid-purchase live checkout redirects to Dodo hosted checkout', asy
   expect(redirect.pathname).toMatch(/^\/session\/cks_/);
 });
 
+test('@regression:F12-1 live license verification stays available and rate-limited', async ({ request }, testInfo) => {
+  // F12-1 was a live 503 from both checkout and verification. The checkout
+  // contract is covered by @claim:paid-purchase immediately above; use one
+  // fresh, harmless token here to prove the verification service returns its
+  // normal JSON before enforcing its documented per-client limit.
+  test.setTimeout(60_000);
+  const token = `qa-invalid-f12-1-${testInfo.workerIndex}-${Date.now()}`;
+  const endpoint = `https://api.sociobot.in/api/v1/products/food-log-export-kit/verify?license=${encodeURIComponent(token)}`;
+  const responses = [];
+  for (let attempt = 0; attempt < 31; attempt += 1) responses.push(await request.get(endpoint, { maxRedirects: 0 }));
+
+  // The public test environment can share an egress address with another
+  // verifier, so its partial allowance can already be spent. A normal reply
+  // and a properly headed 429 still prove both halves of the public contract.
+  let normal = responses.find((response) => response.status() === 200);
+  const throttled = responses.find((response) => response.status() === 429);
+  expect(throttled).toBeDefined();
+  const retryAfter = throttled?.headers()['retry-after'] ?? '';
+  expect(retryAfter).toMatch(/^\d+$/);
+
+  if (!normal) {
+    await new Promise((resolve) => setTimeout(resolve, (Number(retryAfter) + 1) * 1_000));
+    normal = await request.get(endpoint, { maxRedirects: 0 });
+  }
+
+  if (!normal) throw new Error('Verification did not return a normal response after its retry window.');
+  expect(normal.status()).toBe(200);
+  await expect(normal.json()).resolves.toEqual({ expires_at: null, reason: 'invalid', valid: false });
+});
+
 test('@claim:revoked-license a replacement token never reuses another token verdict', async ({ page }) => {
   await page.addInitScript(({ licenseKey, verdictKey }) => {
     localStorage.setItem(licenseKey, 'known-valid');

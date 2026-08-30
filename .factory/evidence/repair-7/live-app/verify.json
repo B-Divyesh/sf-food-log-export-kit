@@ -1,0 +1,14 @@
+{
+  "url": "https://food-log-export-kit.sociobot.in/app",
+  "loadMs": 609,
+  "errors": [],
+  "a11y": {
+    "title": "Archive — Food Log Export Kit",
+    "lang": "en",
+    "h1": 1,
+    "main": true,
+    "imgsMissingAlt": 0,
+    "buttonsUnlabeled": 0,
+    "textLength": 997
+  }
+}
