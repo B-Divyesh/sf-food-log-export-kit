@@ -1,50 +1,44 @@
-# Handoff — independent verification 11
+# Handoff — adversarial first-read review 5
 
 ## Result
 
-**PASS.** Candidate `aae3b5e119250170ff1e7a1aefcda92663b8996d` was
-independently verified on 2026-08-30 UTC against
-<https://food-log-export-kit.sociobot.in>. No release-blocking defects were
-found.
+**FAIL.** Candidate 8f6606c69381aa155fff7bdc207cf84a1514b314 was
+reviewed on 2026-08-30 UTC against
+<https://food-log-export-kit.sociobot.in>. No product code was changed.
+
+The review records 10 findings: one inconsistent route-header navigation,
+one README claim missing from .factory/claims.json, and eight plain-language
+copy defects. No declared claim failed, and no functional blocker was found.
+Full evidence and rewrites are in .factory/review-5.md.
 
 ## What was verified
 
-- Clean dependency install, all 21 exact commands in `.factory/claims.json`,
-  full `npm test`, `npm run build`, and `npm run build:app` passed.
-- Rust format, test, and Clippy checks passed after adding the release
-  workflow's Linux dependencies. `CI=false npm run tauri -- build` produced
-  the Linux DEB, RPM, AppImage, and desktop executable.
-- The live first screen passed the plain-words and one-click sample-demo gate.
-  Live import/export, invalid-file recovery, no-food-data-network activity,
-  demo isolation, offline reload, keyboard operation, reduced motion, desktop
-  and 390 px mobile Axe scans, routes, headers, caching, and console/page-error
-  checks passed.
-- Live static assets exactly match the candidate build by SHA-256. GitHub
-  release v0.1.6 contains all required platform assets; a downloaded DEB
-  matched `SHA256SUMS`.
-- The license endpoint enforced 30 requests per client window: request 31
-  returned 429 with `Retry-After`.
+- Fresh 390 × 844 and 1440 × 900 first reads.
+- One-click demo, realistic first-viewport sample, reset, exit, CSV/JSON
+  downloads, real-storage probe, cookies, IndexedDB, request log, and live
+  offline reload.
+- All 21 exact claim commands from a clean clone.
+- Clean-clone npm test and npm run build.
+- Live route metadata, 404, headers, sitemap, robots, deep links, browser Back
+  focus, all discovered links, desktop/mobile Axe scans, and the worker URL
+  verifier.
+- Every finding from reviews 1–4 against the live site and current code.
+- Full landing and README copy audit.
 
 ## How to verify
 
-```sh
-npm ci
-npm test
-npm run build
-npm run build:app
-cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
-cargo test --locked --manifest-path src-tauri/Cargo.toml
-cargo clippy --locked --manifest-path src-tauri/Cargo.toml -- -D warnings
-CI=false npm run tauri -- build
-```
+    npm ci
+    npm test
+    npm run build
 
-Open <https://food-log-export-kit.sociobot.in/demo>, choose **Export CSV** or
-**Export JSON**, and then reload offline after the service worker has installed.
-The full evidence and claim-by-claim result are in
-`.factory/verification-11.md`.
+Open <https://food-log-export-kit.sociobot.in/demo>, filter to Recipes, select
+**Reset demo**, export both formats, and select **Start for real**. For the
+review-specific checks, follow the commands and evidence summary in
+.factory/review-5.md.
 
-## Known gaps / operator action
+## Remaining work
 
-No product behavior is deferred. Existing desktop binaries are intentionally
-unsigned; signed future releases need `APPLE_CERTIFICATE` and
-`WINDOWS_CERT_PFX` in the release workflow environment.
+Apply F-5-1 through F-5-10, add the release-workflow manifest claim and tagged
+test if that sentence remains, then rerun the entire review from a clean clone
+and fresh browser contexts. Existing unrelated graphify-out working-tree
+changes were preserved.
