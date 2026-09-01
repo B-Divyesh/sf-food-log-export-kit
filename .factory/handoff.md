@@ -1,62 +1,54 @@
-# Handoff — repair 12
+# Handoff — repair 13
 
 ## Result
 
 Food Log Export Kit remains a Tauri 2 desktop app with a static landing site.
-Repair 12 publishes version `0.1.11` from the final repair commit under tag
-`v0.1.11`, then deploys that commit's `dist/site/` only to the allowed
+Repair 13 publishes `v0.1.12` only from the clean final `main` commit, then
+deploys `dist/site/` built from that same commit to the allowed
 `sf-food-log-export-kit` static resource.
 
-## Reproduced failure and root cause
+## Reproduced failure and cause
 
-The failed checkout was exactly
-`2d39958fc164f810f49d3ff3248ae36b92a5c8f6`, matching `origin/main`. A fresh
-request to GitHub's CORS-enabled Releases API returned `v0.1.10` with
-`target_commitish` `85198e56d45478023d2e100ecc94d1a2500294a7`. The annotated
-`v0.1.10` tag peeled to that same older commit. The release contained the full
-installer matrix, but none of those files belonged to the failed candidate.
-The exact reproduction is in
-`.factory/evidence/repair-12/reproduced-stale-release.md`.
+The failed candidate was `269ff71a28d5ee9dd08bc91499a138a7aa5da2f5`. On
+2026-09-01, the GitHub Releases API returned `v0.1.11` with
+`target_commitish` `21758acb519c129ff8d4eba66167940b3ad93562`; the annotated
+`v0.1.11` tag peeled to the same older commit. That release had two DMGs,
+MSI, setup EXE, AppImage, DEB, RPM, `SHA256SUMS`, and `latest.json`, but none
+was built from the candidate. The exact reproduction is recorded in
+`.factory/evidence/repair-13/reproduced-stale-release.md`.
 
-The prior workflow was run before the final repair bookkeeping commit. That
-advanced `main` after the version's tag and release existed. The landing page's
-identity check did its safety job and withheld the older installers.
+The prior release was tagged before all candidate bookkeeping commits were
+final. The release resolver correctly withheld those stale installers, but the
+desktop candidate had no current download. In addition, a supplied
+`VITE_FOOD_LOG_SOURCE_COMMIT` could describe a different checkout.
 
 ## Repair
 
-- Version `0.1.11` is aligned in npm, Cargo, Tauri, the landing page, fixtures,
-  and static 404 page.
-- A tag-push release now verifies that the tagged commit is also the current
-  default-branch tip. Manual rebuilds of an existing tag remain supported.
-- Release jobs still build Intel and Apple Silicon macOS, Windows, and Linux
-  packages. The checksum job publishes and validates `SHA256SUMS` and
-  `latest.json`, then verifies the release target and peeled tag commit.
-- The landing resolver requests only
-  `https://api.github.com/repos/B-Divyesh/sf-food-log-export-kit/releases/latest`.
-  It caches a matching result for one hour. A missing release, rate limit,
-  rejected request, malformed response, stale response, or unavailable browser
-  storage keeps a calm link to the GitHub Releases page without an uncaught
-  error.
-- `@regression:R12-release-absence` covers missing, rate-limited, malformed,
-  stale, and offline metadata plus malformed storage on desktop and mobile.
-  `@regression:R12-release-cache` covers the one-hour cache. The release
-  workflow test covers the tag-at-default-branch invariant.
+- Version `0.1.12` is synchronized across npm, Cargo, Tauri, site identity,
+  static 404, installer fixtures, and version coverage.
+- Site builds now reject a supplied source identity unless it exactly matches
+  `git rev-parse HEAD`; this prevents a stale site build from claiming another
+  desktop candidate.
+- `npm run release:preflight` refuses dirty worktrees, non-`main` checkouts,
+  an `origin/main` different from `HEAD`, an existing local or remote version
+  tag, and divergent npm/Tauri/Cargo/site versions. The workflow independently
+  keeps its existing tagged-default-branch guard.
+- `@regression:R13-release-preflight` covers dirty, stale, and already-tagged
+  candidates. `@regression:F13-1-site-build` covers a valid-looking but stale
+  source-commit override.
 
-No food-data handling, billing behavior, visual system, analytics, or runtime
-AI feature changed.
+No food-data behavior, storage, privacy boundary, pricing, artwork, or
+telemetry changed.
 
-## Local verification
+## Verification before release
 
-The disposable worker started without `node_modules` or Linux GUI headers.
-`npm ci` installed 66 packages with zero reported vulnerabilities. The
-documented GTK/WebKit packages were installed as root because this image does
-not contain `sudo`.
-
-Passed before release:
+All commands below ran after `npm ci` (66 packages; 0 reported
+vulnerabilities), except the intentionally pre-publication live release
+identity gate:
 
 ```sh
 npx vitest run --exclude tests/unit/published-release.test.ts
-# 32 passed
+# 34 passed
 
 npx playwright test
 # 58 passed; 4 expected desktop-project skips
@@ -67,56 +59,53 @@ cargo test --manifest-path src-tauri/Cargo.toml
 CI=1 npm run tauri -- build
 ```
 
-The exact original native command produced:
+The exact native build produced:
 
-- `Food Log Export Kit_0.1.11_amd64.deb`
-- `Food Log Export Kit-0.1.11-1.x86_64.rpm`
-- `Food Log Export Kit_0.1.11_amd64.AppImage`
+- `Food Log Export Kit_0.1.12_amd64.deb`
+- `Food Log Export Kit-0.1.12-1.x86_64.rpm`
+- `Food Log Export Kit_0.1.12_amd64.AppImage`
 
-The site build contains 50,093 bytes of uncompressed initial JavaScript across
-four chunks, 23,482 bytes of CSS, and a 14,420-byte mobile hero image. Vite
-reported 17.36 kB total JavaScript gzip and 6.10 kB CSS gzip.
+The browser matrix covers desktop and 390 px mobile, keyboard export,
+screen-reader filter state, Axe serious/critical findings, 200% zoom, touch
+targets, reduced motion, demo isolation, CSV/JSON export, local-only requests,
+offline reload, and controlled service-worker update. The site build contains
+50,093 bytes of uncompressed JavaScript across four chunks (17.36 kB gzip),
+23,482 bytes CSS (6.10 kB gzip), and a 14,420-byte mobile hero image.
 
-The browser matrix covers Chromium desktop and 390 px mobile, keyboard
-operation, focus state, serious and critical Axe findings, 200% zoom, 44 px
-targets, reduced motion, offline reload, service-worker update, demo storage
-isolation, local-only conversion, billing request privacy, and CSV/JSON export.
-
-After the tagged GitHub workflow completes, the final gate is:
+Before publication, `npm run test:unit` deliberately failed only
+`@claim:candidate-installers`: live latest was `v0.1.11` instead of the new
+candidate. The focused stale override command also failed as designed:
 
 ```sh
-npm test
+VITE_FOOD_LOG_SOURCE_COMMIT=21758acb519c129ff8d4eba66167940b3ad93562 npm run build:site
+# Error: VITE_FOOD_LOG_SOURCE_COMMIT must match the checked-out Git commit.
 ```
 
-This includes `@claim:candidate-installers`, which independently reads the
-public latest Release API, peels the tag, checks the manifest and every URL,
-and downloads the smallest installer to verify its published SHA-256. Every
-exact command in `.factory/claims.json` is also run from this final checkout.
+## Release, deploy, and final identity gate
 
-## Release and deployment evidence
-
-Canonical release: <https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.11>
-
-Required published files are two DMGs, MSI, setup EXE, AppImage, DEB, RPM,
-`SHA256SUMS`, and `latest.json`. The release, peeled tag, checksum provenance
-line, manifest `source_commit`, deployed `release-identity.json`, and local
-`HEAD` must all resolve to the same commit.
-
-The clean site build and repository deployment command are:
+All source, test, handoff, and evidence changes are committed and pushed
+before tagging. From the clean final `main` tip, the exact release sequence is:
 
 ```sh
+npm run release:preflight
+git tag -a v0.1.12 -m "Food Log Export Kit v0.1.12"
+git push origin main v0.1.12
+# wait for GitHub Actions Desktop release to finish
+npm test
 npm run build:site
 /opt/fleet/lib/deploy-static.sh food-log-export-kit dist/site
 ```
 
-Post-deploy checks cover `/`, `/demo`, `/app`, `/privacy`, and `/terms` with
-`/opt/fleet/lib/verify-url.sh`; the real 404; live Axe; offline reload; the
-GitHub API-selected platform link; static asset budgets; live release identity;
-and a direct installer checksum. No infrastructure, DNS, billing, database,
-key vault, or unrelated service is read or changed.
+The post-publication `@claim:candidate-installers` test resolves the release,
+peels its tag, checks `latest.json` and `SHA256SUMS`, resolves every installer
+URL, and downloads the smallest installer for a SHA-256 comparison. The final
+site `release-identity.json`, release manifest, checksum provenance line,
+peeled tag, deployed site, and local final `HEAD` must be identical. Run
+`/opt/fleet/lib/verify-url.sh` for `/`, `/demo`, `/app`, `/privacy`, and
+`/terms`, then Axe against the live landing and app routes.
 
 ## Known gap and operator action
 
-macOS and Windows desktop builds are unsigned. Signing requires the
-owner-managed `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` GitHub Actions secrets.
-The app adds no food-data server, account service, analytics, or telemetry.
+macOS and Windows installers are unsigned. Signing requires the owner-managed
+`APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` GitHub Actions secrets. The product
+does not store food data on a server and has no account or analytics service.
