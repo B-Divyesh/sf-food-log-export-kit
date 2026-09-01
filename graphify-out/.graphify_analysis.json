@@ -1,18 +1,88 @@
 {
   "communities": {
     "0": [
+      "src_app",
+      "src_app_announce",
+      "src_app_appheader",
+      "src_app_applyrecordfilter",
+      "src_app_appstate",
+      "src_app_bindapp",
+      "src_app_demobanner",
+      "src_app_demofirstrecord",
+      "src_app_emptypanel",
+      "src_app_emptystate",
+      "src_app_escapehtml",
+      "src_app_licensepanel",
+      "src_app_loadsample",
+      "src_app_number",
+      "src_app_readfiles",
+      "src_app_renderapp",
+      "src_app_rerender",
+      "src_app_reviewpanel",
+      "src_app_startapp",
+      "src_app_state",
+      "src_app_steps",
+      "src_app_totals",
+      "src_csv",
+      "src_csv_countoutsidequotes",
+      "src_csv_detectdelimiter",
+      "src_csv_encodecsv",
+      "src_csv_parsecsv",
+      "src_exporter",
+      "src_exporter_csvheaders",
+      "src_exporter_exportarchive",
+      "src_exporter_exportcsv",
+      "src_exporter_savetext",
+      "src_icons",
+      "src_icons_icons",
+      "src_importer",
+      "src_importer_aliases",
+      "src_importer_asdate",
+      "src_importer_asnumber",
+      "src_importer_astext",
+      "src_importer_collectunmappedfields",
+      "src_importer_findvalue",
+      "src_importer_hasvalue",
+      "src_importer_importtext",
+      "src_importer_mappedinputkeys",
+      "src_importer_maprecord",
+      "src_importer_normalized",
+      "src_importer_normalizedfield",
+      "src_importer_objectsfromjson",
+      "src_importer_valuefornote",
+      "src_license_optimisticlicense",
+      "src_license_storedlicense",
+      "src_license_verifylicense",
+      "src_sample",
+      "src_sample_samplecsv",
+      "src_types",
+      "src_types_foodrecord",
+      "src_types_importissue",
+      "src_types_importresult",
+      "src_types_recordkind",
+      "tests_unit_importer_test"
+    ],
+    "1": [
+      "src_tauri_gen_schemas_desktop_schema_capability_description",
+      "src_tauri_gen_schemas_desktop_schema_capability_required",
+      "src_tauri_gen_schemas_desktop_schema_capability_type",
+      "src_tauri_gen_schemas_desktop_schema_definitions_capability",
+      "src_tauri_gen_schemas_linux_schema_capability_description",
       "src_tauri_gen_schemas_linux_schema_capability_properties",
-      "src_tauri_gen_schemas_linux_schema_definitions_identifier",
+      "src_tauri_gen_schemas_linux_schema_capability_required",
+      "src_tauri_gen_schemas_linux_schema_capability_type",
+      "src_tauri_gen_schemas_linux_schema_definitions_capability",
       "src_tauri_gen_schemas_linux_schema_description_default",
       "src_tauri_gen_schemas_linux_schema_description_description",
       "src_tauri_gen_schemas_linux_schema_description_type",
       "src_tauri_gen_schemas_linux_schema_identifier_description",
-      "src_tauri_gen_schemas_linux_schema_identifier_oneof",
       "src_tauri_gen_schemas_linux_schema_identifier_type",
       "src_tauri_gen_schemas_linux_schema_items_ref",
       "src_tauri_gen_schemas_linux_schema_items_type",
       "src_tauri_gen_schemas_linux_schema_json_ref_array",
+      "src_tauri_gen_schemas_linux_schema_json_ref_identifier",
       "src_tauri_gen_schemas_linux_schema_json_ref_null",
+      "src_tauri_gen_schemas_linux_schema_json_ref_permissions",
       "src_tauri_gen_schemas_linux_schema_local_default",
       "src_tauri_gen_schemas_linux_schema_local_description",
       "src_tauri_gen_schemas_linux_schema_local_type",
@@ -41,49 +111,60 @@
       "src_tauri_gen_schemas_linux_schema_windows_items",
       "src_tauri_gen_schemas_linux_schema_windows_type"
     ],
-    "1": [
-      "src_app",
-      "src_app_announce",
-      "src_app_appheader",
-      "src_app_applyrecordfilter",
-      "src_app_appstate",
-      "src_app_bindapp",
-      "src_app_demobanner",
-      "src_app_demofirstrecord",
-      "src_app_emptypanel",
-      "src_app_emptystate",
-      "src_app_escapehtml",
-      "src_app_licensepanel",
-      "src_app_loadsample",
-      "src_app_number",
-      "src_app_readfiles",
-      "src_app_renderapp",
-      "src_app_rerender",
-      "src_app_reviewpanel",
-      "src_app_startapp",
-      "src_app_state",
-      "src_app_steps",
-      "src_app_totals",
-      "src_icons",
-      "src_icons_icons",
-      "src_importer_importtext",
-      "src_importer_objectsfromjson",
-      "src_license",
-      "src_license_cachedverdict",
-      "src_license_checkouturl",
-      "src_license_licensestate",
-      "src_license_optimisticlicense",
-      "src_license_removelicense",
-      "src_license_storedlicense",
-      "src_license_verifylicense",
-      "src_sample",
-      "src_sample_samplecsv"
-    ],
     "2": [
+      "axe_core_playwright",
+      "package",
+      "package_dependencies",
+      "package_dependencies_tauri_apps_api",
+      "package_dependencies_tauri_apps_plugin_dialog",
+      "package_dependencies_tauri_apps_plugin_fs",
+      "package_devdependencies",
+      "package_devdependencies_axe_core_playwright",
+      "package_devdependencies_playwright_test",
+      "package_devdependencies_tauri_apps_cli",
+      "package_devdependencies_types_node",
+      "package_devdependencies_typescript",
+      "package_devdependencies_vite",
+      "package_devdependencies_vitest",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_build_app",
+      "package_scripts_build_site",
+      "package_scripts_dev",
+      "package_scripts_native_prereqs",
+      "package_scripts_release_preflight",
+      "package_scripts_tauri",
+      "package_scripts_test",
+      "package_scripts_test_e2e",
+      "package_scripts_test_unit",
+      "package_type",
+      "package_version",
+      "playwright_test",
+      "tauri_apps_api",
+      "tauri_apps_cli",
+      "tauri_apps_plugin_dialog",
+      "tauri_apps_plugin_fs",
+      "tests_e2e_accessibility_spec",
+      "tests_e2e_accessibility_spec_testedsourcecommit",
+      "tests_e2e_claims_spec",
+      "tests_e2e_claims_spec_testedsourcecommit",
+      "types_node",
+      "typescript",
+      "vite",
+      "vitest"
+    ],
+    "3": [
       "src_build",
       "src_build_appversion",
       "src_build_sourcecommit",
+      "src_license",
       "src_license_acceptlicensefromurl",
+      "src_license_cachedverdict",
+      "src_license_checkouturl",
+      "src_license_licensestate",
+      "src_license_removelicense",
       "src_main",
       "src_main_bindlinks",
       "src_main_istauri",
@@ -117,11 +198,12 @@
       "tests_unit_release_test",
       "tests_unit_release_test_assets"
     ],
-    "3": [
+    "4": [
       "src_tauri_gen_schemas_desktop_schema_capability_properties",
       "src_tauri_gen_schemas_desktop_schema_description_default",
       "src_tauri_gen_schemas_desktop_schema_description_description",
       "src_tauri_gen_schemas_desktop_schema_description_type",
+      "src_tauri_gen_schemas_desktop_schema_identifier_description",
       "src_tauri_gen_schemas_desktop_schema_identifier_type",
       "src_tauri_gen_schemas_desktop_schema_items_ref",
       "src_tauri_gen_schemas_desktop_schema_items_type",
@@ -155,7 +237,7 @@
       "src_tauri_gen_schemas_desktop_schema_windows_items",
       "src_tauri_gen_schemas_desktop_schema_windows_type"
     ],
-    "4": [
+    "5": [
       "src_tauri_gen_schemas_desktop_schema",
       "src_tauri_gen_schemas_desktop_schema_anyof",
       "src_tauri_gen_schemas_desktop_schema_capabilityremote_description",
@@ -170,7 +252,6 @@
       "src_tauri_gen_schemas_desktop_schema_definitions_target",
       "src_tauri_gen_schemas_desktop_schema_definitions_value",
       "src_tauri_gen_schemas_desktop_schema_description",
-      "src_tauri_gen_schemas_desktop_schema_identifier_description",
       "src_tauri_gen_schemas_desktop_schema_identifier_oneof",
       "src_tauri_gen_schemas_desktop_schema_json_ref_urls",
       "src_tauri_gen_schemas_desktop_schema_number_anyof",
@@ -187,65 +268,36 @@
       "src_tauri_gen_schemas_desktop_schema_value_anyof",
       "src_tauri_gen_schemas_desktop_schema_value_description"
     ],
-    "5": [
-      "src_csv",
-      "src_csv_countoutsidequotes",
-      "src_csv_detectdelimiter",
-      "src_csv_encodecsv",
-      "src_csv_parsecsv",
-      "src_exporter",
-      "src_exporter_csvheaders",
-      "src_exporter_exportarchive",
-      "src_exporter_exportcsv",
-      "src_exporter_savetext",
-      "src_importer",
-      "src_importer_aliases",
-      "src_importer_asdate",
-      "src_importer_asnumber",
-      "src_importer_astext",
-      "src_importer_collectunmappedfields",
-      "src_importer_findvalue",
-      "src_importer_hasvalue",
-      "src_importer_mappedinputkeys",
-      "src_importer_maprecord",
-      "src_importer_normalized",
-      "src_importer_normalizedfield",
-      "src_importer_valuefornote",
-      "src_types",
-      "src_types_foodrecord",
-      "src_types_importissue",
-      "src_types_importresult",
-      "src_types_recordkind",
-      "tests_unit_importer_test"
-    ],
     "6": [
-      "package",
-      "package_dependencies",
-      "package_dependencies_tauri_apps_api",
-      "package_dependencies_tauri_apps_plugin_dialog",
-      "package_dependencies_tauri_apps_plugin_fs",
-      "package_name",
-      "package_private",
-      "package_scripts",
-      "package_scripts_build",
-      "package_scripts_build_app",
-      "package_scripts_build_site",
-      "package_scripts_dev",
-      "package_scripts_native_prereqs",
-      "package_scripts_release_preflight",
-      "package_scripts_tauri",
-      "package_scripts_test",
-      "package_scripts_test_e2e",
-      "package_scripts_test_unit",
-      "package_type",
-      "package_version",
-      "tauri_apps_api",
-      "tauri_apps_plugin_dialog",
-      "tauri_apps_plugin_fs",
-      "tests_e2e_accessibility_spec",
-      "tests_e2e_accessibility_spec_testedsourcecommit",
-      "tests_e2e_claims_spec",
-      "tests_e2e_claims_spec_testedsourcecommit"
+      "src_tauri_gen_schemas_linux_schema",
+      "src_tauri_gen_schemas_linux_schema_anyof",
+      "src_tauri_gen_schemas_linux_schema_capabilityremote_description",
+      "src_tauri_gen_schemas_linux_schema_capabilityremote_properties",
+      "src_tauri_gen_schemas_linux_schema_capabilityremote_required",
+      "src_tauri_gen_schemas_linux_schema_capabilityremote_type",
+      "src_tauri_gen_schemas_linux_schema_definitions",
+      "src_tauri_gen_schemas_linux_schema_definitions_capabilityremote",
+      "src_tauri_gen_schemas_linux_schema_definitions_identifier",
+      "src_tauri_gen_schemas_linux_schema_definitions_number",
+      "src_tauri_gen_schemas_linux_schema_definitions_permissionentry",
+      "src_tauri_gen_schemas_linux_schema_definitions_target",
+      "src_tauri_gen_schemas_linux_schema_definitions_value",
+      "src_tauri_gen_schemas_linux_schema_description",
+      "src_tauri_gen_schemas_linux_schema_identifier_oneof",
+      "src_tauri_gen_schemas_linux_schema_json_ref_urls",
+      "src_tauri_gen_schemas_linux_schema_number_anyof",
+      "src_tauri_gen_schemas_linux_schema_number_description",
+      "src_tauri_gen_schemas_linux_schema_permissionentry_anyof",
+      "src_tauri_gen_schemas_linux_schema_permissionentry_description",
+      "src_tauri_gen_schemas_linux_schema_properties_urls",
+      "src_tauri_gen_schemas_linux_schema_schema",
+      "src_tauri_gen_schemas_linux_schema_target_description",
+      "src_tauri_gen_schemas_linux_schema_target_oneof",
+      "src_tauri_gen_schemas_linux_schema_title",
+      "src_tauri_gen_schemas_linux_schema_urls_description",
+      "src_tauri_gen_schemas_linux_schema_urls_type",
+      "src_tauri_gen_schemas_linux_schema_value_anyof",
+      "src_tauri_gen_schemas_linux_schema_value_description"
     ],
     "7": [
       "ref_icons_128x128_2x_png",
@@ -277,35 +329,89 @@
       "src_tauri_tauri_conf_version"
     ],
     "8": [
-      "src_tauri_gen_schemas_linux_schema",
-      "src_tauri_gen_schemas_linux_schema_anyof",
-      "src_tauri_gen_schemas_linux_schema_capabilityremote_description",
-      "src_tauri_gen_schemas_linux_schema_capabilityremote_properties",
-      "src_tauri_gen_schemas_linux_schema_capabilityremote_required",
-      "src_tauri_gen_schemas_linux_schema_capabilityremote_type",
-      "src_tauri_gen_schemas_linux_schema_definitions",
-      "src_tauri_gen_schemas_linux_schema_definitions_capabilityremote",
-      "src_tauri_gen_schemas_linux_schema_definitions_number",
-      "src_tauri_gen_schemas_linux_schema_definitions_permissionentry",
-      "src_tauri_gen_schemas_linux_schema_definitions_target",
-      "src_tauri_gen_schemas_linux_schema_definitions_value",
-      "src_tauri_gen_schemas_linux_schema_description",
-      "src_tauri_gen_schemas_linux_schema_json_ref_urls",
-      "src_tauri_gen_schemas_linux_schema_number_anyof",
-      "src_tauri_gen_schemas_linux_schema_number_description",
-      "src_tauri_gen_schemas_linux_schema_permissionentry_anyof",
-      "src_tauri_gen_schemas_linux_schema_permissionentry_description",
-      "src_tauri_gen_schemas_linux_schema_properties_urls",
-      "src_tauri_gen_schemas_linux_schema_schema",
-      "src_tauri_gen_schemas_linux_schema_target_description",
-      "src_tauri_gen_schemas_linux_schema_target_oneof",
-      "src_tauri_gen_schemas_linux_schema_title",
-      "src_tauri_gen_schemas_linux_schema_urls_description",
-      "src_tauri_gen_schemas_linux_schema_urls_type",
-      "src_tauri_gen_schemas_linux_schema_value_anyof",
-      "src_tauri_gen_schemas_linux_schema_value_description"
+      "factory_review_1",
+      "factory_review_1_adversarial_first_read_review_1",
+      "factory_review_1_claims_test_gate",
+      "factory_review_1_cold_first_read",
+      "factory_review_1_copy_audit",
+      "factory_review_1_demo_sandbox_and_privacy_checks",
+      "factory_review_1_earlier_history_recheck",
+      "factory_review_1_f_1_10_minor_the_privacy_section_starts_with_generic_contrast_copy",
+      "factory_review_1_f_1_11_minor_the_pricing_eyebrow_is_a_slogan_instead_of_a_section_name",
+      "factory_review_1_f_1_12_minor_readme_opening_uses_a_24_word_jargon_heavy_compound_sentence",
+      "factory_review_1_f_1_1_blocking_the_mobile_demo_first_screen_does_not_show_sample_data_being_used",
+      "factory_review_1_f_1_2_blocking_the_public_claims_inventory_is_incomplete",
+      "factory_review_1_f_1_3_medium_back_navigation_does_not_restore_focus_to_the_landing_page_heading",
+      "factory_review_1_f_1_4_medium_the_http_404_route_does_not_use_the_required_route_metadata_or_shared_footer",
+      "factory_review_1_f_1_5_minor_the_primary_action_outcome_does_not_name_the_files",
+      "factory_review_1_f_1_6_minor_decorative_exit_labels_carry_no_usable_section_information",
+      "factory_review_1_f_1_7_minor_the_desktop_download_heading_is_indirect",
+      "factory_review_1_f_1_8_minor_one_section_label_is_context_free",
+      "factory_review_1_f_1_9_minor_the_workflow_heading_describes_a_metaphor_instead_of_the_task",
+      "factory_review_1_findings",
+      "factory_review_1_landing_page",
+      "factory_review_1_missed_leverage",
+      "factory_review_1_readme",
+      "factory_review_1_structure_and_visual_checks",
+      "factory_review_1_verdict_fail",
+      "factory_review_1_what_would_make_this_perfect"
     ],
     "9": [
+      "factory_review_2",
+      "factory_review_2_adversarial_first_read_review_2",
+      "factory_review_2_claims_gate",
+      "factory_review_2_cold_first_read",
+      "factory_review_2_copy_audit",
+      "factory_review_2_demo_sandbox_and_privacy",
+      "factory_review_2_earlier_history_recheck",
+      "factory_review_2_f_2_10_minor_readme_uses_cross_origin_requests_instead_of_naming_the_observable_boundary",
+      "factory_review_2_f_2_11_minor_readme_uses_an_unnecessary_date_format_acronym",
+      "factory_review_2_f_2_12_minor_readme_uses_spa_routing_where_a_concrete_deployment_result_is_clearer",
+      "factory_review_2_f_2_1_f_1_2_reopened_blocking_lossy_fields_are_silently_dropped_while_the_product_claims_a_complete_explained_result",
+      "factory_review_2_f_2_2_blocking_checkout_is_said_to_be_hosted_by_sociobot_but_the_tested_checkout_is_hosted_by_dodo",
+      "factory_review_2_f_2_3_medium_the_app_and_demo_routes_omit_the_required_shared_navigation_and_footer",
+      "factory_review_2_f_2_4_medium_app_advertises_the_landing_page_as_its_canonical_url",
+      "factory_review_2_f_2_5_minor_the_404_footer_carries_a_stale_build_label",
+      "factory_review_2_f_2_6_minor_the_same_source_product_is_called_both_a_calorie_tracker_and_a_food_tracker",
+      "factory_review_2_f_2_7_minor_the_paid_tier_has_three_names",
+      "factory_review_2_f_2_8_minor_archive_is_used_for_the_app_instead_of_its_output",
+      "factory_review_2_f_2_9_minor_readme_uses_desktop_webview_without_explaining_it",
+      "factory_review_2_findings",
+      "factory_review_2_landing_page",
+      "factory_review_2_missed_leverage",
+      "factory_review_2_readme",
+      "factory_review_2_structure_routing_accessibility_and_visual_identity",
+      "factory_review_2_verdict_fail",
+      "factory_review_2_what_would_make_this_perfect"
+    ],
+    "10": [
+      "factory_review_5",
+      "factory_review_5_adversarial_first_read_review_5",
+      "factory_review_5_claims_gate",
+      "factory_review_5_cold_first_read",
+      "factory_review_5_copy_audit",
+      "factory_review_5_demo_sandbox_privacy_and_offline_behavior",
+      "factory_review_5_earlier_history_recheck",
+      "factory_review_5_f_5_10_minor_desktop_shell_names_the_implementation_not_the_task",
+      "factory_review_5_f_5_1_medium_app_routes_use_different_primary_navigation_destinations",
+      "factory_review_5_f_5_2_medium_the_release_workflow_sentence_is_an_unlisted_claim",
+      "factory_review_5_f_5_3_minor_use_csv_now_does_not_explain_the_use",
+      "factory_review_5_f_5_4_minor_account_scraping_is_browser_jargon",
+      "factory_review_5_f_5_5_minor_unmapped_is_unexplained_data_processing_jargon",
+      "factory_review_5_f_5_6_minor_readme_uses_map_for_field_recognition",
+      "factory_review_5_f_5_7_minor_readme_repeats_the_unexplained_unmapped_term",
+      "factory_review_5_f_5_8_minor_bare_tracker_changes_the_established_meaning",
+      "factory_review_5_f_5_9_minor_platform_specific_open_step_is_indirect_jargon",
+      "factory_review_5_findings",
+      "factory_review_5_landing_page",
+      "factory_review_5_missed_leverage",
+      "factory_review_5_readme",
+      "factory_review_5_structure_routing_accessibility_and_visual_identity",
+      "factory_review_5_terminology",
+      "factory_review_5_verdict_fail",
+      "factory_review_5_what_would_make_this_perfect"
+    ],
+    "11": [
       "ref_dom",
       "ref_dom_iterable",
       "ref_es2022",
@@ -332,7 +438,52 @@
       "tsconfig_compileroptions_usedefineforclassfields",
       "tsconfig_include"
     ],
-    "10": [
+    "12": [
+      "factory_review_3",
+      "factory_review_3_adversarial_first_read_review_3",
+      "factory_review_3_claims_gate",
+      "factory_review_3_cold_first_read",
+      "factory_review_3_copy_audit",
+      "factory_review_3_demo_sandbox_and_privacy",
+      "factory_review_3_earlier_history_recheck",
+      "factory_review_3_f_3_1_minor_a_workflow_heading_does_not_identify_which_notes_to_read",
+      "factory_review_3_f_3_2_minor_a_workflow_heading_relies_on_an_unnamed_antecedent",
+      "factory_review_3_f_3_3_minor_normalized_is_unexplained_data_processing_jargon",
+      "factory_review_3_f_3_4_minor_the_readme_uses_checksum_without_explaining_the_result",
+      "factory_review_3_f_3_5_minor_the_readme_uses_path_without_explaining_the_user_visible_result",
+      "factory_review_3_f_3_6_minor_the_release_notes_instruction_has_no_release_notes_link",
+      "factory_review_3_findings",
+      "factory_review_3_landing_page",
+      "factory_review_3_missed_leverage",
+      "factory_review_3_readme",
+      "factory_review_3_structure_routing_accessibility_and_visual_identity",
+      "factory_review_3_terminology",
+      "factory_review_3_verdict_fail",
+      "factory_review_3_what_would_make_this_perfect"
+    ],
+    "13": [
+      "factory_verification",
+      "factory_verification_accessibility_keyboard_mobile_and_motion",
+      "factory_verification_build_and_automated_gates",
+      "factory_verification_claims_gate",
+      "factory_verification_critical_the_advertised_paid_purchase_is_unavailable",
+      "factory_verification_desktop_release_evidence",
+      "factory_verification_end_to_end_and_boundary_evidence",
+      "factory_verification_first_read_gate",
+      "factory_verification_high_claims_coverage_does_not_satisfy_the_claims_contract",
+      "factory_verification_high_impossible_iso_dates_are_accepted_as_clean_timeline_data",
+      "factory_verification_high_one_bad_file_in_a_licensed_batch_is_silently_omitted",
+      "factory_verification_high_the_cached_license_verdict_is_not_bound_to_the_license_token",
+      "factory_verification_independent_verification_fail",
+      "factory_verification_live_deployment_privacy_and_security",
+      "factory_verification_medium_mobile_touch_targets_fall_below_the_44_px_contract",
+      "factory_verification_medium_unknown_routes_return_http_200",
+      "factory_verification_other_findings",
+      "factory_verification_pwa_and_performance",
+      "factory_verification_release_blocking_findings",
+      "factory_verification_required_before_re_verification"
+    ],
+    "14": [
       "scripts_linux_native_prereqs",
       "scripts_linux_native_prereqs_checklinuxnativeprerequisites",
       "scripts_linux_native_prereqs_ensurelinuxnativeprerequisites",
@@ -354,24 +505,155 @@
       "vite_config_generatebundle",
       "vite_config_sourcecommit"
     ],
-    "11": [
-      "axe_core_playwright",
-      "package_devdependencies",
-      "package_devdependencies_axe_core_playwright",
-      "package_devdependencies_playwright_test",
-      "package_devdependencies_tauri_apps_cli",
-      "package_devdependencies_types_node",
-      "package_devdependencies_typescript",
-      "package_devdependencies_vite",
-      "package_devdependencies_vitest",
-      "playwright_test",
-      "tauri_apps_cli",
-      "types_node",
-      "typescript",
-      "vite",
-      "vitest"
+    "15": [
+      "factory_review_4",
+      "factory_review_4_adversarial_first_read_review_4",
+      "factory_review_4_claims_gate",
+      "factory_review_4_cold_first_read",
+      "factory_review_4_copy_audit",
+      "factory_review_4_demo_sandbox_and_privacy",
+      "factory_review_4_earlier_history_recheck",
+      "factory_review_4_f_4_1_blocking_every_row_is_an_unlisted_absolute_claim",
+      "factory_review_4_f_4_2_medium_the_export_walkthrough_image_does_not_show_the_described_export_state",
+      "factory_review_4_findings",
+      "factory_review_4_landing_page",
+      "factory_review_4_missed_leverage",
+      "factory_review_4_readme",
+      "factory_review_4_structure_routing_accessibility_and_visual_identity",
+      "factory_review_4_terminology",
+      "factory_review_4_verdict_fail",
+      "factory_review_4_what_would_make_this_perfect"
     ],
-    "12": [
+    "16": [
+      "factory_review_6",
+      "factory_review_6_adversarial_first_read_review_6",
+      "factory_review_6_claim_test_gate",
+      "factory_review_6_cold_first_read",
+      "factory_review_6_copy_audit",
+      "factory_review_6_demo_sandbox_and_privacy_checks",
+      "factory_review_6_earlier_history_recheck",
+      "factory_review_6_f_6_1_blocking_declared_claim_commands_fail_because_the_published_installer_candidate_does_not_match_this_checkout",
+      "factory_review_6_f_6_2_medium_readme_release_process_claims_are_absent_from_the_claims_inventory",
+      "factory_review_6_f_6_3_minor_the_required_copy_audit_record_does_not_describe_the_current_product_copy",
+      "factory_review_6_findings",
+      "factory_review_6_landing_page",
+      "factory_review_6_missed_leverage",
+      "factory_review_6_readme",
+      "factory_review_6_structure_route_and_visual_checks",
+      "factory_review_6_verdict_fail",
+      "factory_review_6_what_would_make_this_perfect"
+    ],
+    "17": [
+      "factory_verification_10",
+      "factory_verification_10_accessibility_responsive_behavior_routes_and_performance",
+      "factory_verification_10_claims_gate_and_clean_clone_checks",
+      "factory_verification_10_defect_summary",
+      "factory_verification_10_deployment_and_desktop_release_identity",
+      "factory_verification_10_end_to_end_and_edge_cases",
+      "factory_verification_10_f_10_1_high_release_blocking_installed_pwa_clients_remain_pinned_to_the_previous_release",
+      "factory_verification_10_f_10_2_medium_release_blocking_contract_issue_readme_claim_is_absent_from_the_claim_manifest",
+      "factory_verification_10_findings",
+      "factory_verification_10_independent_verification_10_fail",
+      "factory_verification_10_privacy_security_rate_limiting_and_payments",
+      "factory_verification_10_required_first_read",
+      "factory_verification_10_verdict"
+    ],
+    "18": [
+      "factory_verification_14",
+      "factory_verification_14_build_and_automated_checks",
+      "factory_verification_14_high_the_live_candidate_has_no_direct_desktop_download",
+      "factory_verification_14_independent_end_to_end_and_live_evidence",
+      "factory_verification_14_medium_a_required_claim_interaction_failed_intermittently",
+      "factory_verification_14_medium_record_filter_state_is_not_exposed_to_assistive_technology",
+      "factory_verification_14_medium_required_payment_legal_copy_is_incomplete",
+      "factory_verification_14_other_findings",
+      "factory_verification_14_privacy_network_headers_and_throttling",
+      "factory_verification_14_release_blockers",
+      "factory_verification_14_required_claims_and_first_read_gate",
+      "factory_verification_14_scope",
+      "factory_verification_14_verification_14_fail"
+    ],
+    "19": [
+      "factory_verification_2",
+      "factory_verification_2_accessibility_mobile_pwa_and_performance",
+      "factory_verification_2_claims_gate",
+      "factory_verification_2_clean_checkout_tests_and_builds",
+      "factory_verification_2_desktop_release_evidence",
+      "factory_verification_2_end_to_end_and_boundary_evidence",
+      "factory_verification_2_first_read_and_demo_gate",
+      "factory_verification_2_high_public_promises_are_missing_from_the_mandatory_claims_manifest",
+      "factory_verification_2_high_the_shipped_unix_installer_cannot_find_any_release_asset",
+      "factory_verification_2_independent_verification_2_fail",
+      "factory_verification_2_live_deployment_privacy_and_server_behavior",
+      "factory_verification_2_release_blocking_findings",
+      "factory_verification_2_required_before_re_verification"
+    ],
+    "20": [
+      "factory_demo",
+      "factory_demo_demo_sandbox",
+      "readme",
+      "readme_deploy",
+      "readme_food_log_export_kit",
+      "readme_install_the_desktop_app",
+      "readme_privacy_and_license",
+      "readme_project_map",
+      "readme_publish_a_desktop_release",
+      "readme_run_locally",
+      "readme_supported_input",
+      "readme_test_and_build"
+    ],
+    "21": [
+      "factory_verification_3",
+      "factory_verification_3_accessibility_and_interaction",
+      "factory_verification_3_clean_build_and_test_evidence",
+      "factory_verification_3_decision",
+      "factory_verification_3_deployment_privacy_headers_and_rate_limit",
+      "factory_verification_3_desktop_release_and_installer",
+      "factory_verification_3_high_windows_installer_promise_is_absent_from_factory_claims_json",
+      "factory_verification_3_independent_verification_3_fail",
+      "factory_verification_3_mandatory_first_read_and_claims_gate",
+      "factory_verification_3_product_flows_and_boundaries",
+      "factory_verification_3_release_blocking_finding",
+      "factory_verification_3_required_before_re_verification"
+    ],
+    "22": [
+      "factory_verification_13",
+      "factory_verification_13_automated_quality_gates",
+      "factory_verification_13_cold_first_read",
+      "factory_verification_13_end_to_end_and_live_checks",
+      "factory_verification_13_high_published_desktop_installers_are_not_built_from_the_candidate",
+      "factory_verification_13_medium_the_documented_native_build_command_fails_in_this_verifier_ci",
+      "factory_verification_13_privacy_headers_and_request_allowance",
+      "factory_verification_13_release_blockers",
+      "factory_verification_13_required_claims_first",
+      "factory_verification_13_scope_and_handoff",
+      "factory_verification_13_verification_13_fail"
+    ],
+    "23": [
+      "factory_verification_12",
+      "factory_verification_12_claims_and_local_gates",
+      "factory_verification_12_critical_f12_1_live_purchase_and_license_service_unavailable",
+      "factory_verification_12_defects_by_severity",
+      "factory_verification_12_desktop_release",
+      "factory_verification_12_first_read_and_demo",
+      "factory_verification_12_handoff",
+      "factory_verification_12_independent_live_checks",
+      "factory_verification_12_independent_verification_12_fail",
+      "factory_verification_12_verdict"
+    ],
+    "24": [
+      "factory_verification_4",
+      "factory_verification_4_accessibility_mobile_pwa_and_performance",
+      "factory_verification_4_claims_gate",
+      "factory_verification_4_clean_build_and_automated_gates",
+      "factory_verification_4_desktop_release_and_installers",
+      "factory_verification_4_independent_product_exercise",
+      "factory_verification_4_independent_verification_4_pass",
+      "factory_verification_4_live_deployment_privacy_headers_and_rate_limit",
+      "factory_verification_4_mandatory_first_read_and_demo_gate",
+      "factory_verification_4_remaining_operator_notes"
+    ],
+    "25": [
       "ref_core_default",
       "ref_dialog_allow_save",
       "ref_fs_allow_write_text_file",
@@ -383,19 +665,99 @@
       "src_tauri_capabilities_default_schema",
       "src_tauri_capabilities_default_windows"
     ],
-    "13": [
-      "src_tauri_gen_schemas_desktop_schema_capability_description",
-      "src_tauri_gen_schemas_desktop_schema_capability_required",
-      "src_tauri_gen_schemas_desktop_schema_capability_type",
-      "src_tauri_gen_schemas_desktop_schema_definitions_capability",
-      "src_tauri_gen_schemas_linux_schema_capability_description",
-      "src_tauri_gen_schemas_linux_schema_capability_required",
-      "src_tauri_gen_schemas_linux_schema_capability_type",
-      "src_tauri_gen_schemas_linux_schema_definitions_capability",
-      "src_tauri_gen_schemas_linux_schema_json_ref_identifier",
-      "src_tauri_gen_schemas_linux_schema_json_ref_permissions"
+    "26": [
+      "factory_verification_7",
+      "factory_verification_7_claims_and_local_checks",
+      "factory_verification_7_defects_by_severity",
+      "factory_verification_7_deployment_headers_performance_and_identity",
+      "factory_verification_7_first_read_and_demo",
+      "factory_verification_7_independent_verification_7",
+      "factory_verification_7_notes",
+      "factory_verification_7_product_exercise_privacy_and_accessibility",
+      "factory_verification_7_verdict_pass"
     ],
-    "14": [
+    "27": [
+      "factory_verification_8",
+      "factory_verification_8_candidate_and_verdict",
+      "factory_verification_8_clean_clone_checks_and_claims",
+      "factory_verification_8_defects",
+      "factory_verification_8_deployment_identity",
+      "factory_verification_8_first_read_and_demo",
+      "factory_verification_8_independent_verification_8_fail",
+      "factory_verification_8_live_product_privacy_accessibility_and_headers",
+      "factory_verification_8_release_blocker_published_desktop_artifacts_are_not_this_candidate"
+    ],
+    "28": [
+      "factory_verification_9",
+      "factory_verification_9_clean_clone_claims_and_automated_checks",
+      "factory_verification_9_defects_by_severity",
+      "factory_verification_9_end_to_end_live_evidence",
+      "factory_verification_9_independent_verification_9_pass",
+      "factory_verification_9_privacy_security_accessibility_and_deployment",
+      "factory_verification_9_remaining_operational_note",
+      "factory_verification_9_required_first_read",
+      "factory_verification_9_verdict"
+    ],
+    "29": [
+      "factory_design",
+      "factory_design_asset_plan_and_prompt_sheet",
+      "factory_design_direction_and_purpose",
+      "factory_design_motion",
+      "factory_design_shape_and_interaction_grammar",
+      "factory_design_tokens",
+      "factory_design_type_and_spacing",
+      "factory_design_visual_thesis_the_archive_at_dusk"
+    ],
+    "30": [
+      "factory_verification_11",
+      "factory_verification_11_claims_and_local_quality_gates",
+      "factory_verification_11_defects",
+      "factory_verification_11_end_to_end_privacy_and_pwa_evidence",
+      "factory_verification_11_first_read_and_demo_gate",
+      "factory_verification_11_independent_verification_11_pass",
+      "factory_verification_11_live_deployment_accessibility_and_release_checks",
+      "factory_verification_11_verdict"
+    ],
+    "31": [
+      "factory_verification_15",
+      "factory_verification_15_build_and_automated_checks",
+      "factory_verification_15_privacy_headers_caching_and_service_boundary",
+      "factory_verification_15_product_accessibility_and_pwa_checks",
+      "factory_verification_15_release_result_and_severity_summary",
+      "factory_verification_15_required_claims_and_cold_first_read",
+      "factory_verification_15_scope",
+      "factory_verification_15_verification_15_pass"
+    ],
+    "32": [
+      "factory_verification_5",
+      "factory_verification_5_build_and_automated_quality_gates",
+      "factory_verification_5_claims_gate_mandatory_clean_clone_result",
+      "factory_verification_5_cold_first_read_and_demo",
+      "factory_verification_5_desktop_release",
+      "factory_verification_5_independent_live_qa",
+      "factory_verification_5_independent_verification_5_pass",
+      "factory_verification_5_notes"
+    ],
+    "33": [
+      "factory_verification_6",
+      "factory_verification_6_conclusion",
+      "factory_verification_6_f6_1_critical_downloadable_desktop_app_is_not_this_candidate",
+      "factory_verification_6_first_read",
+      "factory_verification_6_independent_verification_6_fail",
+      "factory_verification_6_live_checks",
+      "factory_verification_6_local_checks",
+      "factory_verification_6_required_claims_gate"
+    ],
+    "34": [
+      "factory_handoff",
+      "factory_handoff_handoff_polish_round_6_retry_2",
+      "factory_handoff_known_gaps",
+      "factory_handoff_release_and_deployment",
+      "factory_handoff_result",
+      "factory_handoff_verification",
+      "factory_handoff_what_changed"
+    ],
+    "35": [
       "tests_unit_published_release_test",
       "tests_unit_published_release_test_apiheaders",
       "tests_unit_published_release_test_asset",
@@ -404,105 +766,210 @@
       "tests_unit_published_release_test_requiredsourcecommit",
       "tests_unit_published_release_test_requireresponse"
     ],
-    "15": [
+    "36": [
+      "factory_evidence_polish_3_clean_clone_summary",
+      "factory_evidence_polish_3_clean_clone_summary_final_clean_clone_verification",
+      "factory_polish_3",
+      "factory_polish_3_additional_live_audit_repair",
+      "factory_polish_3_final_acceptance_evidence",
+      "factory_polish_3_polish_3_cumulative_review_repair_map"
+    ],
+    "37": [
+      "factory_copy_audit",
+      "factory_copy_audit_copy_audit",
+      "factory_copy_audit_landing_page",
+      "factory_copy_audit_readme",
+      "factory_copy_audit_terminology"
+    ],
+    "38": [
       "factory_evidence_polish_5_live_audit",
       "factory_evidence_polish_5_live_audit_downloadtext",
       "factory_evidence_polish_5_live_audit_expectednavigation",
       "factory_evidence_polish_5_live_audit_report",
       "factory_evidence_polish_5_live_audit_routes"
     ],
-    "16": [
+    "39": [
       "tests_unit_installer_test",
       "tests_unit_installer_test_availablepowershell",
       "tests_unit_installer_test_installer",
       "tests_unit_installer_test_nodesha256",
       "tests_unit_installer_test_sha256"
     ],
-    "17": [
+    "40": [
+      "agents",
+      "agents_definition_of_done_a_worker_may_not_claim_completion_without_all_of_these",
+      "agents_food_log_export_kit_food_log_export_kit_factory_product_contract",
+      "agents_working_rules"
+    ],
+    "41": [
       "public_install_choose_bin_dir",
       "public_install_fail",
       "public_install_sh__entry",
       "public_install_sh_public_install"
     ],
-    "18": [
+    "42": [
       "public_sw",
       "public_sw_cachefirst",
       "public_sw_networkfirst",
       "public_sw_shell"
     ],
-    "19": [
+    "43": [
       "tests_fixtures_windows_installer_harness",
       "tests_fixtures_windows_installer_harness_invoke_restmethod",
       "tests_fixtures_windows_installer_harness_invoke_webrequest",
       "tests_fixtures_windows_installer_harness_start_process"
     ],
-    "20": [
+    "44": [
+      "factory_polish_1",
+      "factory_polish_1_polish_1_review_repair_map",
+      "factory_polish_1_verification"
+    ],
+    "45": [
+      "factory_polish_2",
+      "factory_polish_2_full_evidence",
+      "factory_polish_2_polish_2_cumulative_review_repair_map"
+    ],
+    "46": [
+      "factory_polish_4",
+      "factory_polish_4_final_verification",
+      "factory_polish_4_polish_4_cumulative_review_repair_map"
+    ],
+    "47": [
+      "factory_polish_5",
+      "factory_polish_5_final_verification",
+      "factory_polish_5_polish_5_cumulative_adversarial_repair_map"
+    ],
+    "48": [
+      "factory_polish_6",
+      "factory_polish_6_final_verification",
+      "factory_polish_6_polish_round_6_finding_map"
+    ],
+    "49": [
+      "factory_evidence_repair_10_reproduced_native_build_prerequisite",
+      "factory_evidence_repair_10_reproduced_native_build_prerequisite_repair_10_reproduced_native_build_prerequisite_failure"
+    ],
+    "50": [
+      "factory_evidence_repair_11_reproduced_clean_native_build",
+      "factory_evidence_repair_11_reproduced_clean_native_build_repair_11_clean_native_build_reproduction"
+    ],
+    "51": [
+      "factory_evidence_repair_12_reproduced_stale_release",
+      "factory_evidence_repair_12_reproduced_stale_release_repair_12_reproduced_stale_release_identity"
+    ],
+    "52": [
+      "factory_evidence_repair_13_reproduced_stale_release",
+      "factory_evidence_repair_13_reproduced_stale_release_repair_13_stale_release_reproduction"
+    ],
+    "53": [
+      "factory_evidence_repair_5_reproduced_release_identity",
+      "factory_evidence_repair_5_reproduced_release_identity_release_identity_regression_reproduction"
+    ],
+    "54": [
+      "factory_evidence_repair_9_reproduced_release_identity",
+      "factory_evidence_repair_9_reproduced_release_identity_repair_9_reproduced_release_identity_failure"
+    ],
+    "55": [
       "src_tauri_build",
       "src_tauri_build_main"
     ],
-    "21": [
+    "56": [
       "src_tauri_src_lib",
       "src_tauri_src_lib_run"
     ],
-    "22": [
+    "57": [
       "src_tauri_src_main",
       "src_tauri_src_main_main"
     ],
-    "23": [
+    "58": [
       "tests_e2e_service_worker_update_spec",
       "tests_e2e_service_worker_update_spec_worker"
     ],
-    "24": [
+    "59": [
       "tests_unit_release_version_test",
       "tests_unit_release_version_test_read"
     ],
-    "25": [
+    "60": [
       "pkg_food_log_export_kit"
     ],
-    "26": [
+    "61": [
       "playwright_config"
     ],
-    "27": [
+    "62": [
       "public_install_ps1_public_install"
     ],
-    "28": [
+    "63": [
       "tests_unit_hosting_test"
     ],
-    "29": [
+    "64": [
       "vitest_config"
     ]
   },
   "cohesion": {
-    "0": 0.05398110661268556,
-    "1": 0.1253968253968254,
-    "2": 0.1253968253968254,
-    "3": 0.05873015873015873,
-    "4": 0.06666666666666667,
-    "5": 0.1330049261083744,
-    "6": 0.07407407407407407,
+    "0": 0.08022598870056497,
+    "1": 0.045328399629972246,
+    "2": 0.047619047619047616,
+    "3": 0.1073170731707317,
+    "4": 0.057057057057057055,
+    "5": 0.06896551724137931,
+    "6": 0.06896551724137931,
     "7": 0.07407407407407407,
-    "8": 0.07407407407407407,
-    "9": 0.08,
-    "10": 0.16842105263157894,
-    "11": 0.13333333333333333,
-    "12": 0.2,
-    "13": 0.2222222222222222,
-    "14": 0.2857142857142857,
-    "15": 0.4,
-    "16": 0.4,
-    "17": 0.6666666666666666,
-    "18": 0.5,
-    "19": 0.5,
-    "20": 1.0,
-    "21": 1.0,
-    "22": 1.0,
-    "23": 1.0,
-    "24": 1.0,
-    "25": 1.0,
-    "26": 1.0,
-    "27": 1.0,
-    "28": 1.0,
-    "29": 1.0
+    "8": 0.07692307692307693,
+    "9": 0.07692307692307693,
+    "10": 0.08,
+    "11": 0.08,
+    "12": 0.09523809523809523,
+    "13": 0.1,
+    "14": 0.16842105263157894,
+    "15": 0.11764705882352941,
+    "16": 0.11764705882352941,
+    "17": 0.15384615384615385,
+    "18": 0.15384615384615385,
+    "19": 0.15384615384615385,
+    "20": 0.16666666666666666,
+    "21": 0.16666666666666666,
+    "22": 0.18181818181818182,
+    "23": 0.2,
+    "24": 0.2,
+    "25": 0.2,
+    "26": 0.2222222222222222,
+    "27": 0.2222222222222222,
+    "28": 0.2222222222222222,
+    "29": 0.25,
+    "30": 0.25,
+    "31": 0.25,
+    "32": 0.25,
+    "33": 0.25,
+    "34": 0.2857142857142857,
+    "35": 0.2857142857142857,
+    "36": 0.3333333333333333,
+    "37": 0.4,
+    "38": 0.4,
+    "39": 0.4,
+    "40": 0.5,
+    "41": 0.6666666666666666,
+    "42": 0.5,
+    "43": 0.5,
+    "44": 0.6666666666666666,
+    "45": 0.6666666666666666,
+    "46": 0.6666666666666666,
+    "47": 0.6666666666666666,
+    "48": 0.6666666666666666,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0,
+    "62": 1.0,
+    "63": 1.0,
+    "64": 1.0
   },
   "gods": [
     {
@@ -516,44 +983,44 @@
       "degree": 14
     },
     {
+      "id": "factory_review_1_findings",
+      "label": "Findings",
+      "degree": 13
+    },
+    {
+      "id": "factory_review_2_findings",
+      "label": "Findings",
+      "degree": 13
+    },
+    {
       "id": "src_app_bindapp",
       "label": "bindApp()",
       "degree": 12
     },
     {
-      "id": "package_scripts",
-      "label": "scripts",
+      "id": "factory_verification_independent_verification_fail",
+      "label": "Independent verification \u2014 FAIL",
+      "degree": 12
+    },
+    {
+      "id": "factory_review_1_adversarial_first_read_review_1",
+      "label": "Adversarial first-read review 1",
       "degree": 11
     },
     {
-      "id": "src_main_render",
-      "label": "render()",
-      "degree": 10
+      "id": "factory_review_2_adversarial_first_read_review_2",
+      "label": "Adversarial first-read review 2",
+      "degree": 11
     },
     {
-      "id": "src_importer_importtext",
-      "label": "importText()",
-      "degree": 9
+      "id": "factory_review_3_adversarial_first_read_review_3",
+      "label": "Adversarial first-read review 3",
+      "degree": 11
     },
     {
-      "id": "src_app_startapp",
-      "label": "startApp()",
-      "degree": 8
-    },
-    {
-      "id": "src_shell_footer",
-      "label": "footer()",
-      "degree": 8
-    },
-    {
-      "id": "src_tauri_gen_schemas_desktop_schema_definitions",
-      "label": "definitions",
-      "degree": 8
-    },
-    {
-      "id": "src_tauri_gen_schemas_linux_schema_definitions",
-      "label": "definitions",
-      "degree": 8
+      "id": "factory_review_4_adversarial_first_read_review_4",
+      "label": "Adversarial first-read review 4",
+      "degree": 11
     }
   ],
   "surprises": [
@@ -569,33 +1036,11 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "bindApp()",
-      "target": "exportArchive()",
+      "source": "licensePanel()",
+      "target": "checkoutUrl()",
       "source_files": [
         "src/app.ts",
-        "src/exporter.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "bindApp()",
-      "target": "exportCsv()",
-      "source_files": [
-        "src/app.ts",
-        "src/exporter.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "bindApp()",
-      "target": "saveText()",
-      "source_files": [
-        "src/app.ts",
-        "src/exporter.ts"
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
@@ -611,6 +1056,28 @@
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "bridges separate communities"
+    },
+    {
+      "source": "render()",
+      "target": "startApp()",
+      "source_files": [
+        "src/main.ts",
+        "src/app.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "required",
+      "target": "identifier",
+      "source_files": [
+        "src-tauri/gen/schemas/desktop-schema.json",
+        "src-tauri/gen/schemas/linux-schema.json"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "extends",
+      "why": "cross-file semantic connection"
     }
   ],
   "tokens": {
