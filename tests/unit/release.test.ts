@@ -42,14 +42,14 @@ describe('release asset selection', () => {
 
   it('@regression:V14-release-identity requires both current version and current candidate identity', () => {
     const current = {
-      tag_name: 'v0.1.11',
+      tag_name: 'v0.1.12',
       target_commitish: 'current-candidate',
-      html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.11',
+      html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.12',
       assets
     };
-    expect(selectCurrentRelease(current, '0.1.11', 'current-candidate')).toEqual(current);
-    expect(selectCurrentRelease({ ...current, tag_name: 'v0.1.10' }, '0.1.11', 'current-candidate')).toBeUndefined();
-    expect(selectCurrentRelease({ ...current, target_commitish: 'older-candidate' }, '0.1.11', 'current-candidate')).toBeUndefined();
+    expect(selectCurrentRelease(current, '0.1.12', 'current-candidate')).toEqual(current);
+    expect(selectCurrentRelease({ ...current, tag_name: 'v0.1.11' }, '0.1.12', 'current-candidate')).toBeUndefined();
+    expect(selectCurrentRelease({ ...current, target_commitish: 'older-candidate' }, '0.1.12', 'current-candidate')).toBeUndefined();
   });
 
   it('@regression:R12-release-absence fetches api.github.com and fails soft for missing, stale, or malformed metadata', async () => {
@@ -63,32 +63,32 @@ describe('release asset selection', () => {
       expect(String(input)).toBe(releaseApiUrl);
       return new Response('{"message":"Not Found"}', { status: 404 });
     };
-    await expect(loadCurrentRelease('0.1.11', 'candidate', { storage, fetcher: missingFetch as typeof fetch, now: 100 }))
+    await expect(loadCurrentRelease('0.1.12', 'candidate', { storage, fetcher: missingFetch as typeof fetch, now: 100 }))
       .resolves.toBeUndefined();
     expect(stored.has('release:food-log-export-kit')).toBe(false);
 
     const stale = { tag_name: 'v0.1.10', target_commitish: 'older', html_url: 'https://example.test/old', assets: [] };
-    await expect(loadCurrentRelease('0.1.11', 'candidate', {
+    await expect(loadCurrentRelease('0.1.12', 'candidate', {
       storage,
       fetcher: async () => new Response(JSON.stringify(stale), { status: 200 })
     })).resolves.toBeUndefined();
-    await expect(loadCurrentRelease('0.1.11', 'candidate', {
+    await expect(loadCurrentRelease('0.1.12', 'candidate', {
       storage,
       fetcher: async () => { throw new TypeError('offline'); }
     })).resolves.toBeUndefined();
-    await expect(loadCurrentRelease('0.1.11', 'candidate', {
+    await expect(loadCurrentRelease('0.1.12', 'candidate', {
       storage,
       fetcher: async () => new Response('{broken', { status: 200 })
     })).resolves.toBeUndefined();
-    await expect(loadCurrentRelease('0.1.11', 'candidate', {
+    await expect(loadCurrentRelease('0.1.12', 'candidate', {
       storage,
-      fetcher: async () => new Response(JSON.stringify({ tag_name: 'v0.1.11', target_commitish: 'candidate' }), { status: 200 })
+      fetcher: async () => new Response(JSON.stringify({ tag_name: 'v0.1.12', target_commitish: 'candidate' }), { status: 200 })
     })).resolves.toBeUndefined();
   });
 
   it('@regression:R12-release-cache uses candidate metadata for one hour and refreshes an expired entry', async () => {
     const current = {
-      tag_name: 'v0.1.11', target_commitish: 'candidate', html_url: 'https://example.test/current', assets
+      tag_name: 'v0.1.12', target_commitish: 'candidate', html_url: 'https://example.test/current', assets
     };
     const stored = new Map<string, string>();
     const storage = {
@@ -98,12 +98,12 @@ describe('release asset selection', () => {
     };
     let requests = 0;
     const fetcher = async () => { requests += 1; return new Response(JSON.stringify(current), { status: 200 }); };
-    await expect(loadCurrentRelease('0.1.11', 'candidate', { storage, fetcher: fetcher as typeof fetch, now: 100 }))
+    await expect(loadCurrentRelease('0.1.12', 'candidate', { storage, fetcher: fetcher as typeof fetch, now: 100 }))
       .resolves.toEqual(current);
-    await expect(loadCurrentRelease('0.1.11', 'candidate', { storage, fetcher: fetcher as typeof fetch, now: 3_600_099 }))
+    await expect(loadCurrentRelease('0.1.12', 'candidate', { storage, fetcher: fetcher as typeof fetch, now: 3_600_099 }))
       .resolves.toEqual(current);
     expect(requests).toBe(1);
-    await loadCurrentRelease('0.1.11', 'candidate', { storage, fetcher: fetcher as typeof fetch, now: 3_600_100 });
+    await loadCurrentRelease('0.1.12', 'candidate', { storage, fetcher: fetcher as typeof fetch, now: 3_600_100 });
     expect(requests).toBe(2);
   });
 });

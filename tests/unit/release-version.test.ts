@@ -13,7 +13,7 @@ describe('desktop release regression', () => {
     const footer = read('src/shell.ts');
     const notFound = read('public/404.html');
 
-    expect(packageVersion).toBe('0.1.11');
+    expect(packageVersion).toBe('0.1.12');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);
@@ -23,6 +23,7 @@ describe('desktop release regression', () => {
     expect(footer).toContain('Version ${appVersion} · release repair');
     expect(notFound).toContain(`Version ${packageVersion} · release repair`);
     expect(read('vite.config.ts')).toContain("fileName: 'release-identity.json'");
+    expect(JSON.parse(read('package.json')).scripts['release:preflight']).toBe('node scripts/release-preflight.mjs');
   });
 
   it('@claim:release-workflow starts both Mac architectures, Windows, and Linux from a v* tag', () => {
@@ -57,6 +58,14 @@ describe('desktop release regression', () => {
     expect(workflow).toContain("'checksums': checksums");
     expect(workflow).toContain('grep -Fx "# source_commit=$FOOD_LOG_SOURCE_COMMIT" SHA256SUMS');
     expect(workflow).not.toContain("|| 'v0.1.2'");
+  });
+
+  it('@regression:R13-release-preflight requires a clean current main tip before a tag can exist', () => {
+    const preflight = read('scripts/release-preflight.mjs');
+    expect(preflight).toContain("['status', '--porcelain', '--untracked-files=all']");
+    expect(preflight).toContain("['fetch', 'origin', 'main:refs/remotes/origin/main', '--quiet']");
+    expect(preflight).toContain("['ls-remote', '--exit-code', '--tags', 'origin'");
+    expect(preflight).toContain('origin/main must equal HEAD before creating a release tag');
   });
 
   it('@regression:R10-native-build-prerequisites documents the direct Linux dependency that Cargo needs', () => {

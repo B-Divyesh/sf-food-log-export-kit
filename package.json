@@ -1,6 +1,6 @@
 {
   "name": "food-log-export-kit",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,6 +9,7 @@
     "build:site": "tsc --noEmit && vite build",
     "build:app": "tsc --noEmit && vite build --outDir dist/app",
     "native:prereqs": "node scripts/linux-native-prereqs.mjs",
+    "release:preflight": "node scripts/release-preflight.mjs",
     "tauri": "node scripts/tauri.mjs",
     "test": "vitest run && playwright test",
     "test:unit": "vitest run",

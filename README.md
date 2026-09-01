@@ -64,7 +64,19 @@ npm run tauri build
 
 `npm run build:site` writes the deployable website to `dist/site/`, with `index.html` at that root. `npm run build:app` writes the Tauri frontend to `dist/app/`. The release workflow builds macOS, Windows, and Linux installers after a `v*` tag is pushed.
 
-Site builds embed the current Git commit. Set `VITE_FOOD_LOG_SOURCE_COMMIT` only when deploying a site for an exact published desktop candidate.
+Site builds embed the checked-out Git commit. If `VITE_FOOD_LOG_SOURCE_COMMIT` is set, it must be that exact commit; a site build refuses a stale identity.
+
+## Publish a desktop release
+
+Commit and push all source, test, handoff, and evidence changes first. From the clean `main` tip, run:
+
+```sh
+npm run release:preflight
+git tag -a v0.1.12 -m "Food Log Export Kit v0.1.12"
+git push origin main v0.1.12
+```
+
+The preflight refuses a dirty checkout, a non-`main` branch, a local or remote tag that already exists, a version mismatch, or a `main` tip that does not match `HEAD`. Wait for the GitHub Actions release to publish its installers, `SHA256SUMS`, and `latest.json`; then run the `candidate-installers` claim before deploying `dist/site/` built from that same commit.
 
 Tested product claims are listed in [`.factory/claims.json`](.factory/claims.json). Demo behavior is documented in [`.factory/demo.md`](.factory/demo.md).
 

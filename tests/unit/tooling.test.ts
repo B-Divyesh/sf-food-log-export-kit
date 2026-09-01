@@ -7,6 +7,8 @@ import viteConfig from '../../vite.config';
 // @ts-expect-error The test exercises its runtime exports directly.
 import { checkLinuxNativePrerequisites, linuxNativeBuildPackages, linuxNativePrerequisiteMessage } from '../../scripts/linux-native-prereqs.mjs';
 import { resolveSourceCommit } from '../../scripts/source-commit';
+// @ts-expect-error The release preflight is deliberately executable JavaScript.
+import { validateReleaseState } from '../../scripts/release-preflight.mjs';
 
 describe('release tooling regressions', () => {
   it('@regression:F13-2 normalizes CI=1 before Tauri parses the documented command', () => {
@@ -25,11 +27,23 @@ describe('release tooling regressions', () => {
     expect(resolveSourceCommit({ ...process.env, VITE_FOOD_LOG_SOURCE_COMMIT: '' })).toBe(head);
     expect(viteConfig.define?.['import.meta.env.VITE_FOOD_LOG_SOURCE_COMMIT']).toBe(JSON.stringify(head));
     expect(() => resolveSourceCommit({ ...process.env, VITE_FOOD_LOG_SOURCE_COMMIT: 'not-a-commit' })).toThrow(/40-character Git commit/);
+    expect(() => resolveSourceCommit({ ...process.env, VITE_FOOD_LOG_SOURCE_COMMIT: '0'.repeat(40) })).toThrow(/must match the checked-out Git commit/);
     expect(viteConfig.plugins).toBeDefined();
     for (const installer of ['public/install.sh', 'public/install.ps1']) {
       expect(readFileSync(installer, 'utf8')).not.toMatch(/[0-9a-f]{40}/);
       expect(readFileSync(installer, 'utf8')).toContain('release-identity.json');
     }
+  });
+
+  it('@regression:R13-release-preflight rejects a dirty, stale, or already tagged candidate', () => {
+    const valid = {
+      status: '', branch: 'main', head: 'a'.repeat(40), remoteHead: 'a'.repeat(40), tagExists: false,
+      tag: 'v0.1.12', packageVersion: '0.1.12', tauriVersion: '0.1.12', cargoVersion: '0.1.12', buildVersion: '0.1.12'
+    };
+    expect(() => validateReleaseState(valid)).not.toThrow();
+    expect(() => validateReleaseState({ ...valid, status: ' M src/build.ts' })).toThrow(/commit or stash every change/);
+    expect(() => validateReleaseState({ ...valid, remoteHead: 'b'.repeat(40) })).toThrow(/origin\/main must equal HEAD/);
+    expect(() => validateReleaseState({ ...valid, tagExists: true })).toThrow(/already exists/);
   });
 
   it('@regression:R11-native-preflight names the missing Linux library and exact setup command before Cargo runs', () => {
