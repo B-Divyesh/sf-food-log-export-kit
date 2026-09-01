@@ -1,127 +1,41 @@
-# Handoff — repair 13
-
-## Independent verification 15 — PASS
-
-Candidate `12b6feb595b55aab9e7bd681b762678aba9e67ba` is accepted for
-<https://food-log-export-kit.sociobot.in>. The live release identity reports
-that exact source commit and `v0.1.12`. All 23 exact product-claim checks,
-`npm test`, `npm run build`, and `npm run build:app` passed from a clean
-checkout. Independent live demo, CSV/JSON export, offline reload, 390 px
-mobile, keyboard, Axe serious/critical, console, request, header, cache, and
-installer-identity checks passed. See `.factory/verification-15.md` for exact
-evidence and the severity summary.
-
-The only environment note is that native Rust checks cannot start in this
-disposable container without the documented GLib and WebKit development
-packages. It does not change the PASS result for the checked web/app builds
-or published candidate installers.
+# Handoff — review 6
 
 ## Result
 
-Food Log Export Kit remains a Tauri 2 desktop app with a static landing site.
-Repair 13 publishes `v0.1.12` only from the clean final `main` commit, then
-deploys `dist/site/` built from that same commit to the allowed
-`sf-food-log-export-kit` static resource.
+Completed the requested read-only adversarial QA review. Product code was not changed. The review is FAIL and is recorded in .factory/review-6.md.
 
-## Reproduced failure and cause
+## Checks completed
 
-The failed candidate was `269ff71a28d5ee9dd08bc91499a138a7aa5da2f5`. On
-2026-09-01, the GitHub Releases API returned `v0.1.11` with
-`target_commitish` `21758acb519c129ff8d4eba66167940b3ad93562`; the annotated
-`v0.1.11` tag peeled to the same older commit. That release had two DMGs,
-MSI, setup EXE, AppImage, DEB, RPM, `SHA256SUMS`, and `latest.json`, but none
-was built from the candidate. The exact reproduction is recorded in
-`.factory/evidence/repair-13/reproduced-stale-release.md`.
+- Opened the live site from fresh mobile 390 × 844 and desktop 1440 × 1000 browser contexts.
+- Confirmed the first screen states the job, audience, and first action.
+- Entered the one-click demo, confirmed 12 sample records, demo banner, reset, empty real workspace on exit, empty browser storage, and same-origin demo requests.
+- Checked live routes, titles, descriptions, canonical and OG URLs, one h1 and main per page, header/footer, back-button heading focus, 404, robots, sitemap, favicon, social image, and live links.
+- Ran live Axe checks on /, /demo, /app, /privacy, /terms, and an unknown route: no violations.
+- Reviewed every earlier review, polish record, and the prior handoff; the review matrix records each earlier finding.
+- Ran npm run build successfully. The initial JavaScript chunks total well below the static-site budget after gzip.
+- Attempted all 23 commands listed in .factory/claims.json.
 
-The prior release was tagged before all candidate bookkeeping commits were
-final. The release resolver correctly withheld those stale installers, but the
-desktop candidate had no current download. In addition, a supplied
-`VITE_FOOD_LOG_SOURCE_COMMIT` could describe a different checkout.
+## Blocking result
 
-## Repair
+Nineteen declared claim commands fail before their tagged check because the shared candidate-installers assertion compares current checkout 89753a7bd284c5dd359c965168402a00001b1c83 with published release target 12b6feb595b55aab9e7bd681b762678aba9e67ba. Four direct unit claim commands pass: verified-installer, windows-installer, static-hosting, and release-workflow.
 
-- Version `0.1.12` is synchronized across npm, Cargo, Tauri, site identity,
-  static 404, installer fixtures, and version coverage.
-- Site builds now reject a supplied source identity unless it exactly matches
-  `git rev-parse HEAD`; this prevents a stale site build from claiming another
-  desktop candidate.
-- `npm run release:preflight` refuses dirty worktrees, non-`main` checkouts,
-  an `origin/main` different from `HEAD`, an existing local or remote version
-  tag, and divergent npm/Tauri/Cargo/site versions. The workflow independently
-  keeps its existing tagged-default-branch guard.
-- `@regression:R13-release-preflight` covers dirty, stale, and already-tagged
-  candidates. `@regression:F13-1-site-build` covers a valid-looking but stale
-  source-commit override.
+The review also records unlisted README release-process claims and a stale copy-audit record.
 
-No food-data behavior, storage, privacy boundary, pricing, artwork, or
-telemetry changed.
+## How to verify
 
-## Verification before release
+    npm ci
+    npm run build
+    npm test -- --grep @claim:candidate-installers
 
-All commands below ran after `npm ci` (66 packages; 0 reported
-vulnerabilities), except the intentionally pre-publication live release
-identity gate:
+The last command currently demonstrates the blocking release-identity mismatch. See .factory/review-6.md for the full command result table and concrete repair requirements.
 
-```sh
-npx vitest run --exclude tests/unit/published-release.test.ts
-# 34 passed
+## Known gaps and next steps
 
-npx playwright test
-# 58 passed; 4 expected desktop-project skips
+1. Publish a new commit-matched desktop release and matching website build.
+2. Run every declared claim command after publishing; all must pass.
+3. Add test-backed claims for README source-commit and preflight statements, or remove them.
+4. Regenerate .factory/copy-audit.md from current page and README copy.
 
-npm run build:site
-npm run build:app
-cargo test --manifest-path src-tauri/Cargo.toml
-CI=1 npm run tauri -- build
-```
+## Repository state
 
-The exact native build produced:
-
-- `Food Log Export Kit_0.1.12_amd64.deb`
-- `Food Log Export Kit-0.1.12-1.x86_64.rpm`
-- `Food Log Export Kit_0.1.12_amd64.AppImage`
-
-The browser matrix covers desktop and 390 px mobile, keyboard export,
-screen-reader filter state, Axe serious/critical findings, 200% zoom, touch
-targets, reduced motion, demo isolation, CSV/JSON export, local-only requests,
-offline reload, and controlled service-worker update. The site build contains
-50,093 bytes of uncompressed JavaScript across four chunks (17.36 kB gzip),
-23,482 bytes CSS (6.10 kB gzip), and a 14,420-byte mobile hero image.
-
-Before publication, `npm run test:unit` deliberately failed only
-`@claim:candidate-installers`: live latest was `v0.1.11` instead of the new
-candidate. The focused stale override command also failed as designed:
-
-```sh
-VITE_FOOD_LOG_SOURCE_COMMIT=21758acb519c129ff8d4eba66167940b3ad93562 npm run build:site
-# Error: VITE_FOOD_LOG_SOURCE_COMMIT must match the checked-out Git commit.
-```
-
-## Release, deploy, and final identity gate
-
-All source, test, handoff, and evidence changes are committed and pushed
-before tagging. From the clean final `main` tip, the exact release sequence is:
-
-```sh
-npm run release:preflight
-git tag -a v0.1.12 -m "Food Log Export Kit v0.1.12"
-git push origin main v0.1.12
-# wait for GitHub Actions Desktop release to finish
-npm test
-npm run build:site
-/opt/fleet/lib/deploy-static.sh food-log-export-kit dist/site
-```
-
-The post-publication `@claim:candidate-installers` test resolves the release,
-peels its tag, checks `latest.json` and `SHA256SUMS`, resolves every installer
-URL, and downloads the smallest installer for a SHA-256 comparison. The final
-site `release-identity.json`, release manifest, checksum provenance line,
-peeled tag, deployed site, and local final `HEAD` must be identical. Run
-`/opt/fleet/lib/verify-url.sh` for `/`, `/demo`, `/app`, `/privacy`, and
-`/terms`, then Axe against the live landing and app routes.
-
-## Known gap and operator action
-
-macOS and Windows installers are unsigned. Signing requires the owner-managed
-`APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` GitHub Actions secrets. The product
-does not store food data on a server and has no account or analytics service.
+The pre-existing graphify-out generated-file changes were left untouched. This review adds only .factory/review-6.md and this handoff file.
