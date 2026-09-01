@@ -551,8 +551,8 @@
       "degree": 8
     },
     {
-      "id": "src_tauri_tauri_conf_bundle",
-      "label": "bundle",
+      "id": "src_tauri_gen_schemas_linux_schema_definitions",
+      "label": "definitions",
       "degree": 8
     }
   ],
