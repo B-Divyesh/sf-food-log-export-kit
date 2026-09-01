@@ -22,7 +22,7 @@ describe('release tooling regressions', () => {
     expect(result.status).toBe(0);
   });
 
-  it('@regression:F13-1-site-build commits a full source identity into every Vite build', () => {
+  it('@claim:site-source-commit uses the checked-out commit and rejects a different supplied identity', () => {
     const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
     expect(resolveSourceCommit({ ...process.env, VITE_FOOD_LOG_SOURCE_COMMIT: '' })).toBe(head);
     expect(viteConfig.define?.['import.meta.env.VITE_FOOD_LOG_SOURCE_COMMIT']).toBe(JSON.stringify(head));
@@ -35,15 +35,18 @@ describe('release tooling regressions', () => {
     }
   });
 
-  it('@regression:R13-release-preflight rejects a dirty, stale, or already tagged candidate', () => {
+  it('@claim:release-preflight stops invalid release candidates before a tag is created', () => {
     const valid = {
       status: '', branch: 'main', head: 'a'.repeat(40), remoteHead: 'a'.repeat(40), tagExists: false,
-      tag: 'v0.1.12', packageVersion: '0.1.12', tauriVersion: '0.1.12', cargoVersion: '0.1.12', buildVersion: '0.1.12'
+      tag: 'v0.1.13', packageVersion: '0.1.13', tauriVersion: '0.1.13', cargoVersion: '0.1.13', buildVersion: '0.1.13'
     };
     expect(() => validateReleaseState(valid)).not.toThrow();
     expect(() => validateReleaseState({ ...valid, status: ' M src/build.ts' })).toThrow(/commit or stash every change/);
+    expect(() => validateReleaseState({ ...valid, branch: 'release' })).toThrow(/release checkout must be on main/);
     expect(() => validateReleaseState({ ...valid, remoteHead: 'b'.repeat(40) })).toThrow(/origin\/main must equal HEAD/);
     expect(() => validateReleaseState({ ...valid, tagExists: true })).toThrow(/already exists/);
+    expect(() => validateReleaseState({ ...valid, cargoVersion: '0.1.12' })).toThrow(/versions must match/);
+    expect(() => validateReleaseState({ ...valid, tag: 'v0.1.12' })).toThrow(/release tag must equal/);
   });
 
   it('@regression:R11-native-preflight names the missing Linux library and exact setup command before Cargo runs', () => {
