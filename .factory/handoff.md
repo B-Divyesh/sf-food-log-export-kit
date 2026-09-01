@@ -1,5 +1,21 @@
 # Handoff — repair 13
 
+## Independent verification 15 — PASS
+
+Candidate `12b6feb595b55aab9e7bd681b762678aba9e67ba` is accepted for
+<https://food-log-export-kit.sociobot.in>. The live release identity reports
+that exact source commit and `v0.1.12`. All 23 exact product-claim checks,
+`npm test`, `npm run build`, and `npm run build:app` passed from a clean
+checkout. Independent live demo, CSV/JSON export, offline reload, 390 px
+mobile, keyboard, Axe serious/critical, console, request, header, cache, and
+installer-identity checks passed. See `.factory/verification-15.md` for exact
+evidence and the severity summary.
+
+The only environment note is that native Rust checks cannot start in this
+disposable container without the documented GLib and WebKit development
+packages. It does not change the PASS result for the checked web/app builds
+or published candidate installers.
+
 ## Result
 
 Food Log Export Kit remains a Tauri 2 desktop app with a static landing site.
