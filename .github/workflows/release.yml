@@ -13,6 +13,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: desktop-release-${{ github.ref_name || inputs.release_tag }}
+  cancel-in-progress: false
+
 jobs:
   build:
     env:
@@ -69,6 +73,11 @@ jobs:
           test "$(node -p 'require("./package.json").version')" = "$(node -p 'require("./src-tauri/tauri.conf.json").version')"
           test "$(node -p 'require("fs").readFileSync("src-tauri/Cargo.toml", "utf8").match(/^version = "([^"]+)"$/m)[1]')" = "$(node -p 'require("./package.json").version')"
           test "$FOOD_LOG_SOURCE_COMMIT" = "$(git rev-parse HEAD)"
+          if [ "${{ github.event_name }}" = push ]; then
+            default_branch="${{ github.event.repository.default_branch }}"
+            git fetch origin "$default_branch:refs/remotes/origin/$default_branch" --depth=1
+            test "$FOOD_LOG_SOURCE_COMMIT" = "$(git rev-parse "origin/$default_branch")"
+          fi
       - name: Verify the Windows installer contract
         if: matrix.platform == 'windows-latest'
         run: npm run test:unit -- --testNamePattern '@claim:windows-installer'

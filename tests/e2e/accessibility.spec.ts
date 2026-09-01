@@ -184,3 +184,27 @@ test('@regression:stale-desktop-release keeps the download action calm when GitH
   await expect(page.getByRole('link', { name: 'Downloads are being published' })).toHaveAttribute('href', 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases');
   await expect(page.getByRole('link', { name: 'Read release notes on GitHub' })).toHaveAttribute('href', 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases');
 });
+
+for (const unavailable of [
+  { name: 'missing', status: 404, body: '{"message":"Not Found"}' },
+  { name: 'rate limited', status: 403, body: '{"message":"API rate limit exceeded"}' },
+  { name: 'malformed', status: 200, body: '{broken' }
+]) {
+  test(`@regression:R12-release-absence keeps a usable release-page link when metadata is ${unavailable.name}`, async ({ page }) => {
+    const pageErrors: string[] = [];
+    page.on('pageerror', (error) => pageErrors.push(error.message));
+    await page.addInitScript(() => localStorage.setItem('release:food-log-export-kit', '{broken cache'));
+    await page.route('https://api.github.com/repos/B-Divyesh/sf-food-log-export-kit/releases/latest', (route) => route.fulfill({
+      status: unavailable.status,
+      contentType: 'application/json',
+      body: unavailable.body
+    }));
+    await page.goto('/');
+    const download = page.getByRole('link', { name: 'Downloads are being published' });
+    await expect(download).toHaveAttribute('href', 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases');
+    await expect(page.locator('#download-note')).toHaveText('Use the release page to check current desktop builds.');
+    await expect(page.getByRole('link', { name: 'Read release notes on GitHub' }))
+      .toHaveAttribute('href', 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases');
+    expect(pageErrors).toEqual([]);
+  });
+}

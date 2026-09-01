@@ -36,7 +36,7 @@ describe('Installer regression', () => {
     mkdirSync(fakeBin);
     mkdirSync(assets);
 
-    const linuxName = 'Food.Log.Export.Kit_0.1.10_amd64.AppImage';
+    const linuxName = 'Food.Log.Export.Kit_0.1.11_amd64.AppImage';
     const armName = 'Food.Log.Export.Kit_aarch64.app.tar.gz';
     const intelName = 'Food.Log.Export.Kit_x64.app.tar.gz';
     const linuxAsset = join(assets, linuxName);
@@ -59,7 +59,7 @@ describe('Installer regression', () => {
     writeFileSync(sumsPath, `# source_commit=${fixtureSourceCommit}\n${sums}\n`);
     const releasePath = join(root, 'release.json');
     writeFileSync(releasePath, JSON.stringify({
-      tag_name: 'v0.1.10',
+      tag_name: 'v0.1.11',
       target_commitish: fixtureSourceCommit,
       assets: [linuxName, armName, intelName, 'SHA256SUMS'].map((name) => ({
         name,
@@ -67,7 +67,7 @@ describe('Installer regression', () => {
       }))
     }, null, 2));
     const identityPath = join(root, 'release-identity.json');
-    writeFileSync(identityPath, JSON.stringify({ version: '0.1.10', release_tag: 'v0.1.10', source_commit: fixtureSourceCommit }, null, 2));
+    writeFileSync(identityPath, JSON.stringify({ version: '0.1.11', release_tag: 'v0.1.11', source_commit: fixtureSourceCommit }, null, 2));
 
     const curl = join(fakeBin, 'curl');
     writeFileSync(curl, `#!/bin/sh

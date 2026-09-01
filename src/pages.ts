@@ -1,6 +1,6 @@
 import { checkoutUrl } from './license';
 import { appVersion, sourceCommit } from './build';
-import { detectDesktopPlatform, detectMacArchitecture, selectCurrentRelease, selectPlatformAsset, type ReleaseDetails } from './release';
+import { detectDesktopPlatform, detectMacArchitecture, loadCurrentRelease, releasePageUrl, selectPlatformAsset } from './release';
 import { footer, header } from './shell';
 
 const art = `<picture class="hero-art"><source media="(max-width: 720px)" srcset="/art/archive-kitchen-720.webp"><img src="/art/archive-kitchen-1280.webp" width="1280" height="853" alt="A recipe card archive box in a quiet kitchen at dusk." fetchpriority="high" decoding="async"></picture>`;
@@ -16,7 +16,7 @@ export function landingPage(): string {
       </div>
       <div class="hero-caption"><p>Keep a CSV for spreadsheets. JSON keeps consistent fields and conversion notes.</p></div>
     </section>
-    <section class="download-band" aria-labelledby="download-title"><div><p class="eyebrow">Desktop app · version ${appVersion}</p><h2 id="download-title">Download the desktop app</h2><p>The app reads CSV and JSON exports. It also works when your internet is off.</p></div><div class="download-action"><a class="primary-button download-button" id="platform-download" href="https://github.com/B-Divyesh/sf-food-log-export-kit/releases">Downloads are being published</a><small id="download-note">Choose a build for your computer from the release page.</small><a class="release-notes-link" id="release-notes" href="https://github.com/B-Divyesh/sf-food-log-export-kit/releases" rel="external">Read release notes<span class="sr-only"> on GitHub</span></a></div></section>
+    <section class="download-band" aria-labelledby="download-title"><div><p class="eyebrow">Desktop app · version ${appVersion}</p><h2 id="download-title">Download the desktop app</h2><p>The app reads CSV and JSON exports. It also works when your internet is off.</p></div><div class="download-action"><a class="primary-button download-button" id="platform-download" href="${releasePageUrl}">Downloads are being published</a><small id="download-note">Choose a build for your computer from the release page.</small><a class="release-notes-link" id="release-notes" href="${releasePageUrl}" rel="external">Read release notes<span class="sr-only"> on GitHub</span></a></div></section>
     <section class="product-preview" aria-labelledby="preview-title"><div class="section-intro"><p class="eyebrow">Review before export</p><h2 id="preview-title">Review entries and conversion notes</h2><p>Invalid values, skipped rows, and populated unrecognized fields appear in conversion notes.</p></div>
       <div class="preview-window"><div class="preview-top"><span></span><b>Food Log Export Kit</b><small>● On this device</small></div><div class="preview-body"><ol><li class="done"><i>1</i><span><b>Import</b><small>sample-food-history.csv</small></span></li><li class="active"><i>2</i><span><b>Review</b><small>12 entries ready</small></span></li><li><i>3</i><span><b>Export</b><small>CSV + JSON</small></span></li></ol><div class="preview-ledger"><div class="ledger-head"><span>APR 14</span><b>3 meals</b><em>No notes</em></div><div><span>Breakfast</span><b>Oatmeal with blueberries</b><span>342 kcal</span></div><div><span>Lunch</span><b>Lentil soup</b><span>418 kcal</span></div><div><span>Dinner</span><b>Tofu ginger stir-fry</b><span>561 kcal</span></div></div></div></div>
     </section>
@@ -51,29 +51,18 @@ export async function resolvePlatformDownload(): Promise<void> {
   const releaseNotes = document.querySelector<HTMLAnchorElement>('#release-notes');
   if (!button || !note || !releaseNotes) return;
   const platform = detectDesktopPlatform(navigator.userAgent);
-  try {
-    const cached = localStorage.getItem('release:food-log-export-kit');
-    let release: ReleaseDetails;
-    const cachedRelease = cached ? JSON.parse(cached) as { saved: number; release: ReleaseDetails } : undefined;
-    if (cachedRelease && Date.now() - cachedRelease.saved < 3_600_000 && selectCurrentRelease(cachedRelease.release, appVersion, sourceCommit)) {
-      release = cachedRelease.release;
-    } else {
-      const response = await fetch('https://api.github.com/repos/B-Divyesh/sf-food-log-export-kit/releases/latest');
-      if (!response.ok) throw new Error('No release');
-      release = await response.json();
-      localStorage.setItem('release:food-log-export-kit', JSON.stringify({ saved: Date.now(), release }));
-    }
-    const currentRelease = selectCurrentRelease(release, appVersion, sourceCommit);
-    if (!currentRelease) throw new Error('The published release does not match this app build.');
+  const currentRelease = await loadCurrentRelease(appVersion, sourceCommit);
+  if (currentRelease) {
     const macArchitecture = platform === 'macOS' ? await detectMacArchitecture() : 'unknown';
     const asset = selectPlatformAsset(currentRelease.assets, platform, macArchitecture);
     button.href = asset?.browser_download_url ?? currentRelease.html_url;
     releaseNotes.href = currentRelease.html_url;
     button.textContent = asset ? `Download for ${platform}` : platform === 'macOS' ? 'Choose your Mac download' : 'View desktop releases';
     note.textContent = asset ? asset.name : platform === 'macOS' ? 'Choose Apple Silicon or Intel on the release page.' : 'Downloads are being published for all three platforms.';
-  } catch {
+  } else {
     button.textContent = 'Downloads are being published';
     note.textContent = 'Use the release page to check current desktop builds.';
-    releaseNotes.href = 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases';
+    button.href = releasePageUrl;
+    releaseNotes.href = releasePageUrl;
   }
 }

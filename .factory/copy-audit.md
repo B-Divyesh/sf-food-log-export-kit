@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 2026-08-30 after repair 11. Counts treat hyphenated terms, product names, file names, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
+Audited 2026-09-01 after repair 12. Counts treat hyphenated terms, product names, file names, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
 
 ## Landing page
 
@@ -27,12 +27,12 @@ Audited 2026-08-30 after repair 11. Counts treat hyphenated terms, product names
 | Keep a CSV for spreadsheets. | 5 |
 | JSON keeps consistent fields and conversion notes. | 7 |
 | A recipe card archive box in a quiet kitchen at dusk. | 11 |
-| Desktop app · version 0.1.10 | 4 |
+| Desktop app · version 0.1.11 | 4 |
 | Download the desktop app | 4 |
 | The app reads CSV and JSON exports. | 7 |
 | It also works when your internet is off. | 8 |
 | Download for Linux | 3 |
-| Food.Log.Export.Kit_0.1.10_amd64.AppImage | 1 |
+| Food.Log.Export.Kit_0.1.11_amd64.AppImage | 1 |
 | Read release notes | 3 |
 | Review before export | 3 |
 | Review entries and conversion notes | 5 |
@@ -72,7 +72,7 @@ Audited 2026-08-30 after repair 11. Counts treat hyphenated terms, product names
 | Read the terms. | 3 |
 | Turn food tracker exports into a local archive. | 8 |
 | Built by Param Factory | 4 |
-| Version 0.1.10 · release repair · Generated artwork | 6 |
+| Version 0.1.11 · release repair · Generated artwork | 6 |
 
 ## README
 

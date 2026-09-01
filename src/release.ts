@@ -10,6 +10,16 @@ export interface ReleaseDetails {
   assets: ReleaseAsset[];
 }
 
+interface CachedRelease {
+  saved: number;
+  release: ReleaseDetails;
+}
+
+export const releaseApiUrl = 'https://api.github.com/repos/B-Divyesh/sf-food-log-export-kit/releases/latest';
+export const releasePageUrl = 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases';
+const releaseCacheKey = 'release:food-log-export-kit';
+const releaseCacheLifetimeMs = 3_600_000;
+
 export type DesktopPlatform = 'macOS' | 'Windows' | 'Linux';
 export type MacArchitecture = 'arm64' | 'x64' | 'unknown';
 
@@ -48,7 +58,63 @@ export function selectCurrentRelease(
 ): ReleaseDetails | undefined {
   if (release.tag_name !== `v${appVersion}`) return undefined;
   if (sourceCommit && release.target_commitish !== sourceCommit) return undefined;
+  if (typeof release.html_url !== 'string' || !Array.isArray(release.assets)) return undefined;
+  if (release.assets.some((asset) => typeof asset?.name !== 'string' || typeof asset?.browser_download_url !== 'string')) return undefined;
   return release;
+}
+
+function readCachedRelease(storage: Pick<Storage, 'getItem' | 'removeItem'>, now: number): ReleaseDetails | undefined {
+  try {
+    const value = storage.getItem(releaseCacheKey);
+    if (!value) return undefined;
+    const cached = JSON.parse(value) as Partial<CachedRelease>;
+    if (typeof cached.saved !== 'number' || now - cached.saved >= releaseCacheLifetimeMs || !cached.release) {
+      storage.removeItem(releaseCacheKey);
+      return undefined;
+    }
+    return cached.release;
+  } catch {
+    try { storage.removeItem(releaseCacheKey); } catch { /* Storage can be unavailable in private contexts. */ }
+    return undefined;
+  }
+}
+
+/**
+ * Resolve only metadata for this exact site build. GitHub absence, rate limits,
+ * stale releases, malformed JSON, and unavailable browser storage all degrade
+ * to `undefined`; callers retain the normal Releases-page link.
+ */
+export async function loadCurrentRelease(
+  appVersion: string,
+  sourceCommit: string,
+  options: {
+    fetcher?: typeof fetch;
+    storage?: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+    now?: number;
+  } = {}
+): Promise<ReleaseDetails | undefined> {
+  const fetcher = options.fetcher ?? fetch;
+  const storage = options.storage ?? localStorage;
+  const now = options.now ?? Date.now();
+  const cached = readCachedRelease(storage, now);
+  const currentCached = cached && selectCurrentRelease(cached, appVersion, sourceCommit);
+  if (currentCached) return currentCached;
+
+  try {
+    const response = await fetcher(releaseApiUrl, { headers: { Accept: 'application/vnd.github+json' } });
+    if (!response.ok) return undefined;
+    const release = await response.json() as ReleaseDetails;
+    const current = selectCurrentRelease(release, appVersion, sourceCommit);
+    if (!current) return undefined;
+    try {
+      storage.setItem(releaseCacheKey, JSON.stringify({ saved: now, release: current } satisfies CachedRelease));
+    } catch {
+      // A blocked storage write must not prevent a direct installer link.
+    }
+    return current;
+  } catch {
+    return undefined;
+  }
 }
 
 export function selectPlatformAsset(assets: ReleaseAsset[], platform: DesktopPlatform, macArchitecture: MacArchitecture = 'unknown'): ReleaseAsset | undefined {

@@ -13,7 +13,7 @@ describe('desktop release regression', () => {
     const footer = read('src/shell.ts');
     const notFound = read('public/404.html');
 
-    expect(packageVersion).toBe('0.1.10');
+    expect(packageVersion).toBe('0.1.11');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);
@@ -46,6 +46,9 @@ describe('desktop release regression', () => {
     expect(workflow).toContain('if [ "$remote_tag_type" = tag ]; then');
     expect(workflow).toContain('FOOD_LOG_SOURCE_COMMIT');
     expect(workflow).toContain('VITE_FOOD_LOG_SOURCE_COMMIT');
+    expect(workflow).toContain('github.event.repository.default_branch');
+    expect(workflow).toContain('git fetch origin "$default_branch:refs/remotes/origin/$default_branch" --depth=1');
+    expect(workflow).toContain('git rev-parse "origin/$default_branch"');
     expect(workflow).toContain("'source_commit': source_commit");
     expect(workflow).toContain("latest['source_commit'] == source_commit");
     expect(workflow).toContain("printf '# source_commit=%s\\n'");
