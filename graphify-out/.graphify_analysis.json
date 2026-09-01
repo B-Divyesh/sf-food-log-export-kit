@@ -536,13 +536,13 @@
       "degree": 9
     },
     {
-      "id": "src_shell_footer",
-      "label": "footer()",
+      "id": "src_app_startapp",
+      "label": "startApp()",
       "degree": 8
     },
     {
-      "id": "src_app_startapp",
-      "label": "startApp()",
+      "id": "src_shell_footer",
+      "label": "footer()",
       "degree": 8
     },
     {
@@ -551,45 +551,12 @@
       "degree": 8
     },
     {
-      "id": "src_tauri_gen_schemas_linux_schema_definitions",
-      "label": "definitions",
+      "id": "src_tauri_tauri_conf_bundle",
+      "label": "bundle",
       "degree": 8
     }
   ],
   "surprises": [
-    {
-      "source": "landingPage()",
-      "target": "checkoutUrl()",
-      "source_files": [
-        "src/pages.ts",
-        "src/license.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "render()",
-      "target": "startApp()",
-      "source_files": [
-        "src/main.ts",
-        "src/app.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "renderApp()",
-      "target": "footer()",
-      "source_files": [
-        "src/app.ts",
-        "src/shell.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
     {
       "source": "appHeader()",
       "target": "mainNavigation()",
@@ -607,6 +574,39 @@
       "source_files": [
         "src/app.ts",
         "src/exporter.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "bindApp()",
+      "target": "exportCsv()",
+      "source_files": [
+        "src/app.ts",
+        "src/exporter.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "bindApp()",
+      "target": "saveText()",
+      "source_files": [
+        "src/app.ts",
+        "src/exporter.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "renderApp()",
+      "target": "footer()",
+      "source_files": [
+        "src/app.ts",
+        "src/shell.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
