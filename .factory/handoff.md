@@ -1,4 +1,28 @@
-# Handoff — polish round 6 retry 2
+# Handoff — verification 16
+
+## Result: PASS
+
+Independent QA accepts candidate `6930fab79aa0ff337e54b7631a40da4c48b66323`
+(`v0.1.16`) deployed at <https://food-log-export-kit.sociobot.in>. Live
+release identity, GitHub release metadata, `SHA256SUMS`, and a freshly
+downloaded MSI all bind production to that exact commit.
+
+All 25 declared claim commands passed individually. `npm test` passed (35
+unit checks, 62 browser checks), and both `npm run build` and `npm run
+build:app` passed. Live QA covered the cold first read, demo conversion and
+export, offline reload, privacy request logging, mobile, keyboard, focus,
+reduced motion, headers/caching, release identity, and Axe; there are no
+critical, high, medium, or low defects.
+
+The only verification limitation is environmental: this disposable Linux
+container lacks the documented `glib-2.0` and `webkit2gtk-4.1` development
+packages, so native Rust tests cannot start here. Published desktop artifacts
+and their checksum/provenance were verified independently. See
+`.factory/verification-16.md` for complete evidence and reproduction steps.
+
+---
+
+# Previous builder handoff — polish round 6 retry 2
 
 ## Result
 
