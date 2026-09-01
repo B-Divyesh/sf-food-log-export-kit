@@ -1,6 +1,6 @@
 # Polish round 6 — finding map
 
-Candidate: `0.1.13`. Evidence paths are relative to `.factory/`; live checks use `https://food-log-export-kit.sociobot.in` after the matching site deployment.
+Candidate: `0.1.14`. Evidence paths are relative to `.factory/`; live checks use `https://food-log-export-kit.sociobot.in` after the matching site deployment.
 
 | Finding | Change made | Evidence |
 |---|---|---|
@@ -20,7 +20,7 @@ Candidate: `0.1.13`. Evidence paths are relative to `.factory/`; live checks use
 | F-2-2 | Kept checkout wording accurate to the Sociobot/Dodo flow. | `@claim:paid-purchase`; live checkout redirect. |
 | F-2-3 | Kept the shared semantic navigation and footer on app and demo routes. | `every route uses the same primary navigation destinations and shared footer`; live `/app`, `/demo`. |
 | F-2-4 | Kept route-specific title, canonical URL, social URL, and heading focus. | `each client route sets its title, canonical URL, and heading focus`; live `/app`. |
-| F-2-5 | Bumped static and rendered footer identifiers together to `0.1.13`. | `keeps the static and rendered footer build identifiers in sync`; live `/not-a-real-route`. |
+| F-2-5 | Bumped static and rendered footer identifiers together to `0.1.14`. | `keeps the static and rendered footer build identifiers in sync`; live `/not-a-real-route`. |
 | F-2-6 | Kept `food tracker` as the public source-product term. | `.factory/copy-audit.md`; live `/`. |
 | F-2-7 | Kept `batch-import license` as the public paid-tier term. | `@claim:batch-import`; live `/terms`. |
 | F-2-8 | Kept `archive` for exported output and `free app` for the product tier. | `.factory/copy-audit.md`; live `/`. |
@@ -37,7 +37,7 @@ Candidate: `0.1.13`. Evidence paths are relative to `.factory/`; live checks use
 | F-4-1 | Kept the scoped conversion-note review heading and no universal every-row promise. | `keeps the review promise within the tested conversion-note scope`; live `/`. |
 | F-4-2 | Kept the populated export walkthrough and precise alternative text. | `ships a current export walkthrough frame with precise alternative text`; live `/#how`. |
 | F-5-1 | Kept one shared navigation list across all routes. | `every route uses the same primary navigation destinations and shared footer`; live all routes. |
-| F-5-2 | Kept the tagged release-workflow claim. | `@claim:release-workflow`; published `v0.1.13` release. |
+| F-5-2 | Kept the tagged release-workflow claim. | `@claim:release-workflow`; published `v0.1.14` release. |
 | F-5-3 | Kept the spreadsheet use for CSV. | `keeps review 5 wording concrete and consistent`; live `/#how`. |
 | F-5-4 | Kept the plain tracker sign-in boundary. | Same wording test; live `/`. |
 | F-5-5 | Kept `Unrecognized fields appear in conversion notes`. | `@claim:lossy-fields`; live `/app`. |
@@ -46,9 +46,9 @@ Candidate: `0.1.13`. Evidence paths are relative to `.factory/`; live checks use
 | F-5-8 | Kept concrete meal, account, server, and medical-advice boundaries. | `@claim:privacy-no-account`; live `/privacy`. |
 | F-5-9 | Kept `steps to open the app on your system`. | `.factory/copy-audit.md`; README release-notes link. |
 | F-5-10 | Kept `Rust is needed only to build the desktop app`. | `.factory/copy-audit.md`; clean-clone Tauri test. |
-| F-6-1 | Bumped to a new candidate, tagged the clean main commit, and require the published release, manifest, checksums, assets, and deployed site identity to match it. | `@claim:candidate-installers`; release `v0.1.13`; live `/release-identity.json`. |
+| F-6-1 | Bumped to a new candidate, tagged the clean main commit, and require the published release, manifest, checksums, assets, and deployed site identity to match it. | `@claim:candidate-installers`; release `v0.1.14`; live `/release-identity.json`. |
 | F-6-2 | Added two listed release-process claims with isolated tests; rewrote the README release lines below 22 words. | `@claim:site-source-commit`, `@claim:release-preflight`; `.factory/claims.json`; clean-clone README audit. |
-| F-6-3 | Regenerated the complete copy audit with the current `0.1.13` build text and README sentences. | `.factory/copy-audit.md`; `evidence/polish-6/landing-desktop-1440.png`; live `/`. |
+| F-6-3 | Regenerated the complete copy audit with the current `0.1.14` build text and README sentences. | `.factory/copy-audit.md`; `evidence/polish-6/landing-desktop-1440.png`; live `/`. |
 
 ## Final verification
 
