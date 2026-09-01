@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 2026-09-01 for polish round 6 retry and release candidate 0.1.15. Counts treat hyphenated terms, product names, filenames, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
+Audited 2026-09-01 for polish round 6 retry 2 and release candidate 0.1.16. Counts treat hyphenated terms, product names, filenames, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
 
 ## Landing page
 
@@ -24,12 +24,12 @@ Audited 2026-09-01 for polish round 6 retry and release candidate 0.1.15. Counts
 | Keep a CSV for spreadsheets. | 5 |
 | JSON keeps consistent fields and conversion notes. | 7 |
 | A recipe card archive box in a quiet kitchen at dusk. | 11 |
-| Desktop app · version 0.1.15 | 4 |
+| Desktop app · version 0.1.16 | 4 |
 | Download the desktop app | 4 |
 | The app reads CSV and JSON exports. | 7 |
 | It also works when your internet is off. | 8 |
 | Download for Linux | 3 |
-| Food.Log.Export.Kit_0.1.15_amd64.AppImage | 1 |
+| Food.Log.Export.Kit_0.1.16_amd64.AppImage | 1 |
 | Read release notes; on GitHub | 3; 2 |
 | Review before export | 3 |
 | Review entries and conversion notes | 5 |
@@ -76,7 +76,7 @@ Audited 2026-09-01 for polish round 6 retry and release candidate 0.1.15. Counts
 | Read the terms. | 3 |
 | Turn food tracker exports into a local archive. | 8 |
 | Built by Param Factory | 4 |
-| Version 0.1.15 · release repair · Generated artwork | 6 |
+| Version 0.1.16 · release repair · Generated artwork | 6 |
 
 ## README
 
@@ -146,4 +146,4 @@ Developer commands and project-map fragments use technical names only where they
 | Isolated sample environment | demo |
 | Source product category | food tracker |
 
-Catalog description: “Convert food tracker exports into local CSV and JSON archives.” (10 words, 59 characters)
+Catalog description: “Convert food tracker exports into CSV and JSON archives on your device.” (12 words, 71 characters)
