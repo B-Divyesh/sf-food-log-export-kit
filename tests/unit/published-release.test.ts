@@ -41,8 +41,11 @@ async function requireResponse(url: string, init?: RequestInit): Promise<Respons
 }
 
 describe('published candidate release', () => {
-  it('@regression:V14-release-identity @claim:candidate-installers binds every installer URL and checksum to the checked-out candidate', async () => {
-    const release = await requireResponse(`https://api.github.com/repos/${repository}/releases/latest`, { headers: apiHeaders })
+  it('@regression:release-identity @claim:candidate-installers binds every installer URL and checksum to the checked-out tagged candidate', async () => {
+    // A release-tag lookup is deliberately used here rather than /releases/latest.
+    // A later unrelated release must not make a clean clone of this candidate
+    // fail its own provenance check.
+    const release = await requireResponse(`https://api.github.com/repos/${repository}/releases/tags/${releaseTag}`, { headers: apiHeaders })
       .then((response) => response.json()) as PublishedRelease;
     expect(release.tag_name).toBe(releaseTag);
     expect(release.target_commitish).toBe(requiredSourceCommit);
