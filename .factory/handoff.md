@@ -1,51 +1,85 @@
-# Handoff — verification 18
+# Handoff — repair 15
 
-## Result: FAIL
+## Result: PASS
 
-Candidate `88a07a940040f719d2ec4fda994bda8814f8428b` at
-<https://food-log-export-kit.sociobot.in> is **not release-ready**.
+`v0.1.19` is a new immutable desktop release for Food Log Export Kit. It is an
+annotated tag on `f80b939cbff20abb945b1d3a01a125351a226c55`; `v0.1.18` was
+left unchanged. The release, every published installer checksum, build-info,
+and the live site all identify that exact commit.
 
-The live site exactly matches the candidate, but the immutable `v0.1.18`
-release and all desktop installers were built from
-`ed7b13e93e4ab5c9bbe2c2d17acfec694099fba0`. The required
-`candidate-installers` claim therefore fails. The landing page offers no
-platform download and the documented Unix one-line installer exits 1 with:
+- Release: <https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.19>
+- GitHub Actions: <https://github.com/B-Divyesh/sf-food-log-export-kit/actions/runs/33586481763>
+- Live site: <https://food-log-export-kit.sociobot.in>
+- Tagged site artifact: `release-site-v0.1.19`, SHA-256
+  `be2370fd2ea18141d501911f093d84eb0a1a6738427b8dd9cdc70174780cf960`
+- Static deployment: Azure Static Web Apps deployment
+  `f859e380-ff4b-46c8-a9a1-cd009ac5f9a6`
 
-```text
-The published download does not match this app version.
-```
+## What changed
 
-This is a critical release blocker for a desktop-app product. Publish a new
-immutable version/tag from the accepted candidate, wait for macOS, Windows,
-Linux, `SHA256SUMS`, and `latest.json`, then deploy the site artifact from that
-same tag and rerun all claims. Do not move or reuse `v0.1.18`.
+The verifier failure was reproduced before changing the release version:
+`@claim:candidate-installers` failed for `v0.1.18` because its tag and release
+named `ed7b13e…`, while the deployed identity named `88a07a9…`. The exact
+command, assertion, and source commits are recorded in
+[`reproduced-v0.1.18-provenance-split.md`](evidence/repair-15/reproduced-v0.1.18-provenance-split.md).
 
-## Verification summary
+The repair:
 
-- Mandatory claim commands: **24/25 passed**; `candidate-installers` failed.
-- `npm test`: **FAIL**, 37/38 unit tests passed; the failed live provenance test
-  prevents the chained browser phase.
-- `npm run test:e2e`: PASS, 58 passed and 4 desktop-project skips; those four
-  mobile-only checks passed in the mobile project.
-- `npm run build` and `npm run build:app`: PASS.
-- `npm run native:prereqs`: PASS after installing documented system packages.
-- `cargo test --manifest-path src-tauri/Cargo.toml`: PASS (0 tests; crates
-  compile).
-- First-read and one-click demo: PASS.
-- Hosted CSV/JSON export, invalid-input recovery, demo isolation, offline
-  reload, keyboard use, 390px layout, reduced motion, and privacy request log:
-  PASS.
-- Live Axe on six routes at desktop and mobile: no serious/critical findings.
-- Lighthouse mobile: performance 97, accessibility 100, best practices 100,
-  SEO 100; LCP 2.0 s, TBT 150 ms, CLS 0; 87 KiB transferred.
-- Billing verification allowance observed: 30 successful requests; request 31
-  returned `429` with `Retry-After: 4`.
-- Existing `v0.1.18` Windows EXE checksum matches its `SHA256SUMS`, but that
-  release manifest explicitly names the older `ed7b13e…` source commit.
+- bumped every desktop, Tauri, Cargo, site, static-404, lockfile, and README
+  version surface to `0.1.19`;
+- added two exact Verification 18 regression tests: one suppresses the stale
+  binary in the landing resolver, and one rejects the exact mismatched tagged
+  site target;
+- extended the published-candidate test to require `build-info.json`. That
+  immutable release record lists every installer URL, its SHA-256, and the
+  source commit;
+- released the new tag from `f80b939…`, waited for the workflow, downloaded
+  its `release-site-v0.1.19` artifact, and deployed that artifact directly.
 
-Full evidence and reproduction details are in
-[`.factory/verification-18.md`](verification-18.md).
+`latest.json` lists two macOS DMGs, Windows MSI and EXE, and Linux AppImage,
+DEB, and RPM. `SHA256SUMS` verified all nine published bundle files (the seven
+installers plus the two macOS app tarballs). `build-info.json` maps all seven
+installer files to `f80b939…`; the live `release-identity.json` returns the
+same version, tag, and commit.
 
-No product code or external infrastructure was changed. Pre-existing
-`graphify-out/` changes were preserved and must not be included in this
-verification commit.
+## Verification
+
+- Clean dependency install: `npm ci` — 66 packages, 0 vulnerabilities.
+- Reproduction: `npm run test:unit -- --testNamePattern @claim:candidate-installers`
+  failed as expected before the repair; it now passes against the published
+  release and live deployment.
+- Full suite: `npm test` — 40/40 unit tests and the complete 62-test browser
+  matrix passed. The four desktop-project mobile checks are intentionally
+  skipped and run in the 390px mobile project.
+- Production builds: `npm run build` and `npm run build:app` passed and emitted
+  `dist/site/` and `dist/app/`.
+- Native checks: `npm run native:prereqs` and
+  `cargo test --manifest-path src-tauri/Cargo.toml` passed after installing the
+  documented GTK/WebKit build packages; Rust has 0 unit and 0 doctests.
+- Live route checks: `verify-url.sh` passed on `/`, `/demo`, `/app`,
+  `/privacy`, and `/terms` at desktop and 390px. Each had a title, `lang=en`,
+  one `h1`, one `main`, image alternatives, and no page or console errors.
+- Live Axe integration on those five routes plus `/missing-page`, at desktop
+  and 390px, found zero serious or critical violations. The only console line
+  on the missing route was Chromium's expected failed-document 404.
+- Live keyboard/mobile/offline smoke: the first Tab reaches Skip to main
+  content; keyboard loading sample data reaches Export CSV; all checked mobile
+  routes have no horizontal overflow or targets below 44px; demo traffic stays
+  same-origin; service-worker-controlled demo reloads offline with its named
+  sample record.
+- Response policy: live HTML has HSTS, CSP, `nosniff`, strict referrer policy,
+  permissions policy, and 30-second HTML caching. Hashed JavaScript is
+  immutable for one year. `/missing-page` returns HTTP 404.
+- Live Lighthouse mobile: Performance 100, Accessibility 100, Best Practices
+  100, SEO 100; LCP 1.07 s, TBT 0 ms, CLS 0, transferred 89,658 bytes.
+  Evidence is under `.factory/evidence/repair-15/`.
+
+## Known gaps / operator action
+
+The macOS and Windows packages are deliberately unsigned, as documented on the
+release. The current workflow expects no signing secrets. If signing or macOS
+notarization is later required, the owner must add the workflow support and
+provide the appropriate certificate material (normally `APPLE_CERTIFICATE` and
+`WINDOWS_CERT_PFX`, plus their passwords and platform identity credentials).
+No product behavior, privacy boundary, data storage, or deployment gap remains
+for this release.

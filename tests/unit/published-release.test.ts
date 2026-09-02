@@ -33,6 +33,15 @@ interface ReleaseIdentity {
   source_commit: string;
 }
 
+interface BuildInfo {
+  schema_version: number;
+  version: string;
+  release_tag: string;
+  source_commit: string;
+  workflow_run: string;
+  installers: Array<{ name: string; url: string; sha256: string; source_commit: string }>;
+}
+
 const apiHeaders: Record<string, string> = {
   Accept: 'application/vnd.github+json',
   'User-Agent': 'food-log-export-kit-release-regression'
@@ -71,13 +80,18 @@ describe('published candidate release', () => {
     const byName = new Map(release.assets.map((asset) => [asset.name, asset]));
     const manifestAsset = byName.get('latest.json');
     const sumsAsset = byName.get('SHA256SUMS');
+    const buildInfoAsset = byName.get('build-info.json');
     expect(manifestAsset).toBeDefined();
     expect(sumsAsset).toBeDefined();
+    expect(buildInfoAsset).toBeDefined();
 
     const manifest = await requireResponse(manifestAsset!.browser_download_url).then((response) => response.json()) as ReleaseManifest;
     const sumsText = await requireResponse(sumsAsset!.browser_download_url).then((response) => response.text());
+    const buildInfo = await requireResponse(buildInfoAsset!.browser_download_url).then((response) => response.json()) as BuildInfo;
     expect(manifest).toMatchObject({ version, release_tag: releaseTag, source_commit: taggedSourceCommit });
     expect(sumsText.split(/\r?\n/)[0]).toBe(`# source_commit=${taggedSourceCommit}`);
+    expect(buildInfo).toMatchObject({ schema_version: 1, version, release_tag: releaseTag, source_commit: taggedSourceCommit });
+    expect(buildInfo.workflow_run).toMatch(new RegExp(`/actions/runs/\\d+$`));
 
     const publishedSums = new Map(sumsText.split(/\r?\n/).flatMap((line) => {
       const match = line.match(/^([0-9a-f]{64})\s+\*?(.+)$/i);
@@ -86,6 +100,7 @@ describe('published candidate release', () => {
     const installerPattern = /(?:\.dmg|\.msi|\.exe|\.AppImage|\.deb|\.rpm)$/i;
     const installerAssets = release.assets.filter((asset) => installerPattern.test(asset.name));
     const manifestUrls = Object.values(manifest.platforms).flat();
+    expect(new Set(buildInfo.installers.map((installer) => installer.name))).toEqual(new Set(installerAssets.map((asset) => asset.name)));
     expect(manifest.platforms.macos.filter((url) => url.endsWith('.dmg'))).toHaveLength(2);
     expect(manifest.platforms.windows.some((url) => url.endsWith('.msi'))).toBe(true);
     expect(manifest.platforms.windows.some((url) => url.endsWith('.exe'))).toBe(true);
@@ -99,6 +114,12 @@ describe('published candidate release', () => {
       expect(asset.browser_download_url).toContain(`/releases/download/${releaseTag}/`);
       expect(publishedSums.get(asset.name)).toMatch(/^[0-9a-f]{64}$/);
       expect(manifest.checksums[asset.name]).toBe(publishedSums.get(asset.name));
+      expect(buildInfo.installers).toContainEqual({
+        name: asset.name,
+        url: asset.browser_download_url,
+        sha256: publishedSums.get(asset.name),
+        source_commit: taggedSourceCommit
+      });
       const link = await fetch(asset.browser_download_url, { redirect: 'manual', headers: { Range: 'bytes=0-0' } });
       expect(link.status, asset.name).toBeGreaterThanOrEqual(200);
       expect(link.status, asset.name).toBeLessThan(400);

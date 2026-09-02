@@ -1,0 +1,78 @@
+[
+  {
+    "viewport": "desktop",
+    "route": "/",
+    "serious": [],
+    "consoleErrors": []
+  },
+  {
+    "viewport": "desktop",
+    "route": "/demo",
+    "serious": [],
+    "consoleErrors": []
+  },
+  {
+    "viewport": "desktop",
+    "route": "/app",
+    "serious": [],
+    "consoleErrors": []
+  },
+  {
+    "viewport": "desktop",
+    "route": "/privacy",
+    "serious": [],
+    "consoleErrors": []
+  },
+  {
+    "viewport": "desktop",
+    "route": "/terms",
+    "serious": [],
+    "consoleErrors": []
+  },
+  {
+    "viewport": "desktop",
+    "route": "/missing-page",
+    "serious": [],
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ]
+  },
+  {
+    "viewport": "mobile",
+    "route": "/",
+    "serious": [],
+    "consoleErrors": []
+  },
+  {
+    "viewport": "mobile",
+    "route": "/demo",
+    "serious": [],
+    "consoleErrors": []
+  },
+  {
+    "viewport": "mobile",
+    "route": "/app",
+    "serious": [],
+    "consoleErrors": []
+  },
+  {
+    "viewport": "mobile",
+    "route": "/privacy",
+    "serious": [],
+    "consoleErrors": []
+  },
+  {
+    "viewport": "mobile",
+    "route": "/terms",
+    "serious": [],
+    "consoleErrors": []
+  },
+  {
+    "viewport": "mobile",
+    "route": "/missing-page",
+    "serious": [],
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ]
+  }
+]
