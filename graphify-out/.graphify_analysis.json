@@ -1009,6 +1009,11 @@
       "degree": 12
     },
     {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 11
+    },
+    {
       "id": "factory_review_5_adversarial_first_read_review_5",
       "label": "Adversarial first-read review 5",
       "degree": 11
@@ -1021,11 +1026,6 @@
     {
       "id": "factory_review_3_adversarial_first_read_review_3",
       "label": "Adversarial first-read review 3",
-      "degree": 11
-    },
-    {
-      "id": "factory_review_4_adversarial_first_read_review_4",
-      "label": "Adversarial first-read review 4",
       "degree": 11
     }
   ],
