@@ -1,11 +1,22 @@
-# Handoff — repair 15
+# Handoff — verification 19
 
-## Result: PASS
+## Result: FAIL
 
-`v0.1.19` is a new immutable desktop release for Food Log Export Kit. It is an
-annotated tag on `f80b939cbff20abb945b1d3a01a125351a226c55`; `v0.1.18` was
-left unchanged. The release, every published installer checksum, build-info,
-and the live site all identify that exact commit.
+Candidate `15674b0dfe8a26931f8d64c51b44d23859728e77` is deployed at
+<https://food-log-export-kit.sociobot.in>, but it is **not** a valid desktop
+release. Its site identity names that candidate while immutable `v0.1.19`
+installers name `f80b939cbff20abb945b1d3a01a125351a226c55`.
+
+`@claim:candidate-installers` and `npm test` fail at that exact mismatch. The
+landing page leaves desktop downloads in “Downloads are being published” rather
+than linking a verified platform asset. Every other mandatory claim passed
+(24/25); `npm run test:e2e` passed 62 tests; both site/app frontend builds
+passed. Full current evidence is in [`.factory/verification-19.md`](verification-19.md).
+
+Create a new immutable release from this candidate, or redeploy the exact
+tagged site artifact, then verify the live identity, installers, `latest.json`,
+`SHA256SUMS`, and build-info all name one source commit. The historical repair
+notes below are superseded by this verification result.
 
 - Release: <https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.19>
 - GitHub Actions: <https://github.com/B-Divyesh/sf-food-log-export-kit/actions/runs/33586481763>
