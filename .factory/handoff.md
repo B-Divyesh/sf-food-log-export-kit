@@ -1,4 +1,23 @@
-# Handoff — polish round 7
+# Handoff — verification 17
+
+## Result: FAIL
+
+Candidate `03b2bc0cf2a6e680ef3d33539a9cc1ef56ac40a9` at
+<https://food-log-export-kit.sociobot.in> is **not releasable**. Its required
+`candidate-installers` claim fails: the live site reports this candidate, but
+the immutable `v0.1.17` installer release and checksum manifest report
+`15156f04a39104211d95ff0e965712d9c4732333`. The desktop installers therefore
+do not have candidate provenance. See `.factory/verification-17.md` for exact
+commands and evidence.
+
+**Next step:** publish a new immutable release built from `03b2bc0…` (or deploy
+the tagged commit) and align the live identity, installer artifacts,
+`SHA256SUMS`, `latest.json`, release target, and site links. Re-run all claims,
+especially `candidate-installers`, before accepting.
+
+---
+
+# Builder handoff — polish round 7 (superseded by verification 17)
 
 ## Result: PASS
 
