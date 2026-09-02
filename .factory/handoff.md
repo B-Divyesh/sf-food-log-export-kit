@@ -1,76 +1,48 @@
-# Handoff — repair 16
+# Handoff — independent verification 20
 
-## Result: repaired and released
+## Result: FAIL
 
-The Verification 19 blocker is repaired as immutable release `v0.1.20`.
-The tag, GitHub Release, every installer, `latest.json`, `SHA256SUMS`,
-`build-info.json`, the deployed site artifact, and live
-`release-identity.json` all resolve to the same tagged source.
+Candidate `6de278a9e1dc177c56b932ac8bf8edff4d36b728` was independently
+verified on 2026-09-02 against
+<https://food-log-export-kit.sociobot.in>. Do not release it as the current
+desktop product.
 
-- Product: <https://food-log-export-kit.sociobot.in>
-- Release: <https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.20>
-- Immutable source: annotated tag `v0.1.20` (use
-  `git rev-parse 'v0.1.20^{commit}'` to obtain the peeled commit)
-- Deployment input: the `release-site-v0.1.20` artifact built by the tagged
-  GitHub Actions release workflow, not an ordinary later checkout
+The live website matches the candidate, but the immutable `v0.1.20` tag and
+all published desktop artifacts resolve to
+`133320e0830a501127a2d1150b9cfe3c2155a70a`. The required
+`candidate-installers` claim fails, `npm test` fails, the landing page withholds
+the detected-platform download, and `public/install.sh` rejects the release.
+This is the release-blocking defect.
 
-## What changed
+Full evidence is in [verification-20.md](verification-20.md).
 
-- Reproduced the exact v0.1.19 provenance split before editing. Evidence is in
-  [`evidence/repair-16/reproduced-v0.1.19-provenance-split.md`](evidence/repair-16/reproduced-v0.1.19-provenance-split.md).
-- Bumped all desktop, Cargo, Tauri, site, 404, lockfile, test, and README
-  version surfaces to `0.1.20`.
-- Added two exact `@regression:verification-19` tests. One rejects the
-  `15674b0…` site with `f80b939…` installers. The other keeps those stale
-  installers out of the landing-page resolver.
-- Preserved the existing `@claim:candidate-installers` live release gate. It
-  checks the peeled tag and release target; release identity; `latest.json`;
-  `SHA256SUMS`; `build-info.json`; all seven platform installers; every
-  installer link and checksum; and a downloaded installer checksum.
-- Published from the final handoff commit and deployed only the immutable site
-  artifact emitted by that same tag. No post-tag product or documentation
-  commit was added, preventing the candidate/tag drift found in rounds 18 and
-  19.
+## Verification summary
 
-## Verification
+- All 25 claim commands ran from a clean detached checkout: 24 passed and
+  `candidate-installers` failed.
+- First-read and one-click demo gates passed.
+- Full Playwright suite: 58 passed, 4 expected desktop-project skips covered by
+  the mobile project.
+- Exact site and app builds, TypeScript, Rust format/tests/Clippy, optimized
+  Tauri build, and native launch smoke passed.
+- Live desktop/mobile Axe: no serious or critical findings. Keyboard, focus,
+  touch targets, 200% zoom, reduced motion, links, invalid-input recovery,
+  privacy requests, offline reload, and service-worker replacement passed.
+- Billing verification allowed 30 requests, then returned 429 with
+  `Retry-After: 3`.
+- Lighthouse: 93 Performance, 100 Accessibility, 100 Best Practices, 100 SEO;
+  LCP 2.1 s, CLS 0, 88 KiB transfer.
 
-The repair was checked from a clean npm dependency install with Playwright
-`1.58.2` and the native packages used by the release workflow.
+No product code was modified. The supplied checkout's pre-existing
+`graphify-out` changes were preserved.
 
-- `npm ci` — 66 packages installed; 0 vulnerabilities.
-- Exact reproduction — failed before the repair with live source `15674b0…`
-  versus tagged source `f80b939…`.
-- `npm run test:unit -- --testNamePattern verification-19` — 2/2 exact
-  regression tests passed.
-- Pre-release unit suite excluding the necessarily unpublished live 0.1.20
-  claim — 41 passed, 1 skipped.
-- `npm run test:e2e` — 58 passed, 4 desktop-project skips; each skipped mobile
-  check passed in the 390 px project. This includes keyboard, Axe, touch
-  targets, 200% zoom, demo isolation, privacy requests, offline reload, update,
-  export, import, billing, and route checks.
-- `npm run build` and `npm run build:app` — passed; emitted `dist/site/` and
-  `dist/app/`. Initial JavaScript totals 18.3 kB gzip; CSS is 6.1 kB gzip.
-- `npm run native:prereqs`, Cargo format, locked tests, and Clippy with
-  `-D warnings` — passed.
-- `CI=false npm run tauri -- build --no-bundle` — passed; the optimized Linux
-  desktop executable launched under Xvfb and stayed running for the 10-second
-  smoke window.
-- After release and deployment, `npm test` passed the full unit and browser
-  chain, including `@claim:candidate-installers` against production.
-- Live `verify-url.sh` and Axe checks passed on `/`, `/demo`, `/app`,
-  `/privacy`, and `/terms` at desktop and 390 px. The designed missing route
-  returned HTTP 404.
-- Live keyboard, mobile, privacy, offline/update, response-header, download,
-  checksum, and release-identity checks passed. The detected Linux button
-  linked to the published v0.1.20 AppImage.
-- Local production mobile Lighthouse: Performance 100, Accessibility 100,
-  Best Practices 100, SEO 100; LCP 1.6 s, TBT 0 ms, CLS 0, total transfer
-  88 KiB. The deployed tagged artifact was measured again after release.
+## Required next step
 
-## Known gaps and operator action
+Bump the product version and publish a new immutable tag from the final source
+commit. Build installers, checksums, manifests, and the deployed site from that
+one tag. Update `.factory/copy-audit.md` from its stale `0.1.17` references.
+After deployment, rerun every claim and require `npm test` to pass.
 
-The macOS and Windows packages are deliberately unsigned. Signing and macOS
-notarization require owner certificates. If added later, the release workflow
-will need `APPLE_CERTIFICATE`, `WINDOWS_CERT_PFX`, their passwords, and the
-platform identity credentials. No product behavior, data, privacy, or release
-identity gap remains.
+macOS and Windows packages remain intentionally unsigned. Signing and macOS
+notarization still require the owner's certificate secrets documented by the
+release process.
