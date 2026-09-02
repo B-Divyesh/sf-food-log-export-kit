@@ -1,6 +1,6 @@
 [package]
 name = "food-log-export-kit"
-version = "0.1.19"
+version = "0.1.20"
 description = "Turn food tracker exports into a local archive"
 authors = ["Param Factory"]
 license = "MIT"

@@ -72,8 +72,8 @@ Commit and push all source, test, handoff, and evidence changes first. From the 
 
 ```sh
 npm run release:preflight
-git tag -a v0.1.19 -m "Food Log Export Kit v0.1.19"
-git push origin main v0.1.19
+git tag -a v0.1.20 -m "Food Log Export Kit v0.1.20"
+git push origin main v0.1.20
 ```
 
 The preflight stops a dirty checkout. It also stops wrong branches, existing tags, version mismatches, and stale main tips. Wait for GitHub Actions to publish installers, `SHA256SUMS`, and `latest.json`. Then run `npm run release:site`; it refuses to build a deployable site unless the checkout is the immutable version-tag target. Deploy the resulting `dist/site/`, then run the `candidate-installers` claim.

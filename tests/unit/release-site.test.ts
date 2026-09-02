@@ -28,14 +28,26 @@ describe('release site target', () => {
     })).toThrow('Release site checkout must equal the immutable release tag target before deployment.');
   });
 
-  it('accepts the immutable target and rejects a mismatched emitted identity', () => {
-    const target = validateReleaseSiteTarget({
+  it('@regression:verification-19 rejects the exact v0.1.19 installer/site provenance split', () => {
+    // Verification 19 found the live site naming 15674b0 while its v0.1.19
+    // installers remained bound to f80b939. A deployable release site may
+    // only be built from the commit named by its immutable version tag.
+    expect(() => validateReleaseSiteTarget({
       packageVersion: '0.1.19',
       tag: 'v0.1.19',
+      head: '15674b0dfe8a26931f8d64c51b44d23859728e77',
+      taggedCommit: 'f80b939cbff20abb945b1d3a01a125351a226c55'
+    })).toThrow('Release site checkout must equal the immutable release tag target before deployment.');
+  });
+
+  it('accepts the immutable target and rejects a mismatched emitted identity', () => {
+    const target = validateReleaseSiteTarget({
+      packageVersion: '0.1.20',
+      tag: 'v0.1.20',
       head: taggedCommit,
       taggedCommit
     });
-    expect(target).toEqual({ version: '0.1.19', release_tag: 'v0.1.19', source_commit: taggedCommit });
+    expect(target).toEqual({ version: '0.1.20', release_tag: 'v0.1.20', source_commit: taggedCommit });
     expect(() => validateBuiltReleaseIdentity({ ...target, source_commit: laterCandidate }, target))
       .toThrow('Built release identity does not match the immutable release target.');
   });

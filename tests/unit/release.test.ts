@@ -69,6 +69,20 @@ describe('release asset selection', () => {
     )).toBeUndefined();
   });
 
+  it('@regression:verification-19 withholds v0.1.19 installers from the mismatched candidate site', () => {
+    const verification19Release = {
+      tag_name: 'v0.1.19',
+      target_commitish: 'f80b939cbff20abb945b1d3a01a125351a226c55',
+      html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.19',
+      assets
+    };
+    expect(selectCurrentRelease(
+      verification19Release,
+      '0.1.19',
+      '15674b0dfe8a26931f8d64c51b44d23859728e77'
+    )).toBeUndefined();
+  });
+
   it('@regression:R12-release-absence fetches api.github.com and fails soft for missing, stale, or malformed metadata', async () => {
     const stored = new Map<string, string>([['release:food-log-export-kit', '{not json']]);
     const storage = {
