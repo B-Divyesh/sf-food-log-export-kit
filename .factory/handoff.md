@@ -1,35 +1,88 @@
-# Handoff — adversarial first-read review 7
+# Handoff — polish round 7
 
-## Result: FAIL
+## Result: PASS
 
-Review 7 is recorded in `.factory/review-7.md`. No product code was changed.
+Every finding in `.factory/review-1.md` through `.factory/review-7.md` is resolved and mapped in `.factory/polish-7.md`. The released candidate is `v0.1.17` at commit `15156f04a39104211d95ff0e965712d9c4732333`.
 
-The live first screen, one-click demo, in-memory isolation, reset and exit
-behavior, CSV/JSON exports, offline reload, routes, focus, link crawl,
-accessibility suite, visual identity, and production build pass.
+The release and deployed site now share one immutable identity. The annotated tag, GitHub release target, `latest.json`, checksum header, installer URLs, downloaded installer, and live `/release-identity.json` all resolve to that candidate.
 
-One blocking finding remains: **F-7-1 / F-6-1 (reopened)**. The work-order
-checkout is `d77bda26e0de6ae1eda101d5fafcac2a1a1b5b66`, but release `v0.1.16`
-and the deployed release identity target
-`6930fab79aa0ff337e54b7631a40da4c48b66323`. The exact
-`candidate-installers` command fails, and the same shared Vitest failure stops
-all 18 `npm test -- --grep @claim:…` commands before their browser tests.
+## What changed
 
-## Verification performed
+- Changed release verification to derive source identity from the immutable version tag instead of mutable repository `HEAD`.
+- Added a regression test that requires each of the 25 claims to have one focused command and exactly one tagged test.
+- Changed browser claim commands to run their named Playwright test directly, so an unrelated unit phase cannot stop claim execution.
+- Published fresh macOS, Windows, and Linux desktop installers as `v0.1.17`.
+- Deployed the static site built from the exact `v0.1.17` checkout.
+- Updated all application, Tauri, footer, 404, README, copy-audit, claim, and release version references together.
+- Updated the catalog line to: “Convert food tracker exports into CSV and JSON archives with conversion notes.”
+- Rechecked the first screen, demo isolation, reset and exit, exports, privacy boundary, offline reload, routing, focus, 404, legal pages, mobile layout, touch targets, 200% zoom, reduced motion, and product-specific visual treatment on production.
 
-- Opened production cold in fresh 390 px and 1440 px browser contexts.
-- Exercised demo entry, sample visibility, filtering, Reset, both downloads,
-  Start for real, storage sentinels, request logging, and offline reload.
-- Ran all 25 exact `.factory/claims.json` commands from a clean clone: six pass
-  and 19 fail because of the release-identity mismatch.
-- Ran the 18 browser claim tests directly: all pass.
-- Ran the Playwright accessibility suite: 38 pass; four desktop-project skips
-  have passing mobile counterparts.
-- Ran `npm run build`: pass; largest JS chunk is 39.70 kB raw / 14.10 kB gzip.
-- Ran the worker URL verifier: pass with no console or structural errors.
+## Release and deployment evidence
 
-## Next step
+- GitHub release: <https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.17>
+- GitHub Actions run: <https://github.com/B-Divyesh/sf-food-log-export-kit/actions/runs/33575608828> — all five jobs passed.
+- Production: <https://food-log-export-kit.sociobot.in>
+- Deployment ID: `41b56e51-d93d-4c7e-abbf-b0062ce88d0a`
+- Live identity: `0.1.17`, `v0.1.17`, `15156f04a39104211d95ff0e965712d9c4732333`
+- Independently downloaded asset: `Food.Log.Export.Kit_0.1.17_x64-setup.exe`
+- Verified SHA-256: `1e4a84759c04ef01887bb25716f91510e1722ec60d8a041c3d3f6aaa0ea9ac15`
+- Detailed release record: `.factory/evidence/polish-7/release-verification.md`
 
-Repair the release-provenance contract so its exact command passes from the
-checkout given to reviewers. Then rerun all 25 declared commands from a fresh
-clone. Do not mark the product accepted until that gate is green.
+Published installers include two DMGs, MSI and EXE Windows builds, AppImage, DEB, and RPM Linux builds. `SHA256SUMS` and `latest.json` are attached to the same release.
+
+## Verification
+
+Fresh clone at the candidate commit:
+
+- `npm ci`: PASS, zero vulnerabilities.
+- `npm test`: PASS, 36 unit tests and 58 browser tests. Four desktop-project skips are mobile-only checks that pass in the mobile project.
+- All 25 exact `.factory/claims.json` commands: PASS independently.
+- `npm run build:site`: PASS.
+- `npm run build:app`: PASS.
+- `npm run native:prereqs`: PASS.
+- `cargo test --manifest-path src-tauri/Cargo.toml`: PASS; all Tauri targets compiled.
+- Initial JS: 39.70 kB largest raw chunk / 14.10 kB gzip. CSS: 23.48 kB raw / 6.10 kB gzip.
+- Full command record: `.factory/evidence/polish-7/clean-clone-verification.md`.
+
+Cold production verification:
+
+- Worker verifier passed `/`, `/?demo=1`, `/app`, `/privacy`, and `/terms` with no console errors.
+- Axe found no serious or critical findings on those routes or the real HTTP 404.
+- Every checked route has `lang="en"`, one `h1`, one `main`, route metadata, labeled controls, and image alternatives.
+- Demo entry is one click. Its in-memory data writes no browser storage, makes only same-origin requests, resets to 12 records, and is discarded on exit.
+- The named oatmeal record fits above the 390 × 844 fold. All visible controls meet 44 px touch targets. The demo has no overflow at 200% zoom.
+- CSV and JSON downloads work. The CSV has one header plus 12 sample rows. The demo reloads offline.
+- The unknown route returns HTTP 404 and a designed page with navigation and legal links.
+- The detected Linux button links to the real `v0.1.17` AppImage and returns HTTP 200.
+- Lighthouse mobile scores: performance 100, accessibility 100, best practices 100, SEO 100. LCP 1.2 s; CLS 0; transfer 87 KiB.
+- Screenshots and raw reports: `.factory/evidence/polish-7/`.
+
+## Run and verify
+
+```bash
+npm ci
+npm test
+npm run build:site
+npm run build:app
+npm run native:prereqs
+cargo test --manifest-path src-tauri/Cargo.toml
+```
+
+Run every claim exactly as a verifier does:
+
+```bash
+node --input-type=module -e '
+import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+for (const claim of JSON.parse(readFileSync(".factory/claims.json", "utf8"))) {
+  const result = spawnSync(claim.test, { shell: true, stdio: "inherit" });
+  if (result.status !== 0) process.exit(result.status ?? 1);
+}
+'
+```
+
+## Known gaps and operator action
+
+The Windows and macOS packages are intentionally unsigned because signing credentials are not available to this work order. To sign later, configure the release workflow with the operator-owned `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` secrets. This does not affect checksums, provenance, or the published unsigned installers.
+
+No product or review gaps remain within the work-order scope.
