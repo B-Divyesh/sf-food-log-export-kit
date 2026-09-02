@@ -1003,13 +1003,13 @@
       "degree": 12
     },
     {
-      "id": "factory_review_1_adversarial_first_read_review_1",
-      "label": "Adversarial first-read review 1",
+      "id": "factory_review_5_adversarial_first_read_review_5",
+      "label": "Adversarial first-read review 5",
       "degree": 11
     },
     {
-      "id": "factory_review_2_adversarial_first_read_review_2",
-      "label": "Adversarial first-read review 2",
+      "id": "factory_review_5_findings",
+      "label": "Findings",
       "degree": 11
     },
     {
@@ -1069,14 +1069,14 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "required",
-      "target": "identifier",
+      "source": "AppState",
+      "target": "FoodRecord",
       "source_files": [
-        "src-tauri/gen/schemas/desktop-schema.json",
-        "src-tauri/gen/schemas/linux-schema.json"
+        "src/app.ts",
+        "src/types.ts"
       ],
       "confidence": "EXTRACTED",
-      "relation": "extends",
+      "relation": "references",
       "why": "cross-file semantic connection"
     }
   ],
