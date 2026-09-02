@@ -50,12 +50,7 @@
       "src_importer_normalizedfield",
       "src_importer_objectsfromjson",
       "src_importer_valuefornote",
-      "src_license",
-      "src_license_cachedverdict",
-      "src_license_checkouturl",
-      "src_license_licensestate",
       "src_license_optimisticlicense",
-      "src_license_removelicense",
       "src_license_storedlicense",
       "src_license_verifylicense",
       "src_sample",
@@ -91,6 +86,7 @@
       "package_scripts_dev",
       "package_scripts_native_prereqs",
       "package_scripts_release_preflight",
+      "package_scripts_release_site",
       "package_scripts_tauri",
       "package_scripts_test",
       "package_scripts_test_e2e",
@@ -112,6 +108,49 @@
       "vitest"
     ],
     "2": [
+      "src_build",
+      "src_build_appversion",
+      "src_build_sourcecommit",
+      "src_license",
+      "src_license_acceptlicensefromurl",
+      "src_license_cachedverdict",
+      "src_license_checkouturl",
+      "src_license_licensestate",
+      "src_license_removelicense",
+      "src_main",
+      "src_main_bindlinks",
+      "src_main_istauri",
+      "src_main_live",
+      "src_main_render",
+      "src_main_root",
+      "src_pages",
+      "src_pages_landingpage",
+      "src_pages_notfoundpage",
+      "src_pages_privacypage",
+      "src_pages_resolveplatformdownload",
+      "src_pages_termspage",
+      "src_release",
+      "src_release_cachedrelease",
+      "src_release_desktopplatform",
+      "src_release_detectdesktopplatform",
+      "src_release_detectmacarchitecture",
+      "src_release_loadcurrentrelease",
+      "src_release_macarchitecture",
+      "src_release_readcachedrelease",
+      "src_release_releaseapiurl",
+      "src_release_releaseasset",
+      "src_release_releasedetails",
+      "src_release_releasepageurl",
+      "src_release_selectcurrentrelease",
+      "src_release_selectplatformasset",
+      "src_shell",
+      "src_shell_footer",
+      "src_shell_header",
+      "src_shell_mainnavigation",
+      "tests_unit_release_test",
+      "tests_unit_release_test_assets"
+    ],
+    "3": [
       "src_tauri_gen_schemas_linux_schema_capability_properties",
       "src_tauri_gen_schemas_linux_schema_definitions_identifier",
       "src_tauri_gen_schemas_linux_schema_description_default",
@@ -152,7 +191,7 @@
       "src_tauri_gen_schemas_linux_schema_windows_items",
       "src_tauri_gen_schemas_linux_schema_windows_type"
     ],
-    "3": [
+    "4": [
       "src_tauri_gen_schemas_desktop_schema_capability_description",
       "src_tauri_gen_schemas_desktop_schema_capability_required",
       "src_tauri_gen_schemas_desktop_schema_capability_type",
@@ -191,84 +230,13 @@
       "src_tauri_gen_schemas_linux_schema_value_anyof",
       "src_tauri_gen_schemas_linux_schema_value_description"
     ],
-    "4": [
-      "src_build",
-      "src_build_appversion",
-      "src_build_sourcecommit",
-      "src_license_acceptlicensefromurl",
-      "src_main",
-      "src_main_bindlinks",
-      "src_main_istauri",
-      "src_main_live",
-      "src_main_render",
-      "src_main_root",
-      "src_pages",
-      "src_pages_landingpage",
-      "src_pages_notfoundpage",
-      "src_pages_privacypage",
-      "src_pages_resolveplatformdownload",
-      "src_pages_termspage",
-      "src_release",
-      "src_release_cachedrelease",
-      "src_release_desktopplatform",
-      "src_release_detectdesktopplatform",
-      "src_release_detectmacarchitecture",
-      "src_release_loadcurrentrelease",
-      "src_release_macarchitecture",
-      "src_release_readcachedrelease",
-      "src_release_releaseapiurl",
-      "src_release_releaseasset",
-      "src_release_releasedetails",
-      "src_release_releasepageurl",
-      "src_release_selectcurrentrelease",
-      "src_release_selectplatformasset",
-      "src_shell",
-      "src_shell_footer",
-      "src_shell_header",
-      "src_shell_mainnavigation",
-      "tests_unit_release_test",
-      "tests_unit_release_test_assets"
-    ],
     "5": [
-      "src_tauri_gen_schemas_desktop_schema",
-      "src_tauri_gen_schemas_desktop_schema_anyof",
-      "src_tauri_gen_schemas_desktop_schema_capabilityremote_description",
-      "src_tauri_gen_schemas_desktop_schema_capabilityremote_properties",
-      "src_tauri_gen_schemas_desktop_schema_capabilityremote_required",
-      "src_tauri_gen_schemas_desktop_schema_capabilityremote_type",
-      "src_tauri_gen_schemas_desktop_schema_definitions",
-      "src_tauri_gen_schemas_desktop_schema_definitions_capabilityremote",
-      "src_tauri_gen_schemas_desktop_schema_definitions_identifier",
-      "src_tauri_gen_schemas_desktop_schema_definitions_number",
-      "src_tauri_gen_schemas_desktop_schema_definitions_permissionentry",
-      "src_tauri_gen_schemas_desktop_schema_definitions_target",
-      "src_tauri_gen_schemas_desktop_schema_definitions_value",
-      "src_tauri_gen_schemas_desktop_schema_description",
-      "src_tauri_gen_schemas_desktop_schema_identifier_description",
-      "src_tauri_gen_schemas_desktop_schema_identifier_oneof",
-      "src_tauri_gen_schemas_desktop_schema_identifier_type",
-      "src_tauri_gen_schemas_desktop_schema_json_ref_urls",
-      "src_tauri_gen_schemas_desktop_schema_number_anyof",
-      "src_tauri_gen_schemas_desktop_schema_number_description",
-      "src_tauri_gen_schemas_desktop_schema_permissionentry_anyof",
-      "src_tauri_gen_schemas_desktop_schema_permissionentry_description",
-      "src_tauri_gen_schemas_desktop_schema_properties_identifier",
-      "src_tauri_gen_schemas_desktop_schema_properties_urls",
-      "src_tauri_gen_schemas_desktop_schema_schema",
-      "src_tauri_gen_schemas_desktop_schema_target_description",
-      "src_tauri_gen_schemas_desktop_schema_target_oneof",
-      "src_tauri_gen_schemas_desktop_schema_title",
-      "src_tauri_gen_schemas_desktop_schema_urls_description",
-      "src_tauri_gen_schemas_desktop_schema_urls_items",
-      "src_tauri_gen_schemas_desktop_schema_urls_type",
-      "src_tauri_gen_schemas_desktop_schema_value_anyof",
-      "src_tauri_gen_schemas_desktop_schema_value_description"
-    ],
-    "6": [
       "src_tauri_gen_schemas_desktop_schema_capability_properties",
       "src_tauri_gen_schemas_desktop_schema_description_default",
       "src_tauri_gen_schemas_desktop_schema_description_description",
       "src_tauri_gen_schemas_desktop_schema_description_type",
+      "src_tauri_gen_schemas_desktop_schema_identifier_description",
+      "src_tauri_gen_schemas_desktop_schema_identifier_type",
       "src_tauri_gen_schemas_desktop_schema_items_ref",
       "src_tauri_gen_schemas_desktop_schema_items_type",
       "src_tauri_gen_schemas_desktop_schema_json_ref_array",
@@ -284,6 +252,7 @@
       "src_tauri_gen_schemas_desktop_schema_platforms_items",
       "src_tauri_gen_schemas_desktop_schema_platforms_type",
       "src_tauri_gen_schemas_desktop_schema_properties_description",
+      "src_tauri_gen_schemas_desktop_schema_properties_identifier",
       "src_tauri_gen_schemas_desktop_schema_properties_local",
       "src_tauri_gen_schemas_desktop_schema_properties_permissions",
       "src_tauri_gen_schemas_desktop_schema_properties_platforms",
@@ -292,12 +261,44 @@
       "src_tauri_gen_schemas_desktop_schema_properties_windows",
       "src_tauri_gen_schemas_desktop_schema_remote_anyof",
       "src_tauri_gen_schemas_desktop_schema_remote_description",
+      "src_tauri_gen_schemas_desktop_schema_urls_items",
       "src_tauri_gen_schemas_desktop_schema_webviews_description",
       "src_tauri_gen_schemas_desktop_schema_webviews_items",
       "src_tauri_gen_schemas_desktop_schema_webviews_type",
       "src_tauri_gen_schemas_desktop_schema_windows_description",
       "src_tauri_gen_schemas_desktop_schema_windows_items",
       "src_tauri_gen_schemas_desktop_schema_windows_type"
+    ],
+    "6": [
+      "src_tauri_gen_schemas_desktop_schema",
+      "src_tauri_gen_schemas_desktop_schema_anyof",
+      "src_tauri_gen_schemas_desktop_schema_capabilityremote_description",
+      "src_tauri_gen_schemas_desktop_schema_capabilityremote_properties",
+      "src_tauri_gen_schemas_desktop_schema_capabilityremote_required",
+      "src_tauri_gen_schemas_desktop_schema_capabilityremote_type",
+      "src_tauri_gen_schemas_desktop_schema_definitions",
+      "src_tauri_gen_schemas_desktop_schema_definitions_capabilityremote",
+      "src_tauri_gen_schemas_desktop_schema_definitions_identifier",
+      "src_tauri_gen_schemas_desktop_schema_definitions_number",
+      "src_tauri_gen_schemas_desktop_schema_definitions_permissionentry",
+      "src_tauri_gen_schemas_desktop_schema_definitions_target",
+      "src_tauri_gen_schemas_desktop_schema_definitions_value",
+      "src_tauri_gen_schemas_desktop_schema_description",
+      "src_tauri_gen_schemas_desktop_schema_identifier_oneof",
+      "src_tauri_gen_schemas_desktop_schema_json_ref_urls",
+      "src_tauri_gen_schemas_desktop_schema_number_anyof",
+      "src_tauri_gen_schemas_desktop_schema_number_description",
+      "src_tauri_gen_schemas_desktop_schema_permissionentry_anyof",
+      "src_tauri_gen_schemas_desktop_schema_permissionentry_description",
+      "src_tauri_gen_schemas_desktop_schema_properties_urls",
+      "src_tauri_gen_schemas_desktop_schema_schema",
+      "src_tauri_gen_schemas_desktop_schema_target_description",
+      "src_tauri_gen_schemas_desktop_schema_target_oneof",
+      "src_tauri_gen_schemas_desktop_schema_title",
+      "src_tauri_gen_schemas_desktop_schema_urls_description",
+      "src_tauri_gen_schemas_desktop_schema_urls_type",
+      "src_tauri_gen_schemas_desktop_schema_value_anyof",
+      "src_tauri_gen_schemas_desktop_schema_value_description"
     ],
     "7": [
       "ref_icons_128x128_2x_png",
@@ -758,6 +759,15 @@
       "factory_handoff_what_changed"
     ],
     "35": [
+      "scripts_release_site",
+      "scripts_release_site_collectreleasesitetarget",
+      "scripts_release_site_commit",
+      "scripts_release_site_run",
+      "scripts_release_site_validatebuiltreleaseidentity",
+      "scripts_release_site_validatereleasesitetarget",
+      "tests_unit_release_site_test"
+    ],
+    "36": [
       "tests_unit_published_release_test",
       "tests_unit_published_release_test_apiheaders",
       "tests_unit_published_release_test_asset",
@@ -766,7 +776,7 @@
       "tests_unit_published_release_test_releasemanifest",
       "tests_unit_published_release_test_requireresponse"
     ],
-    "36": [
+    "37": [
       "factory_evidence_polish_3_clean_clone_summary",
       "factory_evidence_polish_3_clean_clone_summary_final_clean_clone_verification",
       "factory_polish_3",
@@ -774,149 +784,153 @@
       "factory_polish_3_final_acceptance_evidence",
       "factory_polish_3_polish_3_cumulative_review_repair_map"
     ],
-    "37": [
+    "38": [
       "factory_copy_audit",
       "factory_copy_audit_copy_audit",
       "factory_copy_audit_landing_page",
       "factory_copy_audit_readme",
       "factory_copy_audit_terminology"
     ],
-    "38": [
+    "39": [
       "factory_evidence_polish_5_live_audit",
       "factory_evidence_polish_5_live_audit_downloadtext",
       "factory_evidence_polish_5_live_audit_expectednavigation",
       "factory_evidence_polish_5_live_audit_report",
       "factory_evidence_polish_5_live_audit_routes"
     ],
-    "39": [
+    "40": [
       "tests_unit_installer_test",
       "tests_unit_installer_test_availablepowershell",
       "tests_unit_installer_test_installer",
       "tests_unit_installer_test_nodesha256",
       "tests_unit_installer_test_sha256"
     ],
-    "40": [
+    "41": [
       "agents",
       "agents_definition_of_done_a_worker_may_not_claim_completion_without_all_of_these",
       "agents_food_log_export_kit_food_log_export_kit_factory_product_contract",
       "agents_working_rules"
     ],
-    "41": [
+    "42": [
       "public_install_choose_bin_dir",
       "public_install_fail",
       "public_install_sh__entry",
       "public_install_sh_public_install"
     ],
-    "42": [
+    "43": [
       "public_sw",
       "public_sw_cachefirst",
       "public_sw_networkfirst",
       "public_sw_shell"
     ],
-    "43": [
+    "44": [
       "tests_fixtures_windows_installer_harness",
       "tests_fixtures_windows_installer_harness_invoke_restmethod",
       "tests_fixtures_windows_installer_harness_invoke_webrequest",
       "tests_fixtures_windows_installer_harness_start_process"
     ],
-    "44": [
+    "45": [
       "factory_polish_1",
       "factory_polish_1_polish_1_review_repair_map",
       "factory_polish_1_verification"
     ],
-    "45": [
+    "46": [
       "factory_polish_2",
       "factory_polish_2_full_evidence",
       "factory_polish_2_polish_2_cumulative_review_repair_map"
     ],
-    "46": [
+    "47": [
       "factory_polish_4",
       "factory_polish_4_final_verification",
       "factory_polish_4_polish_4_cumulative_review_repair_map"
     ],
-    "47": [
+    "48": [
       "factory_polish_5",
       "factory_polish_5_final_verification",
       "factory_polish_5_polish_5_cumulative_adversarial_repair_map"
     ],
-    "48": [
+    "49": [
       "factory_polish_6",
       "factory_polish_6_final_verification",
       "factory_polish_6_polish_round_6_finding_map"
     ],
-    "49": [
+    "50": [
       "tests_unit_claims_manifest_test",
       "tests_unit_claims_manifest_test_claim",
       "tests_unit_claims_manifest_test_read"
     ],
-    "50": [
+    "51": [
       "factory_evidence_repair_10_reproduced_native_build_prerequisite",
       "factory_evidence_repair_10_reproduced_native_build_prerequisite_repair_10_reproduced_native_build_prerequisite_failure"
     ],
-    "51": [
+    "52": [
       "factory_evidence_repair_11_reproduced_clean_native_build",
       "factory_evidence_repair_11_reproduced_clean_native_build_repair_11_clean_native_build_reproduction"
     ],
-    "52": [
+    "53": [
       "factory_evidence_repair_12_reproduced_stale_release",
       "factory_evidence_repair_12_reproduced_stale_release_repair_12_reproduced_stale_release_identity"
     ],
-    "53": [
+    "54": [
       "factory_evidence_repair_13_reproduced_stale_release",
       "factory_evidence_repair_13_reproduced_stale_release_repair_13_stale_release_reproduction"
     ],
-    "54": [
+    "55": [
       "factory_evidence_repair_5_reproduced_release_identity",
       "factory_evidence_repair_5_reproduced_release_identity_release_identity_regression_reproduction"
     ],
-    "55": [
+    "56": [
       "factory_evidence_repair_9_reproduced_release_identity",
       "factory_evidence_repair_9_reproduced_release_identity_repair_9_reproduced_release_identity_failure"
     ],
-    "56": [
+    "57": [
+      "scripts_release_site_d",
+      "scripts_release_site_d_releasesitetarget"
+    ],
+    "58": [
       "src_tauri_build",
       "src_tauri_build_main"
     ],
-    "57": [
+    "59": [
       "src_tauri_src_lib",
       "src_tauri_src_lib_run"
     ],
-    "58": [
+    "60": [
       "src_tauri_src_main",
       "src_tauri_src_main_main"
     ],
-    "59": [
+    "61": [
       "tests_e2e_service_worker_update_spec",
       "tests_e2e_service_worker_update_spec_worker"
     ],
-    "60": [
+    "62": [
       "tests_unit_release_version_test",
       "tests_unit_release_version_test_read"
     ],
-    "61": [
+    "63": [
       "pkg_food_log_export_kit"
     ],
-    "62": [
+    "64": [
       "playwright_config"
     ],
-    "63": [
+    "65": [
       "public_install_ps1_public_install"
     ],
-    "64": [
+    "66": [
       "tests_unit_hosting_test"
     ],
-    "65": [
+    "67": [
       "vitest_config"
     ]
   },
   "cohesion": {
-    "0": 0.07307692307692308,
-    "1": 0.047619047619047616,
-    "2": 0.05398110661268556,
-    "3": 0.05555555555555555,
-    "4": 0.1253968253968254,
-    "5": 0.06060606060606061,
-    "6": 0.06439393939393939,
+    "0": 0.08022598870056497,
+    "1": 0.046511627906976744,
+    "2": 0.1073170731707317,
+    "3": 0.05398110661268556,
+    "4": 0.05555555555555555,
+    "5": 0.057057057057057055,
+    "6": 0.06896551724137931,
     "7": 0.07407407407407407,
     "8": 0.07692307692307693,
     "9": 0.07692307692307693,
@@ -945,22 +959,22 @@
     "32": 0.25,
     "33": 0.25,
     "34": 0.2857142857142857,
-    "35": 0.2857142857142857,
-    "36": 0.3333333333333333,
-    "37": 0.4,
+    "35": 0.47619047619047616,
+    "36": 0.2857142857142857,
+    "37": 0.3333333333333333,
     "38": 0.4,
     "39": 0.4,
-    "40": 0.5,
-    "41": 0.6666666666666666,
-    "42": 0.5,
+    "40": 0.4,
+    "41": 0.5,
+    "42": 0.6666666666666666,
     "43": 0.5,
-    "44": 0.6666666666666666,
+    "44": 0.5,
     "45": 0.6666666666666666,
     "46": 0.6666666666666666,
     "47": 0.6666666666666666,
     "48": 0.6666666666666666,
     "49": 0.6666666666666666,
-    "50": 1.0,
+    "50": 0.6666666666666666,
     "51": 1.0,
     "52": 1.0,
     "53": 1.0,
@@ -975,7 +989,9 @@
     "62": 1.0,
     "63": 1.0,
     "64": 1.0,
-    "65": 1.0
+    "65": 1.0,
+    "66": 1.0,
+    "67": 1.0
   },
   "gods": [
     {
@@ -1011,7 +1027,7 @@
     {
       "id": "package_scripts",
       "label": "scripts",
-      "degree": 11
+      "degree": 12
     },
     {
       "id": "factory_review_5_adversarial_first_read_review_5",
@@ -1042,6 +1058,17 @@
       "why": "bridges separate communities"
     },
     {
+      "source": "licensePanel()",
+      "target": "checkoutUrl()",
+      "source_files": [
+        "src/app.ts",
+        "src/license.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
       "source": "renderApp()",
       "target": "footer()",
       "source_files": [
@@ -1058,17 +1085,6 @@
       "source_files": [
         "src/main.ts",
         "src/app.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "landingPage()",
-      "target": "checkoutUrl()",
-      "source_files": [
-        "src/pages.ts",
-        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
