@@ -40,6 +40,17 @@ describe('release site target', () => {
     })).toThrow('Release site checkout must equal the immutable release tag target before deployment.');
   });
 
+  it('@regression:verification-20 rejects the exact v0.1.20 deployed-site and installer split', () => {
+    // Verification 20 found the site at the accepted candidate while the
+    // immutable v0.1.20 tag and installers still named this earlier commit.
+    expect(() => validateReleaseSiteTarget({
+      packageVersion: '0.1.20',
+      tag: 'v0.1.20',
+      head: '6de278a9e1dc177c56b932ac8bf8edff4d36b728',
+      taggedCommit: '133320e0830a501127a2d1150b9cfe3c2155a70a'
+    })).toThrow('Release site checkout must equal the immutable release tag target before deployment.');
+  });
+
   it('accepts the immutable target and rejects a mismatched emitted identity', () => {
     const target = validateReleaseSiteTarget({
       packageVersion: '0.1.20',

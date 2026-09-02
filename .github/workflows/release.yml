@@ -115,9 +115,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release download "$RELEASE_TAG" --dir release-assets --pattern 'Food*'
-      - name: Create checksums and manifest
+      - name: Create checksums, manifest, and build record
         env:
           TAG: ${{ env.RELEASE_TAG }}
+          WORKFLOW_RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           cd release-assets
           release_files=(*);
@@ -127,7 +128,7 @@ jobs:
           tag = os.environ['TAG']
           source_commit = os.environ['FOOD_LOG_SOURCE_COMMIT']
           base = f"https://github.com/${{ github.repository }}/releases/download/{tag}"
-          files = [f for f in os.listdir('.') if f not in {'SHA256SUMS', 'latest.json'}]
+          files = [f for f in os.listdir('.') if f not in {'SHA256SUMS', 'latest.json', 'build-info.json'}]
           platforms = {
             'macos': [f for f in files if f.endswith('.dmg')],
             'windows': [f for f in files if f.endswith(('.msi', '.exe'))],
@@ -142,6 +143,19 @@ jobs:
                   checksums[name.lstrip('*')] = digest
           with open('latest.json', 'w') as out:
               json.dump({'version': tag.lstrip('v'), 'release_tag': tag, 'source_commit': source_commit, 'platforms': {k: [f'{base}/{name}' for name in v] for k, v in platforms.items()}, 'checksums': checksums}, out, indent=2)
+          installer_names = sorted(name for name in files if name.endswith(('.dmg', '.msi', '.exe', '.AppImage', '.deb', '.rpm')))
+          with open('build-info.json', 'w') as out:
+              json.dump({
+                  'schema_version': 1,
+                  'version': tag.lstrip('v'),
+                  'release_tag': tag,
+                  'source_commit': source_commit,
+                  'workflow_run': os.environ['WORKFLOW_RUN'],
+                  'installers': [
+                      {'name': name, 'url': f'{base}/{name}', 'sha256': checksums[name], 'source_commit': source_commit}
+                      for name in installer_names
+                  ]
+              }, out, indent=2)
           PY
       - uses: softprops/action-gh-release@v2
         with:
@@ -149,6 +163,7 @@ jobs:
           files: |
             release-assets/SHA256SUMS
             release-assets/latest.json
+            release-assets/build-info.json
       - name: Verify published installer release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -174,6 +189,13 @@ jobs:
           assert latest['release_tag'] == tag
           assert latest['source_commit'] == source_commit
           assert latest['checksums']
+          with open('build-info.json') as source:
+              build_info = json.load(source)
+          assert build_info['schema_version'] == 1
+          assert build_info['version'] == tag.removeprefix('v')
+          assert build_info['release_tag'] == tag
+          assert build_info['source_commit'] == source_commit
+          assert build_info['workflow_run'].endswith(f"/actions/runs/{os.environ['GITHUB_RUN_ID']}")
           for platform in ('macos', 'windows', 'linux'):
               assert latest['platforms'][platform]
               assert all(f'/releases/download/{tag}/' in url for url in latest['platforms'][platform])
@@ -185,6 +207,12 @@ jobs:
           assert any(url.endswith('.AppImage') for url in latest['platforms']['linux'])
           assert any(url.endswith('.deb') for url in latest['platforms']['linux'])
           assert any(url.endswith('.rpm') for url in latest['platforms']['linux'])
+          installers = {name for name in os.listdir('.') if name.endswith(('.dmg', '.msi', '.exe', '.AppImage', '.deb', '.rpm'))}
+          assert {entry['name'] for entry in build_info['installers']} == installers
+          for entry in build_info['installers']:
+              assert entry['url'] == f"https://github.com/${{ github.repository }}/releases/download/{tag}/{entry['name']}"
+              assert entry['sha256'] == latest['checksums'][entry['name']]
+              assert entry['source_commit'] == source_commit
           PY
           remote_tag_type="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" --jq '.object.type')"
           remote_tag_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" --jq '.object.sha')"
@@ -222,3 +250,11 @@ jobs:
           name: release-site-${{ env.RELEASE_TAG }}
           path: dist/site
           if-no-files-found: error
+      - name: Deploy the immutable release site
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_FOOD_LOG_EXPORT_KIT }}
+          action: upload
+          app_location: dist/site
+          output_location: ''
+          skip_app_build: true

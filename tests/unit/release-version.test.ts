@@ -12,8 +12,9 @@ describe('desktop release regression', () => {
     const landing = read('src/pages.ts');
     const footer = read('src/shell.ts');
     const notFound = read('public/404.html');
+    const copyAudit = read('.factory/copy-audit.md');
 
-    expect(packageVersion).toBe('0.1.20');
+    expect(packageVersion).toBe('0.1.21');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);
@@ -22,6 +23,10 @@ describe('desktop release regression', () => {
     expect(read('src/build.ts')).toContain(`appVersion = '${packageVersion}'`);
     expect(footer).toContain('Version ${appVersion} · release repair');
     expect(notFound).toContain(`Version ${packageVersion} · release repair`);
+    expect(copyAudit).toContain(`release candidate ${packageVersion}`);
+    expect(copyAudit).toContain(`Desktop app · version ${packageVersion}`);
+    expect(copyAudit).toContain(`Food.Log.Export.Kit_${packageVersion}_amd64.AppImage`);
+    expect(copyAudit).not.toContain('release candidate 0.1.17');
     expect(read('vite.config.ts')).toContain("fileName: 'release-identity.json'");
     expect(JSON.parse(read('package.json')).scripts['release:preflight']).toBe('node scripts/release-preflight.mjs');
     expect(JSON.parse(read('package.json')).scripts['release:site']).toBe('node scripts/release-site.mjs');
@@ -43,6 +48,11 @@ describe('desktop release regression', () => {
     expect(workflow).toContain('Verify published installer release');
     expect(workflow).toContain('Build release landing site from the immutable tag');
     expect(workflow).toContain('release-site-${{ env.RELEASE_TAG }}');
+    expect(workflow).toContain('Azure/static-web-apps-deploy@v1');
+    expect(workflow).toContain('AZURE_STATIC_WEB_APPS_API_TOKEN_FOOD_LOG_EXPORT_KIT');
+    expect(workflow).toContain('Deploy the immutable release site');
+    expect(workflow).toContain('skip_app_build: true');
+    expect(workflow).toContain('release-assets/build-info.json');
     expect(workflow).toContain('sha256sum -c SHA256SUMS');
     for (const asset of ["'*.dmg'", "'*.msi'", "'*-setup.exe'", "'*.AppImage'", "'*.deb'", "'*.rpm'"]) expect(workflow).toContain(asset);
     expect(workflow).toContain('git/ref/tags/${RELEASE_TAG}');

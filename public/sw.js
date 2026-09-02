@@ -1,7 +1,7 @@
 // Bump this cache when the worker changes. Navigation requests are also
 // network-first so a later app-shell deployment cannot pin an installed
 // client even if a worker update is delayed by HTTP caching.
-const CACHE = 'food-log-export-kit-v8';
+const CACHE = 'food-log-export-kit-v9';
 const SHELL = ['/', '/app', '/demo', '/privacy', '/terms', '/404.html', '/404.css', '/favicon.svg', '/art/archive-kitchen-720.webp', '/art/archive-kitchen-1280.webp'];
 self.addEventListener('install', (event) => event.waitUntil((async () => {
   const cache = await caches.open(CACHE);
