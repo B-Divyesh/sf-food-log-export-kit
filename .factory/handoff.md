@@ -1,84 +1,65 @@
-# Handoff — repair 17
+# Handoff — independent verification 21
 
 ## Result
 
-Release **v0.1.21** is published and deployed from immutable source commit
-`c68cbed9be960ee9757db2b186a70642edf91054`.
+**FAIL — do not release candidate
+`adb500d0a89cd022d8aacae6d7430b4aad88b14a`.**
 
-- Tag: <https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.21>
-- Release workflow: <https://github.com/B-Divyesh/sf-food-log-export-kit/actions/runs/33596310351>
-- Live site: <https://food-log-export-kit.sociobot.in>
-- Live release identity: version `0.1.21`, tag `v0.1.21`, source commit
-  `c68cbed9be960ee9757db2b186a70642edf91054`.
+The live web app matches the candidate and its local import/export workflow is
+healthy. The desktop distribution is blocked because release `v0.1.21` and its
+installers are built from `c68cbed9be960ee9757db2b186a70642edf91054`, while
+the deployed identity is `adb500d0a89cd022d8aacae6d7430b4aad88b14a`.
 
-The workflow built and published two macOS DMGs, a Windows MSI and setup EXE,
-and Linux AppImage, DEB, and RPM. `SHA256SUMS`, `latest.json`, and
-`build-info.json` are attached to the same release and name that same source
-commit.
+Exact evidence and the full QA matrix are in
+[`.factory/verification-21.md`](verification-21.md).
 
-## Repair
+## Release-blocking defect
 
-The independent verifier's exact v0.1.20 failure was reproduced before the
-repair:
+- `npm run test:unit -- --testNamePattern @claim:candidate-installers` fails on
+  the source-commit mismatch.
+- The live landing page displays “Downloads are being published” instead of a
+  platform installer.
+- The live Unix one-line installer exits 1 with “The published download does
+  not match this app version.”
+- `latest.json`, `build-info.json`, and `SHA256SUMS` all identify `c68cbed…`.
+- The downloaded Windows setup EXE matches its published SHA-256, so the issue
+  is release provenance, not checksum corruption.
 
-```text
-expected source_commit 133320e0830a501127a2d1150b9cfe3c2155a70a
-received source_commit 6de278a9e1dc177c56b932ac8bf8edff4d36b728
-```
+Publish a new immutable version tag from the final candidate commit, let the
+tag workflow publish all platform artifacts and deploy its site, then rerun the
+candidate-installer claim and live install command. Do not move or reuse
+`v0.1.21`.
 
-That split caused `@claim:candidate-installers` and the Unix installer to
-fail. The root cause was structural: the release workflow built a site artifact
-from the tag but did not deploy it, allowing a later site commit to be deployed
-separately.
+## Verification summary
 
-Changes in `c68cbed`:
+- Clean clone: `npm ci` passed with zero vulnerabilities.
+- Declared claims: 24 passed, 1 failed (`candidate-installers`).
+- `CI=1 npm test`: failed only on that claim (42/43 unit tests passed).
+- `CI=1 npm run test:e2e`: 58 passed, 4 desktop-project mobile-only skips; the
+  skipped checks passed in the mobile project.
+- `npm run build` and `npm run build:app`: passed.
+- Rust format, locked tests, locked Clippy with warnings denied: passed.
+- Release-mode Tauri build without bundles: passed.
+- Live demo, invalid-input recovery, CSV/JSON export, privacy request logging,
+  offline reload/update, keyboard, reduced motion, 390 px layout, Axe, headers,
+  caching, and 404 behavior: passed.
+- Billing license API allowance: requests 1–30 returned 200; request 31
+  returned 429 with `Retry-After: 4`.
+- Mobile Lighthouse: 97 Performance; 100 Accessibility, Best Practices, and
+  SEO; LCP 1.2 s; CLS 0.
+- Candidate and live matched for all 28 publicly served production files.
 
-- bumped every release surface to `0.1.21`, including Tauri, Cargo, static 404,
-  service-worker cache, README instructions, and copy audit;
-- added the exact v0.1.20 provenance split to
-  `@regression:verification-20` coverage;
-- made the tagged workflow create and validate `build-info.json` with each
-  installer URL, SHA-256, workflow run, and source commit;
-- made the final tagged site job deploy its own tag-built `dist/site/` through
-  the product-scoped Static Web Apps Actions secret;
-- added tests that require the deployment step, build record, and current copy
-  audit version.
+## Additional finding
 
-The product-scoped GitHub Actions deployment secret
-`AZURE_STATIC_WEB_APPS_API_TOKEN_FOOD_LOG_EXPORT_KIT` was configured from the
-`sf-food-log-export-kit` Static Web App token. Its value was not logged.
+`.factory/copy-audit.md` is stale: it does not contain the current README's
+two sentences about `release:site` and the deploy-then-claim sequence.
 
-## Verification
+## Files changed by verification
 
-- Clean clone at `c68cbed…`: `npm ci`, `npm test`, `npm run build`, and
-  `npm run build:app` all passed. `npm test` ran **43 unit tests** and **62
-  Playwright tests**.
-- Root checkout: `npm test` passed with the same 43 unit and 62 browser tests.
-  This covers desktop and 390 px mobile, keyboard paths, Axe serious/critical
-  checks, reduced motion, offline update, demo isolation, privacy boundaries,
-  and all declared claims.
-- `npm run test:unit -- --testNamePattern @claim:candidate-installers` passed
-  against the public release. It checked the tag, release target, deployed
-  identity, manifests, every installer URL, and a downloaded asset checksum.
-- `npm run native:prereqs`, `cargo fmt --check`, locked `cargo test`, locked
-  Clippy with `-D warnings`, and `CI=false npm run tauri -- build --no-bundle`
-  passed after installing the documented local GTK/WebKit prerequisites. The
-  release binary was built and an Xvfb launch smoke ran; only expected virtual
-  display EGL acceleration warnings appeared.
-- The live Unix installer completed with isolated temporary install paths and
-  printed `Installed and verified Food.Log.Export.Kit_0.1.21_amd64.AppImage.`
-  The Windows installer contract passed its PowerShell-compatible unit harness;
-  no Windows host is available in this worker.
-- Live mobile Lighthouse: **100** Performance, **100** Accessibility, **100**
-  Best Practices, **100** SEO; LCP **1,174 ms**, CLS **0**, transfer **85,196
-  bytes**.
-- Live response checks confirmed 200, HSTS, CSP with the required GitHub and
-  Sociobot connect sources, `nosniff`, strict referrer policy, and the
-  camera/microphone/geolocation-denying permissions policy.
+- `.factory/verification-21.md`
+- `.factory/handoff.md`
+- `.factory/qa-artifacts/first-read-desktop.png`
+- `.factory/qa-artifacts/live-mobile.png`
 
-## Known gap / operator action
-
-macOS and Windows packages are intentionally unsigned. Distribution signing
-and macOS notarization still need the owner's `APPLE_CERTIFICATE` and
-`WINDOWS_CERT_PFX` secrets; users must follow the platform's unsigned-app
-opening flow until those are supplied.
+No product code was modified. Pre-existing `graphify-out/` changes were left
+untouched and are not included in the verification commit.
