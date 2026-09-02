@@ -52,6 +52,23 @@ describe('release asset selection', () => {
     expect(selectCurrentRelease({ ...current, target_commitish: 'older-candidate' }, '0.1.14', 'current-candidate')).toBeUndefined();
   });
 
+  it('@regression:verification-18 withholds an installer when its immutable v0.1.18 tag names the older release commit', () => {
+    // Verification 18 found exactly this state: the site named 88a07a9,
+    // while the immutable v0.1.18 installer tag named ed7b13e. The landing
+    // page must never expose a binary from that older source candidate.
+    const verification18Release = {
+      tag_name: 'v0.1.18',
+      target_commitish: 'ed7b13e93e4ab5c9bbe2c2d17acfec694099fba0',
+      html_url: 'https://github.com/B-Divyesh/sf-food-log-export-kit/releases/tag/v0.1.18',
+      assets
+    };
+    expect(selectCurrentRelease(
+      verification18Release,
+      '0.1.18',
+      '88a07a940040f719d2ec4fda994bda8814f8428b'
+    )).toBeUndefined();
+  });
+
   it('@regression:R12-release-absence fetches api.github.com and fails soft for missing, stale, or malformed metadata', async () => {
     const stored = new Map<string, string>([['release:food-log-export-kit', '{not json']]);
     const storage = {

@@ -13,7 +13,7 @@ describe('desktop release regression', () => {
     const footer = read('src/shell.ts');
     const notFound = read('public/404.html');
 
-    expect(packageVersion).toBe('0.1.18');
+    expect(packageVersion).toBe('0.1.19');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);

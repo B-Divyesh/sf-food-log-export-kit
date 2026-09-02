@@ -38,7 +38,7 @@ describe('release tooling regressions', () => {
   it('@claim:release-preflight stops invalid release candidates before a tag is created', () => {
     const valid = {
       status: '', branch: 'main', head: 'a'.repeat(40), remoteHead: 'a'.repeat(40), tagExists: false,
-      tag: 'v0.1.18', packageVersion: '0.1.18', tauriVersion: '0.1.18', cargoVersion: '0.1.18', buildVersion: '0.1.18'
+      tag: 'v0.1.19', packageVersion: '0.1.19', tauriVersion: '0.1.19', cargoVersion: '0.1.19', buildVersion: '0.1.19'
     };
     expect(() => validateReleaseState(valid)).not.toThrow();
     expect(() => validateReleaseState({ ...valid, status: ' M src/build.ts' })).toThrow(/commit or stash every change/);
