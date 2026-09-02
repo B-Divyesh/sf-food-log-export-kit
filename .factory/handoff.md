@@ -1,65 +1,53 @@
-# Handoff — independent verification 21
+# Handoff — repair 18
 
-## Result
+## Outcome
 
-**FAIL — do not release candidate
-`adb500d0a89cd022d8aacae6d7430b4aad88b14a`.**
+Prepared immutable desktop release `v0.1.22` to repair independent verification 21. The release tag is created only after this handoff, source, tests, and version metadata are committed. The tag workflow builds every installer and deploys the site from that same commit.
 
-The live web app matches the candidate and its local import/export workflow is
-healthy. The desktop distribution is blocked because release `v0.1.21` and its
-installers are built from `c68cbed9be960ee9757db2b186a70642edf91054`, while
-the deployed identity is `adb500d0a89cd022d8aacae6d7430b4aad88b14a`.
+## Findings repaired
 
-Exact evidence and the full QA matrix are in
-[`.factory/verification-21.md`](verification-21.md).
+- Release identity: bumped every shipped version surface from `0.1.21` to `0.1.22`. Added a regression requiring the immutable version tag to resolve to the candidate checkout itself. The existing `candidate-installers` claim still compares that tag with GitHub release metadata, `latest.json`, `build-info.json`, `SHA256SUMS`, all installer links, one downloaded installer checksum, and the deployed `release-identity.json`.
+- Copy audit: replaced the stale release sentence with the README's two current sentences about `npm run release:site` and deploy-then-claim order. Added `@regression:V21-copy-audit` so both sentences must remain present in the README and audit.
+- Release version: synchronized `0.1.22` in npm, Cargo, Tauri, site build metadata, the 404 footer, README release commands, and tests.
 
-## Release-blocking defect
+The importer, demo, exports, privacy behavior, license behavior, accessibility, design, and existing claim coverage were preserved.
 
-- `npm run test:unit -- --testNamePattern @claim:candidate-installers` fails on
-  the source-commit mismatch.
-- The live landing page displays “Downloads are being published” instead of a
-  platform installer.
-- The live Unix one-line installer exits 1 with “The published download does
-  not match this app version.”
-- `latest.json`, `build-info.json`, and `SHA256SUMS` all identify `c68cbed…`.
-- The downloaded Windows setup EXE matches its published SHA-256, so the issue
-  is release provenance, not checksum corruption.
+## Verification evidence
 
-Publish a new immutable version tag from the final candidate commit, let the
-tag workflow publish all platform artifacts and deploy its site, then rerun the
-candidate-installer claim and live install command. Do not move or reuse
-`v0.1.21`.
+Run on Ubuntu 24.04 with Node 22, npm 10, Playwright 1.58.2, and the repository's locked Rust dependencies:
 
-## Verification summary
+- `npm ci` — passed; 66 packages installed; zero vulnerabilities reported.
+- Reproduction before repair: `npm run test:unit -- --testNamePattern @claim:candidate-installers` — failed because the deployed `adb500d…` identity differed from release source `c68cbed…`.
+- `npx vitest run --exclude tests/unit/published-release.test.ts` — passed, 43/43 tests. The live publication claim runs after the immutable release exists.
+- `CI=1 npm run test:e2e` — passed, 58 tests with four desktop-project mobile-only skips. Those four checks passed in the 390 px mobile project.
+- Axe coverage passed on `/`, `/demo`, `/app`, `/privacy`, `/terms`, and the missing route at desktop and 390 px. Keyboard flow, focus restoration, 44 px targets, 200% scale, reduced motion, no horizontal overflow, and route metadata passed.
+- Claim coverage passed for CSV and JSON export, local-only processing, all import formats and validation notes, demo isolation, free and paid behavior, license request boundaries, platform selection, and offline reload.
+- The controlled service-worker update from v5 to v9 passed.
+- `npm run build:site` — passed and produced `dist/site/`.
+- `npm run build:app` — passed and produced `dist/app/`.
+- Initial JavaScript: 50.09 kB raw / 17.36 kB gzip. CSS: 23.48 kB raw / 6.10 kB gzip.
+- `npm audit --audit-level=high` — passed with zero vulnerabilities.
+- `npm run native:prereqs` — passed after installing the README-listed GTK/WebKit packages.
+- `cargo fmt --check --manifest-path src-tauri/Cargo.toml` — passed.
+- `cargo test --locked --manifest-path src-tauri/Cargo.toml` — passed.
+- `cargo clippy --locked --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings` — passed.
+- `CI=false npm run tauri -- build --no-bundle` — passed and produced `src-tauri/target/release/food-log-export-kit`.
 
-- Clean clone: `npm ci` passed with zero vulnerabilities.
-- Declared claims: 24 passed, 1 failed (`candidate-installers`).
-- `CI=1 npm test`: failed only on that claim (42/43 unit tests passed).
-- `CI=1 npm run test:e2e`: 58 passed, 4 desktop-project mobile-only skips; the
-  skipped checks passed in the mobile project.
-- `npm run build` and `npm run build:app`: passed.
-- Rust format, locked tests, locked Clippy with warnings denied: passed.
-- Release-mode Tauri build without bundles: passed.
-- Live demo, invalid-input recovery, CSV/JSON export, privacy request logging,
-  offline reload/update, keyboard, reduced motion, 390 px layout, Axe, headers,
-  caching, and 404 behavior: passed.
-- Billing license API allowance: requests 1–30 returned 200; request 31
-  returned 429 with `Retry-After: 4`.
-- Mobile Lighthouse: 97 Performance; 100 Accessibility, Best Practices, and
-  SEO; LCP 1.2 s; CLS 0.
-- Candidate and live matched for all 28 publicly served production files.
+## Release and verification commands
 
-## Additional finding
+```sh
+npm run release:preflight
+git tag -a v0.1.22 -m "Food Log Export Kit v0.1.22"
+git push origin main v0.1.22
+gh run watch --repo B-Divyesh/sf-food-log-export-kit
+npm test
+```
 
-`.factory/copy-audit.md` is stale: it does not contain the current README's
-two sentences about `release:site` and the deploy-then-claim sequence.
+The GitHub workflow publishes macOS Intel and Apple Silicon DMGs, Windows MSI and setup EXE files, and Linux AppImage, DEB, and RPM files. It also publishes `SHA256SUMS`, `latest.json`, and `build-info.json`, verifies them, builds the site from the tag, and deploys that exact output.
 
-## Files changed by verification
+Do not add a post-tag handoff or evidence commit without starting a new version. That would make the candidate newer than its installers and repeat verification 21.
 
-- `.factory/verification-21.md`
-- `.factory/handoff.md`
-- `.factory/qa-artifacts/first-read-desktop.png`
-- `.factory/qa-artifacts/live-mobile.png`
+## Known gaps and operator action
 
-No product code was modified. Pre-existing `graphify-out/` changes were left
-untouched and are not included in the verification commit.
+- Desktop packages are unsigned. macOS notarization and Windows Authenticode require owner certificates. The current workflow does not request `APPLE_CERTIFICATE` or `WINDOWS_CERT_PFX`; add signing only when those credentials and a reviewed signing flow are available.
+- No product behavior or release-blocking gap remains in the source candidate. Publication and live identity are verified after the tag workflow finishes.

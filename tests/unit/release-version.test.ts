@@ -14,7 +14,7 @@ describe('desktop release regression', () => {
     const notFound = read('public/404.html');
     const copyAudit = read('.factory/copy-audit.md');
 
-    expect(packageVersion).toBe('0.1.21');
+    expect(packageVersion).toBe('0.1.22');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);
@@ -26,10 +26,24 @@ describe('desktop release regression', () => {
     expect(copyAudit).toContain(`release candidate ${packageVersion}`);
     expect(copyAudit).toContain(`Desktop app · version ${packageVersion}`);
     expect(copyAudit).toContain(`Food.Log.Export.Kit_${packageVersion}_amd64.AppImage`);
-    expect(copyAudit).not.toContain('release candidate 0.1.17');
+    expect(copyAudit).not.toContain('release candidate 0.1.21');
     expect(read('vite.config.ts')).toContain("fileName: 'release-identity.json'");
     expect(JSON.parse(read('package.json')).scripts['release:preflight']).toBe('node scripts/release-preflight.mjs');
     expect(JSON.parse(read('package.json')).scripts['release:site']).toBe('node scripts/release-site.mjs');
+  });
+
+  it('@regression:V21-copy-audit records every current release-site instruction', () => {
+    const readme = read('README.md');
+    const copyAudit = read('.factory/copy-audit.md');
+    const currentSentences = [
+      'Then run `npm run release:site`; it refuses to build a deployable site unless the checkout is the immutable version-tag target.',
+      'Deploy the resulting `dist/site/`, then run the `candidate-installers` claim.'
+    ];
+    for (const sentence of currentSentences) {
+      expect(readme).toContain(sentence);
+      expect(copyAudit).toContain(sentence);
+    }
+    expect(copyAudit).not.toContain('Then run the candidate-installers claim before deploying the site built from the version tag.');
   });
 
   it('@claim:release-workflow starts both Mac architectures, Windows, and Linux from a v* tag', () => {

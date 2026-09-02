@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 2026-09-02 for repair 17 and release candidate 0.1.21. Counts treat hyphenated terms, product names, filenames, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
+Audited 2026-09-02 for repair 18 and release candidate 0.1.22. Counts treat hyphenated terms, product names, filenames, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
 
 ## Landing page
 
@@ -24,12 +24,12 @@ Audited 2026-09-02 for repair 17 and release candidate 0.1.21. Counts treat hyph
 | Keep a CSV for spreadsheets. | 5 |
 | JSON keeps consistent fields and conversion notes. | 7 |
 | A recipe card archive box in a quiet kitchen at dusk. | 11 |
-| Desktop app · version 0.1.21 | 4 |
+| Desktop app · version 0.1.22 | 4 |
 | Download the desktop app | 4 |
 | The app reads CSV and JSON exports. | 7 |
 | It also works when your internet is off. | 8 |
 | Download for Linux | 3 |
-| Food.Log.Export.Kit_0.1.21_amd64.AppImage | 1 |
+| Food.Log.Export.Kit_0.1.22_amd64.AppImage | 1 |
 | Read release notes; on GitHub | 3; 2 |
 | Review before export | 3 |
 | Review entries and conversion notes | 5 |
@@ -76,7 +76,7 @@ Audited 2026-09-02 for repair 17 and release candidate 0.1.21. Counts treat hyph
 | Read the terms. | 3 |
 | Turn food tracker exports into a local archive. | 8 |
 | Built by Param Factory | 4 |
-| Version 0.1.21 · release repair · Generated artwork | 6 |
+| Version 0.1.22 · release repair · Generated artwork | 6 |
 
 ## README
 
@@ -123,7 +123,8 @@ Audited 2026-09-02 for repair 17 and release candidate 0.1.21. Counts treat hyph
 | The preflight stops a dirty checkout. | 6 |
 | It also stops wrong branches, existing tags, version mismatches, and stale main tips. | 12 |
 | Wait for GitHub Actions to publish installers, SHA256SUMS, and latest.json. | 10 |
-| Then run the candidate-installers claim before deploying the site built from the version tag. | 14 |
+| Then run `npm run release:site`; it refuses to build a deployable site unless the checkout is the immutable version-tag target. | 21 |
+| Deploy the resulting `dist/site/`, then run the `candidate-installers` claim. | 9 |
 | Tested product claims are listed in .factory/claims.json. | 7 |
 | Demo behavior is documented in .factory/demo.md. | 6 |
 | Publish dist/site/ as a static site. | 6 |

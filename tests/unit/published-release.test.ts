@@ -56,9 +56,11 @@ async function requireResponse(url: string, init?: RequestInit): Promise<Respons
 
 describe('published candidate release', () => {
   it('@regression:release-identity @claim:candidate-installers binds installers and the deployment to the immutable version tag', async () => {
-    // The version tag is the immutable product candidate. Review and evidence
-    // commits may follow it without changing the published desktop binaries.
+    // The version tag is the immutable product candidate. A later untagged
+    // candidate must not advertise installers built from an older source tree.
+    const candidateCommit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
     const taggedSourceCommit = execFileSync('git', ['rev-parse', `${releaseTag}^{commit}`], { encoding: 'utf8' }).trim();
+    expect(taggedSourceCommit).toBe(candidateCommit);
     const release = await requireResponse(`https://api.github.com/repos/${repository}/releases/tags/${releaseTag}`, { headers: apiHeaders })
       .then((response) => response.json()) as PublishedRelease;
     expect(release.tag_name).toBe(releaseTag);
