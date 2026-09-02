@@ -35,7 +35,7 @@ irm https://food-log-export-kit.sociobot.in/install.ps1 | iex
 ```
 
 Review the [release notes](https://github.com/B-Divyesh/sf-food-log-export-kit/releases/latest) for the steps to open the app on your system.
-The published manifest and checksum file name the source commit used for every desktop build. Each site build publishes its matching release identity for the installers.
+The published manifest and checksum file name the source commit used for every desktop build. The deployed site names that same version tag and source commit.
 
 ## Run locally
 
@@ -64,7 +64,7 @@ npm run tauri build
 
 `npm run build:site` writes the deployable website to `dist/site/`, with `index.html` at that root. `npm run build:app` writes the Tauri frontend to `dist/app/`. The release workflow builds macOS, Windows, and Linux installers after a `v*` tag is pushed.
 
-Site builds use the checked-out Git commit. A supplied commit must match it.
+Site builds use the checked-out Git commit. A supplied commit must match it. Published downloads remain bound to this version's immutable tag.
 
 ## Publish a desktop release
 
@@ -72,11 +72,11 @@ Commit and push all source, test, handoff, and evidence changes first. From the 
 
 ```sh
 npm run release:preflight
-git tag -a v0.1.16 -m "Food Log Export Kit v0.1.16"
-git push origin main v0.1.16
+git tag -a v0.1.17 -m "Food Log Export Kit v0.1.17"
+git push origin main v0.1.17
 ```
 
-The preflight stops a dirty checkout. It also stops wrong branches, existing tags, version mismatches, and stale main tips. Wait for GitHub Actions to publish installers, `SHA256SUMS`, and `latest.json`. Then run the `candidate-installers` claim before deploying the site built from that commit.
+The preflight stops a dirty checkout. It also stops wrong branches, existing tags, version mismatches, and stale main tips. Wait for GitHub Actions to publish installers, `SHA256SUMS`, and `latest.json`. Then run the `candidate-installers` claim before deploying the site built from the version tag.
 
 Tested product claims are listed in [`.factory/claims.json`](.factory/claims.json). Demo behavior is documented in [`.factory/demo.md`](.factory/demo.md).
 

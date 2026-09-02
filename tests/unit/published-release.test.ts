@@ -6,7 +6,6 @@ import { describe, expect, it } from 'vitest';
 const repository = 'B-Divyesh/sf-food-log-export-kit';
 const version = (JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')) as { version: string }).version;
 const releaseTag = `v${version}`;
-const requiredSourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 
 interface Asset {
   name: string;
@@ -28,6 +27,12 @@ interface ReleaseManifest {
   checksums: Record<string, string>;
 }
 
+interface ReleaseIdentity {
+  version: string;
+  release_tag: string;
+  source_commit: string;
+}
+
 const apiHeaders: Record<string, string> = {
   Accept: 'application/vnd.github+json',
   'User-Agent': 'food-log-export-kit-release-regression'
@@ -41,21 +46,27 @@ async function requireResponse(url: string, init?: RequestInit): Promise<Respons
 }
 
 describe('published candidate release', () => {
-  it('@regression:release-identity @claim:candidate-installers binds every installer URL and checksum to the checked-out tagged candidate', async () => {
-    // A release-tag lookup is deliberately used here rather than /releases/latest.
-    // A later unrelated release must not make a clean clone of this candidate
-    // fail its own provenance check.
+  it('@regression:release-identity @claim:candidate-installers binds installers and the deployment to the immutable version tag', async () => {
+    // The version tag is the immutable product candidate. Review and evidence
+    // commits may follow it without changing the published desktop binaries.
+    const taggedSourceCommit = execFileSync('git', ['rev-parse', `${releaseTag}^{commit}`], { encoding: 'utf8' }).trim();
     const release = await requireResponse(`https://api.github.com/repos/${repository}/releases/tags/${releaseTag}`, { headers: apiHeaders })
       .then((response) => response.json()) as PublishedRelease;
     expect(release.tag_name).toBe(releaseTag);
-    expect(release.target_commitish).toBe(requiredSourceCommit);
+    expect(release.target_commitish).toBe(taggedSourceCommit);
 
     const tagRef = await requireResponse(`https://api.github.com/repos/${repository}/git/ref/tags/${releaseTag}`, { headers: apiHeaders })
       .then((response) => response.json()) as { object: { type: string; sha: string; url: string } };
     const tagCommit = tagRef.object.type === 'tag'
       ? await requireResponse(tagRef.object.url, { headers: apiHeaders }).then((response) => response.json()).then((tag: { object: { sha: string } }) => tag.object.sha)
       : tagRef.object.sha;
-    expect(tagCommit).toBe(requiredSourceCommit);
+    expect(tagCommit).toBe(taggedSourceCommit);
+
+    const deployedIdentity = await requireResponse(`https://food-log-export-kit.sociobot.in/release-identity.json?version=${encodeURIComponent(version)}`, {
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache', 'User-Agent': apiHeaders['User-Agent'] }
+    }).then((response) => response.json()) as ReleaseIdentity;
+    expect(deployedIdentity).toEqual({ version, release_tag: releaseTag, source_commit: taggedSourceCommit });
 
     const byName = new Map(release.assets.map((asset) => [asset.name, asset]));
     const manifestAsset = byName.get('latest.json');
@@ -65,8 +76,8 @@ describe('published candidate release', () => {
 
     const manifest = await requireResponse(manifestAsset!.browser_download_url).then((response) => response.json()) as ReleaseManifest;
     const sumsText = await requireResponse(sumsAsset!.browser_download_url).then((response) => response.text());
-    expect(manifest).toMatchObject({ version, release_tag: releaseTag, source_commit: requiredSourceCommit });
-    expect(sumsText.split(/\r?\n/)[0]).toBe(`# source_commit=${requiredSourceCommit}`);
+    expect(manifest).toMatchObject({ version, release_tag: releaseTag, source_commit: taggedSourceCommit });
+    expect(sumsText.split(/\r?\n/)[0]).toBe(`# source_commit=${taggedSourceCommit}`);
 
     const publishedSums = new Map(sumsText.split(/\r?\n/).flatMap((line) => {
       const match = line.match(/^([0-9a-f]{64})\s+\*?(.+)$/i);

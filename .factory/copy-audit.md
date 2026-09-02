@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 2026-09-01 for polish round 6 retry 2 and release candidate 0.1.16. Counts treat hyphenated terms, product names, filenames, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
+Audited 2026-09-02 for polish round 7 and release candidate 0.1.17. Counts treat hyphenated terms, product names, filenames, URLs, and numbers as one word. No sentence exceeds 22 words. No reader-facing sentence contains a banned marketing word.
 
 ## Landing page
 
@@ -24,12 +24,12 @@ Audited 2026-09-01 for polish round 6 retry 2 and release candidate 0.1.16. Coun
 | Keep a CSV for spreadsheets. | 5 |
 | JSON keeps consistent fields and conversion notes. | 7 |
 | A recipe card archive box in a quiet kitchen at dusk. | 11 |
-| Desktop app · version 0.1.16 | 4 |
+| Desktop app · version 0.1.17 | 4 |
 | Download the desktop app | 4 |
 | The app reads CSV and JSON exports. | 7 |
 | It also works when your internet is off. | 8 |
 | Download for Linux | 3 |
-| Food.Log.Export.Kit_0.1.16_amd64.AppImage | 1 |
+| Food.Log.Export.Kit_0.1.17_amd64.AppImage | 1 |
 | Read release notes; on GitHub | 3; 2 |
 | Review before export | 3 |
 | Review entries and conversion notes | 5 |
@@ -76,7 +76,7 @@ Audited 2026-09-01 for polish round 6 retry 2 and release candidate 0.1.16. Coun
 | Read the terms. | 3 |
 | Turn food tracker exports into a local archive. | 8 |
 | Built by Param Factory | 4 |
-| Version 0.1.16 · release repair · Generated artwork | 6 |
+| Version 0.1.17 · release repair · Generated artwork | 6 |
 
 ## README
 
@@ -110,19 +110,20 @@ Audited 2026-09-01 for polish round 6 retry 2 and release candidate 0.1.16. Coun
 | On Windows, this command verifies and starts the MSI installer. | 10 |
 | Review the release notes for the steps to open the app on your system. | 13 |
 | The published manifest and checksum file name the source commit used for every desktop build. | 15 |
-| Each site build publishes its matching release identity for the installers. | 11 |
+| The deployed site names that same version tag and source commit. | 10 |
 | Requires Node.js 22. | 3 |
 | Rust is needed only to build the desktop app. | 9 |
 | Open http://127.0.0.1:4173/demo for the isolated sample workspace. | 7 |
 | The release workflow builds macOS, Windows, and Linux installers after a v* tag is pushed. | 15 |
 | Site builds use the checked-out Git commit. | 7 |
 | A supplied commit must match it. | 6 |
+| Published downloads remain bound to this version's immutable tag. | 9 |
 | Commit and push all source, test, handoff, and evidence changes first. | 10 |
 | From the clean main tip, run: | 7 |
 | The preflight stops a dirty checkout. | 6 |
 | It also stops wrong branches, existing tags, version mismatches, and stale main tips. | 12 |
 | Wait for GitHub Actions to publish installers, SHA256SUMS, and latest.json. | 10 |
-| Then run the candidate-installers claim before deploying the site built from that commit. | 13 |
+| Then run the candidate-installers claim before deploying the site built from the version tag. | 14 |
 | Tested product claims are listed in .factory/claims.json. | 7 |
 | Demo behavior is documented in .factory/demo.md. | 6 |
 | Publish dist/site/ as a static site. | 6 |
@@ -146,4 +147,4 @@ Developer commands and project-map fragments use technical names only where they
 | Isolated sample environment | demo |
 | Source product category | food tracker |
 
-Catalog description: “Convert food tracker exports into CSV and JSON archives on your device.” (12 words, 71 characters)
+Catalog description: “Convert food tracker exports into CSV and JSON archives with conversion notes.” (11 words, 75 characters)

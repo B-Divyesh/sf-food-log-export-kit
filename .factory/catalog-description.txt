@@ -1,1 +1,1 @@
-Convert food tracker exports into CSV and JSON archives on your device.
+Convert food tracker exports into CSV and JSON archives with conversion notes.
