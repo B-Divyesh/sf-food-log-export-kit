@@ -13,7 +13,7 @@ describe('desktop release regression', () => {
     const footer = read('src/shell.ts');
     const notFound = read('public/404.html');
 
-    expect(packageVersion).toBe('0.1.17');
+    expect(packageVersion).toBe('0.1.18');
     expect(packageLock.version).toBe(packageVersion);
     expect(packageLock.packages[''].version).toBe(packageVersion);
     expect(tauri).toBe(packageVersion);
@@ -24,6 +24,7 @@ describe('desktop release regression', () => {
     expect(notFound).toContain(`Version ${packageVersion} · release repair`);
     expect(read('vite.config.ts')).toContain("fileName: 'release-identity.json'");
     expect(JSON.parse(read('package.json')).scripts['release:preflight']).toBe('node scripts/release-preflight.mjs');
+    expect(JSON.parse(read('package.json')).scripts['release:site']).toBe('node scripts/release-site.mjs');
   });
 
   it('@claim:release-workflow starts both Mac architectures, Windows, and Linux from a v* tag', () => {
@@ -40,6 +41,8 @@ describe('desktop release regression', () => {
     expect(workflow).toContain('apt-get install -y file pkg-config libglib2.0-dev libwebkit2gtk-4.1-dev');
     expect(workflow).toContain('test "$RELEASE_TAG" = "v$(node -p');
     expect(workflow).toContain('Verify published installer release');
+    expect(workflow).toContain('Build release landing site from the immutable tag');
+    expect(workflow).toContain('release-site-${{ env.RELEASE_TAG }}');
     expect(workflow).toContain('sha256sum -c SHA256SUMS');
     for (const asset of ["'*.dmg'", "'*.msi'", "'*-setup.exe'", "'*.AppImage'", "'*.deb'", "'*.rpm'"]) expect(workflow).toContain(asset);
     expect(workflow).toContain('git/ref/tags/${RELEASE_TAG}');

@@ -193,3 +193,32 @@ jobs:
           fi
           test "$remote_tag_sha" = "$FOOD_LOG_SOURCE_COMMIT"
           test "$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" --jq '.target_commitish')" = "$FOOD_LOG_SOURCE_COMMIT"
+
+  site:
+    needs: checksums
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.ref_type == 'tag' && github.ref_name || inputs.release_tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_type == 'tag' && github.ref || inputs.release_tag }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build release landing site from the immutable tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          source_commit="$(git rev-parse "${RELEASE_TAG}^{commit}")"
+          test "$source_commit" = "$(git rev-parse HEAD)"
+          export VITE_FOOD_LOG_SOURCE_COMMIT="$source_commit"
+          npm ci
+          npm run release:site
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-site-${{ env.RELEASE_TAG }}
+          path: dist/site
+          if-no-files-found: error
