@@ -750,6 +750,16 @@
       "factory_verification_6_required_claims_gate"
     ],
     "34": [
+      "tests_unit_published_release_test",
+      "tests_unit_published_release_test_apiheaders",
+      "tests_unit_published_release_test_asset",
+      "tests_unit_published_release_test_buildinfo",
+      "tests_unit_published_release_test_publishedrelease",
+      "tests_unit_published_release_test_releaseidentity",
+      "tests_unit_published_release_test_releasemanifest",
+      "tests_unit_published_release_test_requireresponse"
+    ],
+    "35": [
       "factory_handoff",
       "factory_handoff_handoff_polish_round_6_retry_2",
       "factory_handoff_known_gaps",
@@ -758,7 +768,7 @@
       "factory_handoff_verification",
       "factory_handoff_what_changed"
     ],
-    "35": [
+    "36": [
       "scripts_release_site",
       "scripts_release_site_collectreleasesitetarget",
       "scripts_release_site_commit",
@@ -766,15 +776,6 @@
       "scripts_release_site_validatebuiltreleaseidentity",
       "scripts_release_site_validatereleasesitetarget",
       "tests_unit_release_site_test"
-    ],
-    "36": [
-      "tests_unit_published_release_test",
-      "tests_unit_published_release_test_apiheaders",
-      "tests_unit_published_release_test_asset",
-      "tests_unit_published_release_test_publishedrelease",
-      "tests_unit_published_release_test_releaseidentity",
-      "tests_unit_published_release_test_releasemanifest",
-      "tests_unit_published_release_test_requireresponse"
     ],
     "37": [
       "factory_evidence_polish_3_clean_clone_summary",
@@ -958,9 +959,9 @@
     "31": 0.25,
     "32": 0.25,
     "33": 0.25,
-    "34": 0.2857142857142857,
-    "35": 0.47619047619047616,
-    "36": 0.2857142857142857,
+    "34": 0.25,
+    "35": 0.2857142857142857,
+    "36": 0.47619047619047616,
     "37": 0.3333333333333333,
     "38": 0.4,
     "39": 0.4,
@@ -1020,13 +1021,13 @@
       "degree": 12
     },
     {
-      "id": "package_scripts",
-      "label": "scripts",
+      "id": "factory_verification_independent_verification_fail",
+      "label": "Independent verification \u2014 FAIL",
       "degree": 12
     },
     {
-      "id": "factory_verification_independent_verification_fail",
-      "label": "Independent verification \u2014 FAIL",
+      "id": "package_scripts",
+      "label": "scripts",
       "degree": 12
     },
     {
