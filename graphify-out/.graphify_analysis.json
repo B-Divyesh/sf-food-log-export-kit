@@ -1021,13 +1021,13 @@
       "degree": 12
     },
     {
-      "id": "package_scripts",
-      "label": "scripts",
+      "id": "factory_verification_independent_verification_fail",
+      "label": "Independent verification \u2014 FAIL",
       "degree": 12
     },
     {
-      "id": "factory_verification_independent_verification_fail",
-      "label": "Independent verification \u2014 FAIL",
+      "id": "package_scripts",
+      "label": "scripts",
       "degree": 12
     },
     {
