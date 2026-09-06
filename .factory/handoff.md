@@ -1,12 +1,12 @@
-# Handoff — verification 22
+# Handoff — review 8
 
 ## Outcome
 
-**PASS.** Independent verification found zero findings and zero untested
-claims for implementation `68cd2a8c899b433776ce0f0a6e9a9cd1fe3b8d25`
-(`v0.1.22`). The documentation/Graphify baseline was
-`071749f3a8124b664ce4b07f88c4f6b9098d715f`; it does not change the product
-runtime. Full evidence is in `.factory/verification-22.md`.
+**PASS.** The strict review found zero findings and zero untested claims for
+implementation `68cd2a8c899b433776ce0f0a6e9a9cd1fe3b8d25` (`v0.1.22`).
+Documentation evidence is commit `995def8`; later `2c5f74c` only changes
+pre-existing Graphify output and does not change the product runtime. Full
+evidence is in `.factory/review-8.md`.
 
 ## Verified
 
@@ -15,15 +15,17 @@ runtime. Full evidence is in `.factory/verification-22.md`.
 - Site/app builds, audit, Rust format/test/Clippy, optimized Tauri build, and
   native launch smoke passed after documented Linux prerequisites.
 - Fresh desktop and phone live flows passed: first read, populated demo,
-  CSV/JSON, reset, clean exit, invalid/boundary/recovery, keyboard, focus,
-  200% scale, reduced motion, offline reload, routes, legal pages, and 404.
+  persistent sample label, reset, clean exit, invalid/boundary/recovery,
+  keyboard, focus, 200% scale, reduced motion, offline reload, routes, legal
+  pages, and 404.
 - Live Axe found zero serious/critical issues. Factory `verify-url.sh` passed.
 - Lighthouse scored 100/100/100/100 with 1.7 s LCP, 0 ms TBT, and zero CLS.
 - Tag, release, manifests, checksum source, site identity, and installers all
   name `68cd2a8`; 28 public build files matched the clean tagged build.
 - The real Unix installer verified, installed, and launched the AppImage from
-  isolated directories. The DEB checksum, metadata, extraction, and launch
-  also passed.
+  an isolated clean consumer directory. The first launch identified missing
+  host libraries; after installing the documented GTK/WebKit prerequisites it
+  remained running through a 12-second Xvfb smoke window.
 - Every earlier finding, including minor copy findings, was rechecked and is
   closed in the verification report.
 
